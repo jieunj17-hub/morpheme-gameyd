@@ -360,8 +360,13 @@
     cursor: pointer;
     transition: 0.2s;
   }
-  .btn:hover { opacity: 0.9; }
+  .btn:hover:not(:disabled) { opacity: 0.9; }
   .btn.boss { background: var(--boss); }
+  .btn:disabled {
+    background: #94a3b8 !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
   
   /* 피드백 & 모범 답안 해설 */
   .feedback {
@@ -614,6 +619,7 @@ let userCuts = new Set();
 let selectedClassifyOpt = -1;
 let score = 0;
 let sessionRecords = [];
+let isEvaluating = false; // 중복 클릭 방지 상태 플래그
 
 function toggleAccordion() {
   const content = document.getElementById("accContent");
@@ -646,6 +652,7 @@ function getActiveData() {
 }
 
 function loadStage() {
+  isEvaluating = false;
   const dataList = getActiveData();
   const q = dataList[currentIdx];
   userCuts.clear();
@@ -653,10 +660,12 @@ function loadStage() {
 
   document.getElementById("feedbackBox").style.display = "none";
   document.getElementById("reportCard").style.display = "none";
-  document.getElementById("actionBtn").style.display = "block";
+  
+  const actionBtn = document.getElementById("actionBtn");
+  actionBtn.style.display = "block";
+  actionBtn.disabled = false; // 자르기 버튼 다시 활성화
 
   const badge = document.getElementById("badge");
-  const actionBtn = document.getElementById("actionBtn");
   const sentenceDisplay = document.getElementById("sentenceDisplay");
   const sliceContainer = document.getElementById("sliceContainer");
   const classifyContainer = document.getElementById("classifyContainer");
@@ -716,6 +725,7 @@ function loadStage() {
 }
 
 function toggleGap(idx, el) {
+  if (isEvaluating) return;
   if (userCuts.has(idx)) {
     userCuts.delete(idx);
     el.classList.remove("active");
@@ -726,6 +736,7 @@ function toggleGap(idx, el) {
 }
 
 function selectOpt(idx, el) {
+  if (isEvaluating) return;
   const btns = document.querySelectorAll(".opt-btn");
   btns.forEach(b => b.classList.remove("selected"));
   el.classList.add("selected");
@@ -747,6 +758,12 @@ function renderAnswerCard(q) {
 }
 
 function checkAnswer() {
+  if (isEvaluating) return; // 이미 확인 중이면 중복 처리 방지
+  isEvaluating = true;
+
+  const actionBtn = document.getElementById("actionBtn");
+  actionBtn.disabled = true; // [자르기 완료!] 버튼 비활성화 (마구 연타 방지)
+
   const dataList = getActiveData();
   const q = dataList[currentIdx];
   const fb = document.getElementById("feedbackBox");
