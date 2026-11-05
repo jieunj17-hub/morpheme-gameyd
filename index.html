@@ -316,13 +316,35 @@
 </div>
 
 <script>
-// 1. 형태소 분석하기 기본편 문제 세트
+// 1. 형태소 분석하기 기본편 문제 세트 (총 26개 단어)
 const basicData = [
-  { id: 1, type: "click", text: "웃고", cuts: [0] },
-  { id: 2, type: "click", text: "참기름", cuts: [0] },
-  { id: 3, type: "click", text: "맨발", cuts: [0] },
-  { id: 4, type: "click", text: "손수건", cuts: [0] },
-  { id: 5, type: "click", text: "무지개", cuts: [] }
+  { id: 1, type: "click", text: "무지개", cuts: [] },
+  { id: 2, type: "click", text: "구름", cuts: [] },
+  { id: 3, type: "click", text: "바람", cuts: [] },
+  { id: 4, type: "click", text: "아침", cuts: [] },
+  { id: 5, type: "click", text: "웃고", cuts: [0] },
+  { id: 6, type: "click", text: "참기름", cuts: [0] },
+  { id: 7, type: "click", text: "맨발", cuts: [0] },
+  { id: 8, type: "click", text: "햇밤", cuts: [0] },
+  { id: 9, type: "click", text: "헛기침", cuts: [0] },
+  { id: 10, type: "click", text: "지우개", cuts: [1] },
+  { id: 11, type: "click", text: "손수건", cuts: [0] },
+  { id: 12, type: "click", text: "돌다리", cuts: [0] },
+  { id: 13, type: "click", text: "눈물", cuts: [0] },
+  { id: 14, type: "click", text: "발자국", cuts: [0] },
+  { id: 15, type: "click", text: "높다", cuts: [0] },
+  { id: 16, type: "click", text: "신고", cuts: [0] },
+  { id: 17, type: "click", text: "먹었다", cuts: [0, 1] },
+  { id: 18, type: "click", text: "맑아서", cuts: [0] },
+  { id: 19, type: "click", text: "파랗고", cuts: [1] },
+  // 신규 추가 7개 단어
+  { id: 20, type: "click", text: "산나물", cuts: [0] },
+  { id: 21, type: "click", text: "우리", cuts: [] },
+  { id: 22, type: "click", text: "거울", cuts: [] },
+  { id: 23, type: "click", text: "손발", cuts: [0] },
+  { id: 24, type: "click", text: "민낯", cuts: [0] },
+  { id: 25, type: "click", text: "걸레질", cuts: [1] },
+  { id: 26, type: "click", text: "물걸레", cuts: [0] }
 ];
 
 // 2. 형태소 분석하기 심화편 문제 세트
@@ -474,7 +496,11 @@ function checkAnswer() {
       score += 100;
       document.getElementById("scoreDisplay").innerText = score;
       fb.className = "feedback success";
-      fb.innerHTML = `<b>정답 확인!</b> (+100점)<br>형태소 경계를 정확히 잘랐습니다!`;
+      if (q.cuts.length === 0) {
+        fb.innerHTML = `<b>정답 확인!</b> (+100점)<br><b>'${q.text}'</b>은 더 이상 쪼갤 수 없는 단일어 형태소입니다.`;
+      } else {
+        fb.innerHTML = `<b>정답 확인!</b> (+100점)<br>형태소 경계를 정확히 잘랐습니다!`;
+      }
     } else {
       fb.className = "feedback error";
       fb.innerHTML = `❌ <b>아쉬워요! 다시 한번 형태소를 확인해보세요.</b>`;
