@@ -1,712 +1,1118 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<script>
-/*! Chart.js v4.4.1 */
-!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):(t="undefined"!=typeof globalThis?globalThis:t||self).Chart=e()}(this,(function(){"use strict";var t=Object.freeze({__proto__:null});function e(){}const i=(()=>{let t=0;return()=>t++})();function s(t){return null==t}function n(t){if(Array.isArray&&Array.isArray(t))return!0;const e=Object.prototype.toString.call(t);return"[object"===e.slice(0,7)&&"Array]"===e.slice(-6)}function o(t){return null!==t&&"[object Object]"===Object.prototype.toString.call(t)}function a(t){return("number"==typeof t||t instanceof Number)&&isFinite(+t)}function r(t,e){return a(t)?t:e}function l(t,e){return void 0===t?e:t}const h=(t,e)=>"string"==typeof t&&t.endsWith("%")?parseFloat(t)/100:+t/e,c=(t,e)=>"string"==typeof t&&t.endsWith("%")?parseFloat(t)/100*e:+t;function d(t,e,i){if(t&&"function"==typeof t.call)return t.apply(i,e)}function u(t,e,i,s){let a,r,l;if(n(t))if(r=t.length,s)for(a=r-1;a>=0;a--)e.call(i,t[a],a);else for(a=0;a<r;a++)e.call(i,t[a],a);else if(o(t))for(l=Object.keys(t),r=l.length,a=0;a<r;a++)e.call(i,t[l[a]],l[a])}function f(t,e){let i,s,n,o;if(!t||!e||t.length!==e.length)return!1;for(i=0,s=t.length;i<s;++i)if(n=t[i],o=e[i],n.datasetIndex!==o.datasetIndex||n.index!==o.index)return!1;return!0}function g(t){if(n(t))return t.map(g);if(o(t)){const e=Object.create(null),i=Object.keys(t),s=i.length;let n=0;for(;n<s;++n)e[i[n]]=g(t[i[n]]);return e}return t}function p(t){return-1===["__proto__","prototype","constructor"].indexOf(t)}function m(t,e,i,s){if(!p(t))return;const n=e[t],a=i[t];o(n)&&o(a)?b(n,a,s):e[t]=g(a)}function b(t,e,i){const s=n(e)?e:[e],a=s.length;if(!o(t))return t;const r=(i=i||{}).merger||m;let l;for(let e=0;e<a;++e){if(l=s[e],!o(l))continue;const n=Object.keys(l);for(let e=0,s=n.length;e<s;++e)r(n[e],t,l,i)}return t}function x(t,e){return b(t,e,{merger:_})}function _(t,e,i){if(!p(t))return;const s=e[t],n=i[t];o(s)&&o(n)?x(s,n):Object.prototype.hasOwnProperty.call(e,t)||(e[t]=g(n))}const y={"":t=>t,x:t=>t.x,y:t=>t.y};function v(t){const e=t.split("."),i=[];let s="";for(const t of e)s+=t,s.endsWith("\\")?s=s.slice(0,-1)+".":(i.push(s),s="");return i}function M(t,e){const i=y[e]||(y[e]=function(t){const e=v(t);return t=>{for(const i of e){if(""===i)break;t=t&&t[i]}return t}}(e));return i(t)}function w(t){return t.charAt(0).toUpperCase()+t.slice(1)}const k=t=>void 0!==t,S=t=>"function"==typeof t,P=(t,e)=>{if(t.size!==e.size)return!1;for(const i of t)if(!e.has(i))return!1;return!0};function D(t){return"mouseup"===t.type||"click"===t.type||"contextmenu"===t.type}const C=Math.PI,O=2*C,A=O+C,T=Number.POSITIVE_INFINITY,L=C/180,E=C/2,R=C/4,I=2*C/3,z=Math.log10,F=Math.sign;function V(t,e,i){return Math.abs(t-e)<i}function B(t){const e=Math.round(t);t=V(t,e,t/1e3)?e:t;const i=Math.pow(10,Math.floor(z(t))),s=t/i;return(s<=1?1:s<=2?2:s<=5?5:10)*i}function W(t){const e=[],i=Math.sqrt(t);let s;for(s=1;s<i;s++)t%s==0&&(e.push(s),e.push(t/s));return i===(0|i)&&e.push(i),e.sort(((t,e)=>t-e)).pop(),e}function N(t){return!isNaN(parseFloat(t))&&isFinite(t)}function H(t,e){const i=Math.round(t);return i-e<=t&&i+e>=t}function j(t,e,i){let s,n,o;for(s=0,n=t.length;s<n;s++)o=t[s][i],isNaN(o)||(e.min=Math.min(e.min,o),e.max=Math.max(e.max,o))}function $(t){return t*(C/180)}function Y(t){return t*(180/C)}function U(t){if(!a(t))return;let e=1,i=0;for(;Math.round(t*e)/e!==t;)e*=10,i++;return i}function X(t,e){const i=e.x-t.x,s=e.y-t.y,n=Math.sqrt(i*i+s*s);let o=Math.atan2(s,i);return o<-.5*C&&(o+=O),{angle:o,distance:n}}function q(t,e){return Math.sqrt(Math.pow(e.x-t.x,2)+Math.pow(e.y-t.y,2))}function K(t,e){return(t-e+A)%O-C}function G(t){return(t%O+O)%O}function Z(t,e,i,s){const n=G(t),o=G(e),a=G(i),r=G(o-n),l=G(a-n),h=G(n-o),c=G(n-a);return n===o||n===a||s&&o===a||r>l&&h<c}function J(t,e,i){return Math.max(e,Math.min(i,t))}function Q(t){return J(t,-32768,32767)}function tt(t,e,i,s=1e-6){return t>=Math.min(e,i)-s&&t<=Math.max(e,i)+s}function et(t,e,i){i=i||(i=>t[i]<e);let s,n=t.length-1,o=0;for(;n-o>1;)s=o+n>>1,i(s)?o=s:n=s;return{lo:o,hi:n}}const it=(t,e,i,s)=>et(t,i,s?s=>{const n=t[s][e];return n<i||n===i&&t[s+1][e]===i}:s=>t[s][e]<i),st=(t,e,i)=>et(t,i,(s=>t[s][e]>=i));function nt(t,e,i){let s=0,n=t.length;for(;s<n&&t[s]<e;)s++;for(;n>s&&t[n-1]>i;)n--;return s>0||n<t.length?t.slice(s,n):t}const ot=["push","pop","shift","splice","unshift"];function at(t,e){t._chartjs?t._chartjs.listeners.push(e):(Object.defineProperty(t,"_chartjs",{configurable:!0,enumerable:!1,value:{listeners:[e]}}),ot.forEach((e=>{const i="_onData"+w(e),s=t[e];Object.defineProperty(t,e,{configurable:!0,enumerable:!1,value(...e){const n=s.apply(this,e);return t._chartjs.listeners.forEach((t=>{"function"==typeof t[i]&&t[i](...e)})),n}})})))}function rt(t,e){const i=t._chartjs;if(!i)return;const s=i.listeners,n=s.indexOf(e);-1!==n&&s.splice(n,1),s.length>0||(ot.forEach((e=>{delete t[e]})),delete t._chartjs)}function lt(t){const e=new Set(t);return e.size===t.length?t:Array.from(e)}const ht="undefined"==typeof window?function(t){return t()}:window.requestAnimationFrame;function ct(t,e){let i=[],s=!1;return function(...n){i=n,s||(s=!0,ht.call(window,(()=>{s=!1,t.apply(e,i)})))}}function dt(t,e){let i;return function(...s){return e?(clearTimeout(i),i=setTimeout(t,e,s)):t.apply(this,s),e}}const ut=t=>"start"===t?"left":"end"===t?"right":"center",ft=(t,e,i)=>"start"===t?e:"end"===t?i:(e+i)/2,gt=(t,e,i,s)=>t===(s?"left":"right")?i:"center"===t?(e+i)/2:e;function pt(t,e,i){const s=e.length;let n=0,o=s;if(t._sorted){const{iScale:a,_parsed:r}=t,l=a.axis,{min:h,max:c,minDefined:d,maxDefined:u}=a.getUserBounds();d&&(n=J(Math.min(it(r,l,h).lo,i?s:it(e,l,a.getPixelForValue(h)).lo),0,s-1)),o=u?J(Math.max(it(r,a.axis,c,!0).hi+1,i?0:it(e,l,a.getPixelForValue(c),!0).hi+1),n,s)-n:s-n}return{start:n,count:o}}function mt(t){const{xScale:e,yScale:i,_scaleRanges:s}=t,n={xmin:e.min,xmax:e.max,ymin:i.min,ymax:i.max};if(!s)return t._scaleRanges=n,!0;const o=s.xmin!==e.min||s.xmax!==e.max||s.ymin!==i.min||s.ymax!==i.max;return Object.assign(s,n),o}class bt{constructor(){this._request=null,this._charts=new Map,this._running=!1,this._lastDate=void 0}_notify(t,e,i,s){const n=e.listeners[s],o=e.duration;n.forEach((s=>s({chart:t,initial:e.initial,numSteps:o,currentStep:Math.min(i-e.start,o)})))}_refresh(){this._request||(this._running=!0,this._request=ht.call(window,(()=>{this._update(),this._request=null,this._running&&this._refresh()})))}_update(t=Date.now()){let e=0;this._charts.forEach(((i,s)=>{if(!i.running||!i.items.length)return;const n=i.items;let o,a=n.length-1,r=!1;for(;a>=0;--a)o=n[a],o._active?(o._total>i.duration&&(i.duration=o._total),o.tick(t),r=!0):(n[a]=n[n.length-1],n.pop());r&&(s.draw(),this._notify(s,i,t,"progress")),n.length||(i.running=!1,this._notify(s,i,t,"complete"),i.initial=!1),e+=n.length})),this._lastDate=t,0===e&&(this._running=!1)}_getAnims(t){const e=this._charts;let i=e.get(t);return i||(i={running:!1,initial:!0,items:[],listeners:{complete:[],progress:[]}},e.set(t,i)),i}listen(t,e,i){this._getAnims(t).listeners[e].push(i)}add(t,e){e&&e.length&&this._getAnims(t).items.push(...e)}has(t){return this._getAnims(t).items.length>0}start(t){const e=this._charts.get(t);e&&(e.running=!0,e.start=Date.now(),e.duration=e.items.reduce(((t,e)=>Math.max(t,e._duration)),0),this._refresh())}running(t){if(!this._running)return!1;const e=this._charts.get(t);return!!(e&&e.running&&e.items.length)}stop(t){const e=this._charts.get(t);if(!e||!e.items.length)return;const i=e.items;let s=i.length-1;for(;s>=0;--s)i[s].cancel();e.items=[],this._notify(t,e,Date.now(),"complete")}remove(t){return this._charts.delete(t)}}var xt=new bt;
-function _t(t){return t+.5|0}const yt=(t,e,i)=>Math.max(Math.min(t,i),e);function vt(t){return yt(_t(2.55*t),0,255)}function Mt(t){return yt(_t(255*t),0,255)}function wt(t){return yt(_t(t/2.55)/100,0,1)}function kt(t){return yt(_t(100*t),0,100)}const St={0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,A:10,B:11,C:12,D:13,E:14,F:15,a:10,b:11,c:12,d:13,e:14,f:15},Pt=[..."0123456789ABCDEF"],Dt=t=>Pt[15&t],Ct=t=>Pt[(240&t)>>4]+Pt[15&t],Ot=t=>(240&t)>>4==(15&t);function At(t){var e=(t=>Ot(t.r)&&Ot(t.g)&&Ot(t.b)&&Ot(t.a))(t)?Dt:Ct;return t?"#"+e(t.r)+e(t.g)+e(t.b)+((t,e)=>t<255?e(t):"")(t.a,e):void 0}const Tt=/^(hsla?|hwb|hsv)\(\s*([-+.e\d]+)(?:deg)?[\s,]+([-+.e\d]+)%[\s,]+([-+.e\d]+)%(?:[\s,]+([-+.e\d]+)(%)?)?\s*\)$/;function Lt(t,e,i){const s=e*Math.min(i,1-i),n=(e,n=(e+t/30)%12)=>i-s*Math.max(Math.min(n-3,9-n,1),-1);return[n(0),n(8),n(4)]}function Et(t,e,i){const s=(s,n=(s+t/60)%6)=>i-i*e*Math.max(Math.min(n,4-n,1),0);return[s(5),s(3),s(1)]}function Rt(t,e,i){const s=Lt(t,1,.5);let n;for(e+i>1&&(n=1/(e+i),e*=n,i*=n),n=0;n<3;n++)s[n]*=1-e-i,s[n]+=e;return s}function It(t){const e=t.r/255,i=t.g/255,s=t.b/255,n=Math.max(e,i,s),o=Math.min(e,i,s),a=(n+o)/2;let r,l,h;return n!==o&&(h=n-o,l=a>.5?h/(2-n-o):h/(n+o),r=function(t,e,i,s,n){return t===n?(e-i)/s+(e<i?6:0):e===n?(i-t)/s+2:(t-e)/s+4}(e,i,s,h,n),r=60*r+.5),[0|r,l||0,a]}function zt(t,e,i,s){return(Array.isArray(e)?t(e[0],e[1],e[2]):t(e,i,s)).map(Mt)}function Ft(t,e,i){return zt(Lt,t,e,i)}function Vt(t){return(t%360+360)%360}function Bt(t){const e=Tt.exec(t);let i,s=255;if(!e)return;e[5]!==i&&(s=e[6]?vt(+e[5]):Mt(+e[5]));const n=Vt(+e[2]),o=+e[3]/100,a=+e[4]/100;return i="hwb"===e[1]?function(t,e,i){return zt(Rt,t,e,i)}(n,o,a):"hsv"===e[1]?function(t,e,i){return zt(Et,t,e,i)}(n,o,a):Ft(n,o,a),{r:i[0],g:i[1],b:i[2],a:s}}
-function Jt(t){if(t&&"object"==typeof t){const e=t.toString();return"[object CanvasPattern]"===e||"[object CanvasGradient]"===e}return!1}
-class Zt{constructor(t){this._rgb=Kt(t),this._valid=!!this._rgb}get valid(){return this._valid}get rgb(){var t=qt(this._rgb);return t&&(t.a=wt(t.a)),t}set rgb(t){this._rgb=Kt(t)}rgbString(){return this._valid?(t=this._rgb)&&(t.a<255?`rgba(${t.r}, ${t.g}, ${t.b}, ${wt(t.a)})`:`rgb(${t.r}, ${t.g}, ${t.b})`):void 0;var t}hexString(){return this._valid?At(this._rgb):void 0}}
-function Kt(t){var e={r:0,g:0,b:0,a:255};return Array.isArray(t)?t.length>=3&&(e={r:t[0],g:t[1],b:t[2],a:255},t.length>3&&(e.a=Mt(t[3]))):(e=qt(t,{r:0,g:0,b:0,a:1})).a=Mt(e.a),e}
-function qt(t,e){return t?Object.assign(e||{},t):t}
-window.Chart = Chart;
-}));
-</script>
-<meta charset="UTF-8">
-<title>형태소 슬라이서 - 심화 문장 게임</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
-<style>
-:root {
-  --wrks-viz-font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --wrks-viz-primary: #2563eb;
-  --wrks-viz-boss: #dc2626;
-  --wrks-viz-bg: #ffffff;
-  --wrks-viz-fg: #111827;
-  --wrks-viz-border: #d1d5db;
-  --wrks-viz-radius: 8px;
-  --wrks-viz-space-1: 4px;
-  --wrks-viz-space-2: 8px;
-  --wrks-viz-space-3: 12px;
-  --wrks-viz-space-4: 16px;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: var(--wrks-viz-font-family);
-  background: var(--wrks-viz-bg);
-  color: var(--wrks-viz-fg);
-  padding: var(--wrks-viz-space-4);
-}
-.container {
-  max-width: 760px;
-  margin: 0 auto;
-}
-h1 {
-  font-size: 20px;
-  margin-bottom: var(--wrks-viz-space-2);
-  letter-spacing: -0.3px;
-}
-.subtitle {
-  font-size: 13px;
-  color: #6b7280;
-  margin-bottom: var(--wrks-viz-space-4);
-}
-.hud {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--wrks-viz-space-2);
-  margin-bottom: var(--wrks-viz-space-3);
-}
-.hud-cell {
-  border: 1px solid var(--wrks-viz-border);
-  border-radius: var(--wrks-viz-radius);
-  padding: var(--wrks-viz-space-2) var(--wrks-viz-space-3);
-}
-.hud-label {
-  font-size: 11px;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.hud-value {
-  font-size: 22px;
-  font-weight: 600;
-  margin-top: 2px;
-}
-.stage {
-  border: 1px solid var(--wrks-viz-border);
-  border-radius: var(--wrks-viz-radius);
-  padding: var(--wrks-viz-space-4);
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--wrks-viz-space-3);
-  position: relative;
-}
-.stage.boss-theme {
-  border-color: #fca5a5;
-  background: #fff5f5;
-}
-.hint {
-  position: absolute;
-  top: var(--wrks-viz-space-3);
-  left: var(--wrks-viz-space-3);
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 600;
-}
-.word-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 0;
-  user-select: none;
-  line-height: 1.8;
-}
-.char {
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: background 0.15s;
-}
-.gap {
-  width: 16px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-}
-.gap::before {
-  content: "";
-  display: block;
-  width: 2px;
-  height: 50%;
-  background: transparent;
-  transition: background 0.15s;
-}
-.gap:hover::before {
-  background: #d1d5db;
-}
-.gap.cut::before {
-  background: var(--wrks-viz-primary);
-  width: 3px;
-  height: 85%;
-}
-.gap.correct::before {
-  background: #16a34a;
-  width: 3px;
-  height: 85%;
-}
-.gap.wrong::before {
-  background: #dc2626;
-  width: 3px;
-  height: 85%;
-}
-.gap.missed::before {
-  background: #f59e0b;
-  width: 3px;
-  height: 85%;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>형태소 슬라이서 & 분류 탐험대</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Noto Sans KR) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
-/* 주관식 입력 폼 (보스 스테이지 전용) */
-.subjective-box {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  margin-top: 10px;
-}
-.subjective-box.active { display: flex; }
-.subjective-box input {
-  font-size: 18px;
-  padding: 10px 14px;
-  border: 2px solid #fca5a5;
-  border-radius: 8px;
-  text-align: center;
-  width: 85%;
-  max-width: 380px;
-  outline: none;
-}
-.subjective-box input:focus { border-color: var(--wrks-viz-boss); }
-
-.feedback {
-  margin-top: var(--wrks-viz-space-3);
-  font-size: 14px;
-  min-height: 42px;
-  text-align: center;
-  padding: var(--wrks-viz-space-2);
-  width: 100%;
-}
-.feedback.ok { color: #16a34a; }
-.feedback.ng { color: #dc2626; }
-
-.answer-row {
-  font-size: 15px;
-  color: #374151;
-  margin-top: var(--wrks-viz-space-2);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: var(--wrks-viz-space-1);
-}
-.answer-row .m-box {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 6px 10px;
-  border: 1px solid var(--wrks-viz-border);
-  border-radius: 4px;
-  background: #f9fafb;
-  min-width: 45px;
-  margin-bottom: 4px;
-}
-.answer-row .m-text {
-  font-weight: 600;
-  font-size: 15px;
-}
-.answer-row .m-type {
-  font-size: 11px;
-  color: #6b7280;
-  margin-top: 2px;
-  white-space: nowrap;
-}
-.answer-row .m-plus {
-  align-self: center;
-  color: #9ca3af;
-  font-weight: 600;
-  padding: 0 2px;
-}
-
-.controls {
-  display: flex;
-  gap: var(--wrks-viz-space-2);
-  justify-content: center;
-}
-button {
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: var(--wrks-viz-radius);
-  border: 1px solid var(--wrks-viz-border);
-  background: var(--wrks-viz-bg);
-  color: var(--wrks-viz-fg);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-button:hover:not(:disabled) {
-  background: #f3f4f6;
-}
-button.primary {
-  background: var(--wrks-viz-primary);
-  color: #ffffff;
-  border-color: var(--wrks-viz-primary);
-}
-button.primary:hover:not(:disabled) {
-  background: #1d4ed8;
-}
-button.boss {
-  background: var(--wrks-viz-boss);
-  color: #ffffff;
-  border-color: var(--wrks-viz-boss);
-}
-button.boss:hover:not(:disabled) {
-  background: #b91c1c;
-}
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.legend {
-  margin-top: var(--wrks-viz-space-3);
-  font-size: 12px;
-  color: #6b7280;
-  text-align: center;
-}
-.legend span {
-  display: inline-block;
-  margin: 0 var(--wrks-viz-space-2);
-}
-.legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  vertical-align: middle;
-  margin-right: 4px;
-}
-
-/* 기록 리포트 카드 */
-.report-card {
-  width: 100%;
-  text-align: left;
-  background: #f9fafb;
-  border: 1px solid var(--wrks-viz-border);
-  border-radius: var(--wrks-viz-radius);
-  padding: 16px;
-  margin-top: 12px;
-  color: #111827;
-}
-.report-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: var(--wrks-viz-primary);
-  text-align: center;
-}
-.report-stats {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 16px;
-  background: #ffffff;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-}
-.stat-item { text-align: center; }
-.stat-item .lbl { font-size: 11px; color: #6b7280; }
-.stat-item .val { font-size: 18px; font-weight: 700; color: #1f2937; }
-
-.record-list {
-  list-style: none;
-  max-height: 150px;
-  overflow-y: auto;
-  border-top: 1px dashed var(--wrks-viz-border);
-  padding-top: 8px;
-}
-.record-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  padding: 4px 8px;
-  border-bottom: 1px solid #f3f4f6;
-}
-.record-item.latest {
-  font-weight: 700;
-  background: #eff6ff;
-  color: var(--wrks-viz-primary);
-  border-radius: 4px;
-}
-</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            user-select: none;
+        }
+        .slice-gap {
+            transition: all 0.2s ease;
+        }
+        .slice-gap:hover .cut-line {
+            opacity: 0.6;
+            transform: scaleY(1.1);
+        }
+        .cut-line.active {
+            opacity: 1 !important;
+            background-color: #ef4444 !important;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+    </style>
 </head>
-<body>
-<div class="container">
-  <h1>형태소 슬라이서 - 문장 심화 스테이지</h1>
-  <div class="subtitle">글자 사이를 마우스로 클릭해 문장을 형태소 단위로 슬라이스하세요!</div>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
 
-  <div class="hud">
-    <div class="hud-cell">
-      <div class="hud-label">문제</div>
-      <div class="hud-value" id="qnum">1 / 33</div>
-    </div>
-    <div class="hud-cell">
-      <div class="hud-label">점수</div>
-      <div class="hud-value" id="score">0</div>
-    </div>
-    <div class="hud-cell">
-      <div class="hud-label">연속 정답</div>
-      <div class="hud-value" id="combo">0</div>
-    </div>
-    <div class="hud-cell">
-      <div class="hud-label">시도 회차</div>
-      <div class="hud-value" id="playCount">1차</div>
-    </div>
-  </div>
-
-  <div class="stage" id="stageCard">
-    <div class="hint" id="hint">글자 사이를 클릭하세요</div>
-    <div class="word-row" id="word"></div>
-    
-    <!-- 보스 스테이지 서술형 입력창 -->
-    <div class="subjective-box" id="subjectiveArea">
-      <div style="font-weight:700; color:#991b1b; font-size:15px;">👾 보스 특수 문제: '달렸다' 속에 숨은 형태소를 직접 써보세요!</div>
-      <div style="font-size:13px; color:#7f1d1d;">입력 방식 예시: <b>달리/었/다</b> 또는 <b>달리- / -었- / -다</b></div>
-      <input type="text" id="subjectiveInput" placeholder="정답 입력 (예: 달리/었/다)">
-    </div>
-
-    <div class="feedback" id="feedback"></div>
-  </div>
-
-  <div class="controls">
-    <button id="checkBtn" class="primary">잘라!</button>
-    <button id="nextBtn" disabled>다음 문제</button>
-    <button id="resetBtn">처음부터 다시</button>
-  </div>
-
-  <div class="legend" id="legend">
-    <span><span class="legend-dot" style="background:#2563eb"></span>내가 자른 곳</span>
-    <span><span class="legend-dot" style="background:#16a34a"></span>정답</span>
-    <span><span class="legend-dot" style="background:#dc2626"></span>오답</span>
-    <span><span class="legend-dot" style="background:#f59e0b"></span>놓친 경계</span>
-  </div>
-</div>
-
-<script>
-const problems = [
-  // ===== 1차시: 단어 단위 기초 예시 =====
-  { mode: "click", word: "밝다", cuts: [1], display: ["밝-","-다"], types: ["용언 어간","용언 어미"], level: "쉬움", hint: "밝(어근) + 다(어미)" },
-  { mode: "click", word: "차다", cuts: [1], display: ["차-","-다"], types: ["용언 어간","용언 어미"], level: "쉬움", hint: "차(어근) + 다(어미)" },
-  { mode: "click", word: "활짝", cuts: [], display: ["활짝"], types: ["단일어"], level: "쉬움", hint: "함정! 활짝은 단일어(부사) - 자르지 않음" },
-  { mode: "click", word: "봄바람", cuts: [1], display: ["봄","바람"], types: ["어근","어근"], level: "보통", hint: "봄(명사) + 바람(명사)" },
-  { mode: "click", word: "밤하늘", cuts: [1], display: ["밤","하늘"], types: ["어근","어근"], level: "보통", hint: "밤(명사) + 하늘(명사)" },
-  { mode: "click", word: "눈꽃", cuts: [1], display: ["눈","꽃"], types: ["어근","어근"], level: "보통", hint: "눈(명사) + 꽃(명사)" },
-  { mode: "click", word: "풋사과", cuts: [1], display: ["풋-","사과"], types: ["접두사","어근"], level: "어려움", hint: "풋-(접사) + 사과 = 파생어" },
-  { mode: "click", word: "맨손", cuts: [1], display: ["맨-","손"], types: ["접두사","어근"], level: "어려움", hint: "맨-(접사) + 손 = 파생어" },
-  { mode: "click", word: "지우개", cuts: [2], display: ["지우-","-개"], types: ["어근","접미사"], level: "어려움", hint: "지우-(어근) + -개(접사)" },
-  { mode: "click", word: "아침", cuts: [], display: ["아침"], types: ["단일어"], level: "쉬움", hint: "단일어(명사)" },
-  { mode: "click", word: "무지개", cuts: [], display: ["무지개"], types: ["단일어"], level: "보통", hint: "함정! 무지개는 단일어" },
-
-  // ===== 2차시: 형태소 심화 문장 스테이지 =====
-  { 
-    mode: "click",
-    word: "새 신을 신고 달리고 있다.", 
-    cuts: [1, 2, 3, 5, 6, 7, 9, 10, 12, 13], 
-    display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"], 
-    types: ["관형사", "명사", "조사", "어간", "어미", "어간", "어미", "어간", "어미"], 
-    level: "심화 문장 1", 
-    hint: "새 / 신 / 을 / 신 / 고 / 달 / 리 / 고 / 있 / 다" 
-  },
-  { 
-    mode: "click",
-    word: "풋사과를 아주 맛있게 먹었어.", 
-    cuts: [1, 3, 4, 6, 7, 8, 10, 11, 13, 14], 
-    display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"], 
-    types: ["접두사", "명사", "조사", "부사", "어근", "어간", "어미", "어간", "선어말어미", "어말어미"], 
-    level: "심화 문장 2", 
-    hint: "풋 / 사 / 과 / 를 / 아 / 주 / 맛 / 있 / 게 / 먹 / 었 / 어" 
-  },
-  { 
-    mode: "click",
-    word: "아침에 맨발로 강가를 건너고 있다.", 
-    cuts: [2, 3, 4, 6, 7, 8, 10, 11, 13, 14, 16, 17], 
-    display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], 
-    types: ["명사", "조사", "접두사", "명사", "조사", "명사", "명사", "조사", "어간", "어미", "어간", "어미"], 
-    level: "심화 문장 3", 
-    hint: "아 / 침 / 에 / 맨 / 발 / 로 / 강 / 가 / 를 / 건 / 너 / 고 / 있 / 다" 
-  },
-  { 
-    mode: "click",
-    word: "그분은 아주 환하게 웃었다.", 
-    cuts: [1, 2, 3, 5, 6, 8, 9, 10, 12, 13], 
-    display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
-    types: ["관형사", "의존명사", "조사", "부사", "어간", "어미", "어간", "선어말어미", "어말어미"], 
-    level: "심화 문장 4", 
-    hint: "그 / 분 / 은 / 아 / 주 / 환 / 하 / 게 / 웃 / 었 / 다" 
-  },
-
-  // ===== 2차시 심화 보스 문제 (서술형) =====
-  { 
-    mode: "subjective",
-    word: "새 신을 신고 길을 달렸다.",
-    targetWord: "달렸다",
-    keywords: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리,었,다"],
-    display: ["새", "신", "을", "신-", "-고", "길", "을", "달리-", "-었-", "-다"],
-    types: ["관형사", "명사", "조사", "어간", "어미", "명사", "조사", "어간", "선어말어미", "어말어미"],
-    level: "심화 보스 👾",
-    hint: "'달렸다' 속 어간('달리-')과 과거시제 어미('-었-')의 원형을 밝혀 쓰세요!"
-  }
-];
-
-let sessionRecords = [];
-let state = {
-  idx: 0,
-  score: 0,
-  combo: 0,
-  cuts: new Set(),
-  checked: false
-};
-
-const wordEl = document.getElementById("word");
-const feedbackEl = document.getElementById("feedback");
-const qnumEl = document.getElementById("qnum");
-const scoreEl = document.getElementById("score");
-const comboEl = document.getElementById("combo");
-const playCountEl = document.getElementById("playCount");
-const checkBtn = document.getElementById("checkBtn");
-const nextBtn = document.getElementById("nextBtn");
-const resetBtn = document.getElementById("resetBtn");
-const hintEl = document.getElementById("hint");
-const legendEl = document.getElementById("legend");
-const stageCard = document.getElementById("stageCard");
-const subjectiveArea = document.getElementById("subjectiveArea");
-const subjectiveInput = document.getElementById("subjectiveInput");
-
-function render() {
-  const p = problems[state.idx];
-  wordEl.style.display = "flex";
-  wordEl.innerHTML = "";
-  
-  if (p.mode === "click") {
-    stageCard.className = "stage";
-    checkBtn.className = "primary";
-    checkBtn.innerText = "잘라!";
-    subjectiveArea.classList.remove("active");
-
-    const chars = p.word.split("");
-    for (let i = 0; i < chars.length; i++) {
-      if (i > 0) {
-        const gap = document.createElement("div");
-        gap.className = "gap";
-        gap.dataset.pos = i;
-        if (state.cuts.has(i)) {
-          gap.classList.add("cut");
-        }
-        if (state.checked) {
-          const isCorrectCut = p.cuts.includes(i);
-          const userCut = state.cuts.has(i);
-          if (userCut && isCorrectCut) {
-            gap.classList.remove("cut");
-            gap.classList.add("correct");
-          } else if (userCut && !isCorrectCut) {
-            gap.classList.remove("cut");
-            gap.classList.add("wrong");
-          } else if (!userCut && isCorrectCut) {
-            gap.classList.add("missed");
-          }
-        }
-        if (!state.checked) {
-          gap.addEventListener("click", () => toggleCut(i));
-        }
-        wordEl.appendChild(gap);
-      }
-      const c = document.createElement("div");
-      c.className = "char";
-      c.textContent = chars[i];
-      wordEl.appendChild(c);
-    }
-  } else {
-    // 서술형 보스 문제 연출
-    stageCard.className = "stage boss-theme";
-    checkBtn.className = "boss";
-    checkBtn.innerText = "보스 공격 (제출)";
-    subjectiveArea.classList.add("active");
-    subjectiveInput.value = "";
-    
-    // 전체 문장 출력
-    wordEl.innerHTML = `<span style="color:#b91c1c; font-size:28px;">"${p.word}"</span>`;
-  }
-
-  qnumEl.textContent = (state.idx + 1) + " / " + problems.length;
-  scoreEl.textContent = state.score;
-  comboEl.textContent = state.combo;
-  playCountEl.textContent = (sessionRecords.length + 1) + "차";
-  hintEl.textContent = `[${p.level}] ${p.hint}`;
-  legendEl.style.display = (p.mode === "click") ? "block" : "none";
-}
-
-function toggleCut(pos) {
-  if (state.cuts.has(pos)) {
-    state.cuts.delete(pos);
-  } else {
-    state.cuts.add(pos);
-  }
-  render();
-}
-
-function renderAnswer(p) {
-  let html = "<div class='answer-row'>";
-  for (let i = 0; i < p.display.length; i++) {
-    html += "<div class='m-box'>";
-    html += "<div class='m-text'>" + p.display[i] + "</div>";
-    html += "<div class='m-type'>" + p.types[i] + "</div>";
-    html += "</div>";
-    if (i < p.display.length - 1) html += "<span class='m-plus'>+</span>";
-  }
-  html += "</div>";
-  return html;
-}
-
-function check() {
-  const p = problems[state.idx];
-  state.checked = true;
-
-  if (p.mode === "click") {
-    const correct = new Set(p.cuts);
-    const user = state.cuts;
-    let hits = 0, misses = 0, wrongs = 0;
-    correct.forEach(c => { if (user.has(c)) hits++; else misses++; });
-    user.forEach(u => { if (!correct.has(u)) wrongs++; });
-
-    const perfect = misses === 0 && wrongs === 0;
-    if (perfect) {
-      state.combo++;
-      const bonus = state.combo >= 3 ? 50 : 0;
-      const gained = 100 + bonus;
-      state.score += gained;
-      feedbackEl.className = "feedback ok";
-      let msg = "정답! +" + gained + "점";
-      if (bonus) msg += " (연속 " + state.combo + "번째 보너스!)";
-      msg += renderAnswer(p);
-      feedbackEl.innerHTML = msg;
-    } else {
-      state.combo = 0;
-      feedbackEl.className = "feedback ng";
-      let msg = "아쉬워요. ";
-      if (misses) msg += "놓친 경계 " + misses + "곳";
-      if (misses && wrongs) msg += ", ";
-      if (wrongs) msg += "잘못 자른 곳 " + wrongs + "곳";
-      msg += "<div style='margin-top:8px'>정답 해설:</div>" + renderAnswer(p);
-      feedbackEl.innerHTML = msg;
-    }
-  } else {
-    // 서술형 보스 채점 로직
-    const val = subjectiveInput.value.trim().replace(/\s+/g, "");
-    const isCorrect = p.keywords.some(k => val === k.replace(/\s+/g, ""));
-
-    if (isCorrect) {
-      state.combo++;
-      const gained = 300; // 보스 특별 점수
-      state.score += gained;
-      feedbackEl.className = "feedback ok";
-      feedbackEl.innerHTML = `🎉 <b>보스 클리어 성공! (+${gained}점)</b><br>'<b>달렸다</b>' 속 3개의 형태소(<b>달리-</b> + <b>-었-</b> + <b>-다</b>)를 정확하게 추론해냈습니다!` + renderAnswer(p);
-    } else {
-      state.combo = 0;
-      feedbackEl.className = "feedback ng";
-      feedbackEl.innerHTML = `❌ <b>보스 공격 실패!</b><br>정답 표기 방식: <b>달리/었/다</b> ('달리-' + '-었-' + '-다')` + renderAnswer(p);
-    }
-  }
-
-  checkBtn.disabled = true;
-  nextBtn.disabled = false;
-  render();
-}
-
-function next() {
-  if (state.idx < problems.length - 1) {
-    state.idx++;
-    state.cuts = new Set();
-    state.checked = false;
-    feedbackEl.textContent = "";
-    feedbackEl.className = "feedback";
-    checkBtn.disabled = false;
-    nextBtn.disabled = true;
-    render();
-  } else {
-    showFinalResult();
-  }
-}
-
-function showFinalResult() {
-  const currentTry = sessionRecords.length + 1;
-  sessionRecords.push({
-    tryCount: currentTry,
-    score: state.score,
-    date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  });
-
-  const maxScore = Math.max(...sessionRecords.map(r => r.score));
-  
-  wordEl.style.display = "none";
-  subjectiveArea.classList.remove("active");
-  hintEl.textContent = "🏆 게임 종료!";
-  legendEl.style.display = "none";
-
-  feedbackEl.className = "feedback ok";
-  
-  let reportHtml = `
-    <div style="font-size:20px; font-weight:700; margin-bottom:8px;">축하합니다! 형태소 심화 문장까지 모두 정복했습니다.</div>
-    <div class="report-card">
-      <div class="report-title"> 🏆 누적 플레이 성적 </div>
-      <div class="report-stats">
-        <div class="stat-item">
-          <div class="lbl">이번 회차 점수</div>
-          <div class="val" style="color:#2563eb;">${state.score}점</div>
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('mode-select')">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-2xl shadow-md shadow-indigo-200">
+                    <i class="fa-solid fa-scissors text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl text-slate-800 tracking-tight leading-none">형태소 슬라이서</h1>
+                    <span class="text-xs text-indigo-600 font-semibold">국어 문법 학습 탐험대</span>
+                </div>
+            </div>
+            
+            <!-- Dynamic Stats Bar (Visible in Game) -->
+            <div id="game-stats" class="hidden flex items-center space-x-4 text-sm font-bold bg-slate-100 px-4 py-1.5 rounded-full border border-slate-200">
+                <div class="flex items-center text-amber-500">
+                    <i class="fa-solid fa-star mr-1.5"></i>
+                    <span id="score-display">0</span>
+                </div>
+                <div class="w-px h-4 bg-slate-300"></div>
+                <div class="flex items-center text-rose-500">
+                    <i class="fa-solid fa-fire mr-1.5"></i>
+                    <span id="combo-display">0</span> <span class="text-xs ml-0.5">COMBO</span>
+                </div>
+                <div class="w-px h-4 bg-slate-300"></div>
+                <div class="flex items-center text-emerald-600">
+                    <i class="fa-solid fa-stopwatch mr-1.5"></i>
+                    <span id="timer-display">00:00</span>
+                </div>
+            </div>
         </div>
-        <div class="stat-item">
-          <div class="lbl">최고 점수</div>
-          <div class="val" style="color:#16a34a;">${maxScore}점</div>
-        </div>
-        <div class="stat-item">
-          <div class="lbl">총 도전 횟수</div>
-          <div class="val">${sessionRecords.length}회차</div>
-        </div>
-      </div>
-      <div style="font-size:12px; font-weight:600; color:#4b5563; margin-bottom:6px;"> 📜 누적 플레이 기록</div>
-      <ul class="record-list">
-  `;
+    </header>
 
-  [...sessionRecords].reverse().forEach(rec => {
-    const isLatest = rec.tryCount === currentTry;
-    reportHtml += `
-      <li class="record-item ${isLatest ? 'latest' : ''}">
-        <span>${rec.tryCount}차 시도 (${rec.date}) ${isLatest ? '<b>[NEW]</b>' : ''}</span>
-        <span><b>${rec.score}점</b></span>
-      </li>
-    `;
-  });
+    <!-- Main Content Container -->
+    <main class="max-w-4xl w-full mx-auto p-4 my-auto">
+        
+        <!-- ================= 1. MODE SELECT SCREEN ================= -->
+        <div id="mode-select" class="space-y-8 py-6">
+            <div class="text-center space-y-3">
+                <span class="bg-indigo-100 text-indigo-700 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Morpheme Learning Game</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-800">뜻을 가진 가장 작은 말의 단위,<br/><span class="text-indigo-600">형태소</span>를 찾아라!</h2>
+                <p class="text-slate-500 text-sm sm:text-base max-w-lg mx-auto">
+                    문장을 형태소 단위로 올바르게 자르고, 각 형태소의 성격과 유형을 맞혀 점수를 획득하세요.
+                </p>
+            </div>
 
-  reportHtml += `
-      </ul>
+            <div class="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                <!-- Practice Mode Card -->
+                <div onclick="startStandardGame()" class="bg-white p-6 rounded-3xl border-2 border-slate-200 hover:border-indigo-500 card-shadow transition-all hover:-translate-y-1 cursor-pointer group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-indigo-100 group-hover:bg-indigo-600 group-hover:text-white text-indigo-600 rounded-2xl flex items-center justify-center text-xl mb-4 transition-colors">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">기본 스테이지 모드</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">
+                            준비된 단계별 문장들을 차례대로 슬라이스하고 형태소를 분류합니다.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex items-center text-indigo-600 font-bold text-sm">
+                        <span>도전 시작하기</span>
+                        <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Custom Mode Card -->
+                <div onclick="showScreen('custom-editor')" class="bg-white p-6 rounded-3xl border-2 border-slate-200 hover:border-emerald-500 card-shadow transition-all hover:-translate-y-1 cursor-pointer group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-emerald-100 group-hover:bg-emerald-600 group-hover:text-white text-emerald-600 rounded-2xl flex items-center justify-center text-xl mb-4 transition-colors">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">커스텀 문장 제작소</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">
+                            직접 원하는 문장과 정답 형태소를 등록하여 친구나 학생들과 공유하며 출제해보세요.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex items-center text-emerald-600 font-bold text-sm">
+                        <span>문장 직접 만들기</span>
+                        <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Morph Concept Quick Guide Toggle -->
+            <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200 max-w-2xl mx-auto">
+                <div class="flex items-center justify-between cursor-pointer" onclick="toggleConceptGuide()">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-lightbulb text-amber-500 text-lg"></i>
+                        <span class="font-bold text-amber-900 text-sm sm:text-base">형태소 개념 1분 요약 보기</span>
+                    </div>
+                    <i id="guide-chevron" class="fa-solid fa-chevron-down text-amber-600 transition-transform"></i>
+                </div>
+                <div id="concept-guide-content" class="hidden mt-4 pt-4 border-t border-amber-200/60 text-xs sm:text-sm text-amber-900 space-y-3">
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <div class="bg-white/80 p-3 rounded-xl border border-amber-200">
+                            <p class="font-bold text-amber-800 mb-1">📌 자립성에 따른 구분</p>
+                            <ul class="list-disc list-inside space-y-0.5 text-slate-700">
+                                <li><strong class="text-indigo-600">자립 형태소:</strong> 홀로 쓰일 수 있는 형태소 (명사, 대명사, 수사, 관형사, 부사, 감탄사)</li>
+                                <li><strong class="text-indigo-600">의존 형태소:</strong> 다른 말에 붙어 쓰이는 형태소 (조사, 용언 어간, 어미, 접사)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white/80 p-3 rounded-xl border border-amber-200">
+                            <p class="font-bold text-amber-800 mb-1">📌 실질적 의미에 따른 구분</p>
+                            <ul class="list-disc list-inside space-y-0.5 text-slate-700">
+                                <li><strong class="text-indigo-600">실질 형태소:</strong> 구체적인 세계의 상태/사물/동작을 나타냄 (체언, 수식언, 용언 어간 등)</li>
+                                <li><strong class="text-indigo-600">형식(문법) 형태소:</strong> 문법적 관계나 뜻을 더함 (조사, 어미, 접사)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 2. GAME PLAY SCREEN (STEP 1 & STEP 2) ================= -->
+        <div id="game-screen" class="hidden space-y-6 py-2">
+            
+            <!-- Progress & Stage Info Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 card-shadow">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span id="stage-badge" class="bg-indigo-100 text-indigo-700 font-bold text-xs px-2.5 py-0.5 rounded-full">STAGE 1</span>
+                        <span id="stage-count" class="text-xs text-slate-400 font-medium">문제 1 / 3</span>
+                    </div>
+                    <h3 id="step-title" class="text-lg font-bold text-slate-800 mt-1">1단계: 문장을 형태소 단위로 잘라주세요!</h3>
+                </div>
+                <!-- Step Bar Indicator -->
+                <div class="flex items-center space-x-2">
+                    <div id="step-1-indicator" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 text-white font-bold text-xs">
+                        <span>1. 자르기</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-300"></i>
+                    <div id="step-2-indicator" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-400 font-bold text-xs">
+                        <span>2. 종류 선택</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Interactive Game Board Card -->
+            <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 card-shadow relative min-h-[360px] flex flex-col justify-between">
+                
+                <!-- Hint Button Floating Top Right -->
+                <div class="flex justify-end mb-4">
+                    <button id="hint-btn" onclick="useHint()" class="flex items-center space-x-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+                        <span>힌트 사용 (<span id="hint-count">3</span>)</span>
+                    </button>
+                </div>
+
+                <!-- STEP 1: SLICING VIEW -->
+                <div id="step-1-view" class="my-auto py-8">
+                    <p class="text-center text-slate-400 text-sm mb-6">글자 사이의 절단선 공간을 클릭/터치하여 형태소를 나누세요.</p>
+                    
+                    <!-- Interactive Sentence Slicer Container -->
+                    <div id="sentence-slicer-container" class="flex flex-wrap items-center justify-center gap-y-6 max-w-3xl mx-auto px-2">
+                        <!-- JS renders characters and cut boundaries here -->
+                    </div>
+                </div>
+
+                <!-- STEP 2: CLASSIFYING VIEW -->
+                <div id="step-2-view" class="hidden my-auto space-y-6">
+                    <p class="text-center text-slate-500 text-sm">각 형태소 조각의 <span class="font-bold text-indigo-600">속성 버튼</span>을 탭하여 선택하세요!</p>
+                    
+                    <!-- Morpheme Cards List -->
+                    <div id="morpheme-classify-list" class="space-y-4 max-h-[440px] overflow-y-auto pr-2">
+                        <!-- JS renders morph cards here -->
+                    </div>
+                </div>
+
+                <!-- Action Footer Buttons -->
+                <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+                    <button id="reset-step-btn" onclick="resetCurrentStep()" class="text-slate-400 hover:text-slate-600 text-sm font-bold flex items-center space-x-1 px-3 py-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>초기화</span>
+                    </button>
+
+                    <div class="flex space-x-3">
+                        <button id="step-back-btn" onclick="goToStep(1)" class="hidden px-5 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm transition-all">
+                            이전 (자르기)
+                        </button>
+                        <button id="next-action-btn" onclick="handleNextAction()" class="px-7 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-extrabold text-sm shadow-lg shadow-indigo-200 transition-all flex items-center space-x-2">
+                            <span>형태소 분류로 이동</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= 3. RESULT & FEEDBACK SCREEN ================= -->
+        <div id="result-screen" class="hidden space-y-6 py-6">
+            <!-- Score Banner -->
+            <div class="bg-gradient-to-br from-indigo-600 to-violet-700 text-white rounded-3xl p-8 text-center card-shadow relative overflow-hidden">
+                <div class="relative z-10 space-y-2">
+                    <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">STAGE COMPLETED</span>
+                    <h2 id="result-title" class="text-3xl font-black">완벽합니다! 🎉</h2>
+                    <p id="result-subtitle" class="text-indigo-100 text-sm">모든 형태소를 올바르게 분석하고 분류했습니다.</p>
+                    
+                    <div class="pt-4 flex justify-center items-center space-x-6 text-center">
+                        <div>
+                            <p class="text-indigo-200 text-xs">획득 점수</p>
+                            <p id="result-score" class="text-3xl font-black text-amber-300">100</p>
+                        </div>
+                        <div class="w-px h-8 bg-indigo-400/40"></div>
+                        <div>
+                            <p class="text-indigo-200 text-xs">최대 콤보</p>
+                            <p id="result-combo" class="text-3xl font-black text-rose-300">3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Morph Explanation Card -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 card-shadow space-y-4">
+                <h3 class="font-bold text-slate-800 text-base flex items-center">
+                    <i class="fa-solid fa-book-open text-indigo-600 mr-2"></i>
+                    정답 및 문법 해설
+                </h3>
+                
+                <div id="explanation-container" class="space-y-3 divide-y divide-slate-100">
+                    <!-- JS renders detailed morphological analysis -->
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="flex justify-between items-center pt-2">
+                <button onclick="showScreen('mode-select')" class="px-6 py-3 rounded-2xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm transition-all">
+                    메인으로
+                </button>
+                <button id="next-stage-btn" onclick="nextStage()" class="px-8 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm shadow-lg shadow-indigo-200 transition-all flex items-center space-x-2">
+                    <span>다음 문제 도전</span>
+                    <i class="fa-solid fa-circle-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= 4. CUSTOM SENTENCE EDITOR SCREEN ================= -->
+        <div id="custom-editor" class="hidden space-y-6 py-4">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 card-shadow space-y-6">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">나만의 커스텀 문제 만들기</h2>
+                    <p class="text-slate-500 text-sm mt-1">문장을 입력하고 형태소 경계선과 각 형태소의 속성을 설정해 문제를 제작하세요.</p>
+                </div>
+
+                <!-- Form Step A: Sentence Input -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-bold text-slate-700 uppercase">1. 문제 문장 입력</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="custom-input-text" placeholder="예: 풋사과를 맛있게 먹었다" class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-medium">
+                        <button onclick="generateCustomSlicer()" class="whitespace-nowrap px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-sm transition-all">
+                            경계 설정하기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form Step B: Interactive Cutter & Attribute Assign -->
+                <div id="custom-setup-area" class="hidden space-y-6 pt-4 border-t border-slate-100">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-2">2. 형태소 단위로 잘라주세요</label>
+                        <div id="custom-slicer-box" class="flex flex-wrap items-center justify-center gap-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                            <!-- JS dynamic slicer for custom sentence -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-2">3. 각 조각별 문법 속성 지정</label>
+                        <div id="custom-pieces-list" class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                            <!-- JS renders inputs for generated morphs -->
+                        </div>
+                    </div>
+
+                    <button onclick="saveAndPlayCustom()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl text-sm shadow-lg shadow-emerald-100 transition-all">
+                        이 문장으로 게임 플레이하기 🚀
+                    </button>
+                </div>
+            </div>
+
+            <button onclick="showScreen('mode-select')" class="px-6 py-2.5 rounded-2xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm">
+                취소하고 메인으로
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+        <p>한국어 표준 문법 기반 형태소 학습 가이드 · EduTech Interactive</p>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs sm:text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
+        <i id="toast-icon" class="fa-solid fa-circle-info text-amber-400"></i>
+        <span id="toast-msg">메시지 내용</span>
     </div>
-  `;
 
-  feedbackEl.innerHTML = reportHtml;
-  checkBtn.disabled = true;
-  nextBtn.disabled = true;
-}
+    <!-- JS Logic Code -->
+    <script>
+        /* ================= DATABASE OF PRESET QUESTIONS ================= */
+        const PRESET_STAGES = [
+            {
+                id: 1,
+                sentence: "하늘이 매우 푸르다",
+                morphemes: [
+                    { text: "하늘", independence: "자립", substance: "실질", desc: "혼자 쓰일 수 있고 실제 의미가 있는 명사입니다." },
+                    { text: "이", independence: "의존", substance: "형식", desc: "혼자 쓰일 수 없고 문법 역할만 하는 조사입니다." },
+                    { text: "매우", independence: "자립", substance: "실질", desc: "혼자 쓰일 수 있는 부사이자 실질 형태소입니다." },
+                    { text: "푸르", independence: "의존", substance: "실질", desc: "형용사의 뿌리가 되는 핵심 의미(실질)를 가졌지만 어미가 필요하여 의존 형태소입니다." },
+                    { text: "다", independence: "의존", substance: "형식", desc: "문장을 마무리짓는 문법적 역할(형식)을 하는 의존 형태소입니다." }
+                ]
+            },
+            {
+                id: 2,
+                sentence: "풋사과를 먹었다",
+                morphemes: [
+                    { text: "풋", independence: "의존", substance: "형식", desc: "'덜 익은' 뜻을 더하는 접두사(의존/형식)입니다." },
+                    { text: "사과", independence: "자립", substance: "실질", desc: "혼자 쓰일 수 있는 과일 이름(자립/실질)입니다." },
+                    { text: "를", independence: "의존", substance: "형식", desc: "목적어 역할을 뜻하는 조사(의존/형식)입니다." },
+                    { text: "먹", independence: "의존", substance: "실질", desc: "'먹다'의 핵심 동작 의미(실질)를 가진 어간(의존)입니다." },
+                    { text: "었", independence: "의존", substance: "형식", desc: "과거 시제를 뜻하는 문법 어미(의존/형식)입니다." },
+                    { text: "다", independence: "의존", substance: "형식", desc: "문장 끝을 맺는 종결 어미(의존/형식)입니다." }
+                ]
+            },
+            {
+                id: 3,
+                sentence: "아기 새가 노래를 부른다",
+                morphemes: [
+                    { text: "아기", independence: "자립", substance: "실질", desc: "자립 형태소이자 실질 형태소인 명사입니다." },
+                    { text: "새", independence: "자립", substance: "실질", desc: "자립 형태소이자 실질 형태소인 명사입니다." },
+                    { text: "가", independence: "의존", substance: "형식", desc: "주격 조사로 의존 및 형식 형태소입니다." },
+                    { text: "노래", independence: "자립", substance: "실질", desc: "자립 형태소이자 실질 형태소입니다." },
+                    { text: "를", independence: "의존", substance: "형식", desc: "목적격 조사(의존/형식)입니다." },
+                    { text: "부르", independence: "의존", substance: "실질", desc: "'부르다'의 핵심 동작 뜻(실질)을 담은 어간(의존)입니다." },
+                    { text: "ㄴ", independence: "의존", substance: "형식", desc: "현재 시제를 나타내는 어미 요소(의존/형식)입니다." },
+                    { text: "다", independence: "의존", substance: "형식", desc: "평서형 종결 어미(의존/형식)입니다." }
+                ]
+            }
+        ];
 
-function reset() {
-  state = { idx: 0, score: 0, combo: 0, cuts: new Set(), checked: false };
-  feedbackEl.textContent = "";
-  feedbackEl.className = "feedback";
-  checkBtn.disabled = false;
-  nextBtn.disabled = true;
-  render();
-}
+        /* ================= GAME STATE VARIABLES ================= */
+        let currentQuestions = [...PRESET_STAGES];
+        let currentStageIdx = 0;
+        let currentStep = 1;
+        let score = 0;
+        let combo = 0;
+        let maxCombo = 0;
+        let hintCount = 3;
+        let timerInterval = null;
+        let secondsElapsed = 0;
 
-checkBtn.addEventListener("click", check);
-nextBtn.addEventListener("click", next);
-resetBtn.addEventListener("click", reset);
+        let userCutIndices = new Set();
+        let userClassifications = [];
 
-render();
-</script>
+        // Custom Mode Temp State
+        let customCutIndices = new Set();
+        let customClassifications = [];
+
+        /* ================= HELPER & UTILITY FUNCTIONS ================= */
+        function updateStatsHeader() {
+            document.getElementById('score-display').innerText = score;
+            document.getElementById('combo-display').innerText = combo;
+        }
+
+        function startTimer() {
+            stopTimer();
+            secondsElapsed = 0;
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay() {
+            const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+            const secs = String(secondsElapsed % 60).padStart(2, '0');
+            document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+        }
+
+        function showToast(message, iconClass = "fa-circle-info") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.innerText = message;
+            toastIcon.className = `fa-solid ${iconClass} text-amber-400`;
+
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        function toggleConceptGuide() {
+            const guideContent = document.getElementById('concept-guide-content');
+            const chevron = document.getElementById('guide-chevron');
+            if (guideContent.classList.contains('hidden')) {
+                guideContent.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                guideContent.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+
+        /* ================= SCREEN NAVIGATION ================= */
+        function showScreen(screenId) {
+            ['mode-select', 'game-screen', 'result-screen', 'custom-editor'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+
+            const statsBar = document.getElementById('game-stats');
+            if (screenId === 'game-screen') {
+                statsBar.classList.remove('hidden');
+            } else {
+                statsBar.classList.add('hidden');
+                stopTimer();
+            }
+        }
+
+        function startStandardGame() {
+            currentQuestions = [...PRESET_STAGES];
+            currentStageIdx = 0;
+            score = 0;
+            combo = 0;
+            maxCombo = 0;
+            hintCount = 3;
+            document.getElementById('hint-count').innerText = hintCount;
+            updateStatsHeader();
+            loadStage(currentStageIdx);
+            showScreen('game-screen');
+        }
+
+        function loadStage(idx) {
+            const qData = currentQuestions[idx];
+            document.getElementById('stage-badge').innerText = `STAGE ${idx + 1}`;
+            document.getElementById('stage-count').innerText = `문제 ${idx + 1} / ${currentQuestions.length}`;
+            userCutIndices.clear();
+            userClassifications = [];
+            
+            startTimer();
+            goToStep(1);
+        }
+
+        function goToStep(stepNumber) {
+            currentStep = stepNumber;
+            const qData = currentQuestions[currentStageIdx];
+
+            if (stepNumber === 1) {
+                document.getElementById('step-title').innerText = "1단계: 문장을 형태소 단위로 잘라주세요!";
+                document.getElementById('step-1-indicator').className = "flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 text-white font-bold text-xs";
+                document.getElementById('step-2-indicator').className = "flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-400 font-bold text-xs";
+                
+                document.getElementById('step-1-view').classList.remove('hidden');
+                document.getElementById('step-2-view').classList.add('hidden');
+                
+                document.getElementById('step-back-btn').classList.add('hidden');
+                document.getElementById('next-action-btn').innerHTML = `<span>형태소 분류로 이동</span><i class="fa-solid fa-arrow-right"></i>`;
+
+                renderStep1Slicer(qData.sentence);
+            } else {
+                const chunks = getSlicedChunks();
+                if (chunks.length === 0) {
+                    showToast("최소한 하나 이상의 형태소 조각이 필요합니다!", "fa-triangle-exclamation");
+                    return;
+                }
+
+                document.getElementById('step-title').innerText = "2단계: 각 형태소 조각의 속성을 선택하세요!";
+                document.getElementById('step-1-indicator').className = "flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-400 font-bold text-xs";
+                document.getElementById('step-2-indicator').className = "flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 text-white font-bold text-xs";
+                
+                document.getElementById('step-1-view').classList.add('hidden');
+                document.getElementById('step-2-view').classList.remove('hidden');
+                
+                document.getElementById('step-back-btn').classList.remove('hidden');
+                document.getElementById('next-action-btn').innerHTML = `<span>정답 제출하기</span><i class="fa-solid fa-check"></i>`;
+
+                // Initialize classification choices as null (unselected) if length changed
+                if (userClassifications.length !== chunks.length) {
+                    userClassifications = chunks.map(() => ({ independence: null, substance: null }));
+                }
+
+                renderStep2Classifiers(chunks);
+            }
+        }
+
+        /* ================= STEP 1: SLICING LOGIC ================= */
+        function renderStep1Slicer(sentence) {
+            const container = document.getElementById('sentence-slicer-container');
+            container.innerHTML = '';
+
+            const chars = sentence.split('');
+            chars.forEach((char, i) => {
+                if (char === ' ') {
+                    const spaceBox = document.createElement('div');
+                    spaceBox.className = "w-6 h-14 flex items-center justify-center text-slate-300 font-bold text-xl select-none";
+                    spaceBox.innerText = "␣";
+                    container.appendChild(spaceBox);
+                    return;
+                }
+
+                const charCard = document.createElement('div');
+                charCard.className = "w-14 h-16 sm:w-16 sm:h-20 bg-slate-100 border-2 border-slate-300 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl font-black text-slate-800 shadow-sm";
+                charCard.innerText = char;
+                container.appendChild(charCard);
+
+                // Add Cut Boundary Gap (except after last character)
+                if (i < chars.length - 1) {
+                    const isNextSpace = chars[i+1] === ' ';
+                    const isCut = userCutIndices.has(i);
+
+                    const gapBtn = document.createElement('button');
+                    gapBtn.className = "slice-gap w-6 sm:w-8 h-16 sm:h-20 flex items-center justify-center relative cursor-pointer group focus:outline-none";
+                    gapBtn.onclick = () => toggleCutIndex(i);
+
+                    const line = document.createElement('div');
+                    line.className = `cut-line w-1.5 h-12 rounded-full transition-all duration-200 ${isCut ? 'active' : 'bg-slate-200 group-hover:bg-slate-400'}`;
+                    
+                    gapBtn.appendChild(line);
+                    container.appendChild(gapBtn);
+                }
+            });
+        }
+
+        function toggleCutIndex(idx) {
+            if (userCutIndices.has(idx)) {
+                userCutIndices.delete(idx);
+            } else {
+                userCutIndices.add(idx);
+            }
+            renderStep1Slicer(currentQuestions[currentStageIdx].sentence);
+        }
+
+        function getSlicedChunks() {
+            const sentence = currentQuestions[currentStageIdx].sentence;
+            const chars = sentence.split('');
+            let chunks = [];
+            let currentChunk = "";
+
+            chars.forEach((char, i) => {
+                if (char !== ' ') {
+                    currentChunk += char;
+                }
+                if (userCutIndices.has(i) || i === chars.length - 1) {
+                    if (currentChunk.length > 0) {
+                        chunks.push(currentChunk);
+                        currentChunk = "";
+                    }
+                }
+            });
+            if (currentChunk.length > 0) chunks.push(currentChunk);
+            return chunks;
+        }
+
+        /* ================= STEP 2: CLASSIFYING LOGIC (BUTTON TOGGLES) ================= */
+        function renderStep2Classifiers(chunks) {
+            const container = document.getElementById('morpheme-classify-list');
+            container.innerHTML = '';
+
+            chunks.forEach((chunkText, idx) => {
+                const itemData = userClassifications[idx] || { independence: null, substance: null };
+                
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 border border-slate-200 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3";
+
+                const title = document.createElement('div');
+                title.className = "flex items-center space-x-3";
+                title.innerHTML = `
+                    <span class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">${idx + 1}</span>
+                    <span class="text-xl font-black text-slate-800 tracking-wide">${chunkText}</span>
+                `;
+
+                // Button Grid for 4 types
+                const btnGrid = document.createElement('div');
+                btnGrid.className = "grid grid-cols-2 gap-2 w-full sm:w-auto";
+
+                // Independence & Substance selection states
+                const isJalib = itemData.independence === '자립';
+                const isEuijon = itemData.independence === '의존';
+                const isSiljil = itemData.substance === '실질';
+                const isHyeongsik = itemData.substance === '형식';
+
+                btnGrid.innerHTML = `
+                    <div class="flex space-x-1 bg-white p-1 rounded-xl border border-slate-200">
+                        <button onclick="setMorphAttr(${idx}, 'independence', '자립')" class="flex-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isJalib ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'}">
+                            자립 형태소
+                        </button>
+                        <button onclick="setMorphAttr(${idx}, 'independence', '의존')" class="flex-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isEuijon ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'}">
+                            의존 형태소
+                        </button>
+                    </div>
+                    <div class="flex space-x-1 bg-white p-1 rounded-xl border border-slate-200">
+                        <button onclick="setMorphAttr(${idx}, 'substance', '실질')" class="flex-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isSiljil ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'}">
+                            실질 형태소
+                        </button>
+                        <button onclick="setMorphAttr(${idx}, 'substance', '형식')" class="flex-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isHyeongsik ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'}">
+                            형식 형태소
+                        </button>
+                    </div>
+                `;
+
+                card.appendChild(title);
+                card.appendChild(btnGrid);
+                container.appendChild(card);
+            });
+        }
+
+        function setMorphAttr(chunkIdx, type, val) {
+            if (!userClassifications[chunkIdx]) {
+                userClassifications[chunkIdx] = { independence: null, substance: null };
+            }
+            // Toggle selection if clicking the already selected button
+            if (userClassifications[chunkIdx][type] === val) {
+                userClassifications[chunkIdx][type] = null;
+            } else {
+                userClassifications[chunkIdx][type] = val;
+            }
+            renderStep2Classifiers(getSlicedChunks());
+        }
+
+        function resetCurrentStep() {
+            if (currentStep === 1) {
+                userCutIndices.clear();
+                renderStep1Slicer(currentQuestions[currentStageIdx].sentence);
+            } else {
+                userClassifications = getSlicedChunks().map(() => ({ independence: null, substance: null }));
+                renderStep2Classifiers(getSlicedChunks());
+            }
+        }
+
+        /* ================= HINT & VALIDATION LOGIC ================= */
+        function useHint() {
+            if (hintCount <= 0) {
+                showToast("남은 힌트가 없습니다!", "fa-triangle-exclamation");
+                return;
+            }
+
+            const qData = currentQuestions[currentStageIdx];
+            if (currentStep === 1) {
+                const chars = qData.sentence.split('');
+                let answerCutIndices = new Set();
+                let accLen = 0;
+                
+                for (let i = 0; i < qData.morphemes.length - 1; i++) {
+                    const m = qData.morphemes[i];
+                    accLen += m.text.length;
+                    
+                    let count = 0;
+                    for (let c = 0; c < chars.length; c++) {
+                        if (chars[c] !== ' ') count++;
+                        if (count === accLen) {
+                            answerCutIndices.add(c);
+                            break;
+                        }
+                    }
+                }
+
+                userCutIndices = new Set(answerCutIndices);
+                renderStep1Slicer(qData.sentence);
+                hintCount--;
+                document.getElementById('hint-count').innerText = hintCount;
+                showToast("1단계 자르기 정답 힌트를 적용했습니다!", "fa-wand-magic-sparkles");
+            } else {
+                const chunks = getSlicedChunks();
+                userClassifications = chunks.map((chunk, i) => {
+                    const target = qData.morphemes[i];
+                    return target ? { independence: target.independence, substance: target.substance } : { independence: '자립', substance: '실질' };
+                });
+                renderStep2Classifiers(chunks);
+                hintCount--;
+                document.getElementById('hint-count').innerText = hintCount;
+                showToast("2단계 형태소 종류 힌트를 적용했습니다!", "fa-wand-magic-sparkles");
+            }
+        }
+
+        function handleNextAction() {
+            if (currentStep === 1) {
+                // 1단계 자르기 정답 검증
+                const qData = currentQuestions[currentStageIdx];
+                const userChunks = getSlicedChunks();
+                const correctMorphemes = qData.morphemes;
+
+                let isSliceCorrect = (userChunks.length === correctMorphemes.length);
+                if (isSliceCorrect) {
+                    for (let i = 0; i < userChunks.length; i++) {
+                        if (userChunks[i] !== correctMorphemes[i].text) {
+                            isSliceCorrect = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (!isSliceCorrect) {
+                    showToast("아직 형태소가 올바르게 잘리지 않았어요! 다시 한번 시도해보세요. ✂️", "fa-triangle-exclamation");
+                    return;
+                }
+
+                showToast("1단계 성공! 이제 형태소의 종류를 선택해주세요. 🎉", "fa-circle-check");
+                goToStep(2);
+            } else {
+                // 2단계 미선택 항목 체크
+                const userChunks = getSlicedChunks();
+                for (let i = 0; i < userChunks.length; i++) {
+                    const cls = userClassifications[i];
+                    if (!cls || !cls.independence || !cls.substance) {
+                        showToast(`'${userChunks[i]}' 형태소의 속성을 모두 선택해주세요!`, "fa-triangle-exclamation");
+                        return;
+                    }
+                }
+                validateAndSubmitAnswer();
+            }
+        }
+
+        function validateAndSubmitAnswer() {
+            stopTimer();
+            const qData = currentQuestions[currentStageIdx];
+            const userChunks = getSlicedChunks();
+            const correctMorphemes = qData.morphemes;
+
+            let isSliceCorrect = (userChunks.length === correctMorphemes.length);
+            if (isSliceCorrect) {
+                for (let i = 0; i < userChunks.length; i++) {
+                    if (userChunks[i] !== correctMorphemes[i].text) {
+                        isSliceCorrect = false;
+                        break;
+                    }
+                }
+            }
+
+            // 부분 점수 계산 로직
+            let earnedScore = 0;
+            let totalPossiblePoints = 50 + (correctMorphemes.length * 20); // 자르기 50점 + 개별 형태소당 20점(속성당 10점)
+            
+            // 1. 자르기 성공 점수
+            if (isSliceCorrect) {
+                earnedScore += 50;
+            }
+
+            // 각 형태소별 맞은 개수 카운트 (해설용 데이터 저장)
+            const evaluationDetails = [];
+
+            if (isSliceCorrect) {
+                for (let i = 0; i < userChunks.length; i++) {
+                    const uCls = userClassifications[i];
+                    const cTarget = correctMorphemes[i];
+                    
+                    const isIndepCorrect = uCls.independence === cTarget.independence;
+                    const isSubstCorrect = uCls.substance === cTarget.substance;
+
+                    if (isIndepCorrect) earnedScore += 10;
+                    if (isSubstCorrect) earnedScore += 10;
+
+                    evaluationDetails.push({
+                        text: cTarget.text,
+                        independence: cTarget.independence,
+                        substance: cTarget.substance,
+                        userIndep: uCls.independence,
+                        userSubst: uCls.substance,
+                        isIndepCorrect: isIndepCorrect,
+                        isSubstCorrect: isSubstCorrect,
+                        desc: cTarget.desc
+                    });
+                }
+            } else {
+                // 자르기가 틀린 경우
+                correctMorphemes.forEach(m => {
+                    evaluationDetails.push({
+                        text: m.text,
+                        independence: m.independence,
+                        substance: m.substance,
+                        userIndep: '-',
+                        userSubst: '-',
+                        isIndepCorrect: false,
+                        isSubstCorrect: false,
+                        desc: m.desc
+                    });
+                });
+            }
+
+            // 시간 보너스 & 콤보 적용
+            const accuracyRate = earnedScore / totalPossiblePoints;
+            const isPerfect = accuracyRate === 1.0;
+
+            if (accuracyRate >= 0.7) {
+                combo++;
+                if (combo > maxCombo) maxCombo = combo;
+                earnedScore += (combo * 5); // 콤보 보너스
+            } else {
+                combo = 0;
+            }
+
+            score += earnedScore;
+            updateStatsHeader();
+
+            if (isPerfect) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+
+            showResultScreen(isPerfect, accuracyRate, earnedScore, isSliceCorrect, evaluationDetails);
+        }
+
+        function showResultScreen(isPerfect, accuracyRate, gainedScore, isSliceCorrect, evaluationDetails) {
+            showScreen('result-screen');
+            const qData = currentQuestions[currentStageIdx];
+
+            const titleEl = document.getElementById('result-title');
+            const subtitleEl = document.getElementById('result-subtitle');
+
+            if (isPerfect) {
+                titleEl.innerText = "완벽합니다! 🎉";
+                subtitleEl.innerText = "모든 형태소 자르기와 종류 분류를 만점으로 통과했습니다!";
+            } else if (accuracyRate >= 0.5) {
+                titleEl.innerText = "잘했어요! 👏";
+                subtitleEl.innerText = "부분 점수를 획득했습니다. 틀린 부분을 복습해 보세요!";
+            } else {
+                titleEl.innerText = "아쉬워요! 💪";
+                subtitleEl.innerText = "정답 해설을 확인하고 다시 한번 도전해 보세요!";
+            }
+
+            document.getElementById('result-score').innerText = `+${gainedScore}`;
+            document.getElementById('result-combo').innerText = maxCombo;
+
+            // Render Explanations with Visual Correct/Incorrect Tags
+            const expContainer = document.getElementById('explanation-container');
+            expContainer.innerHTML = '';
+
+            // 1단계 자르기 결과 뱃지
+            const sliceSummary = document.createElement('div');
+            sliceSummary.className = `p-3 rounded-2xl border mb-3 flex items-center justify-between text-xs font-bold ${isSliceCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-rose-50 border-rose-200 text-rose-800'}`;
+            sliceSummary.innerHTML = `
+                <span>1단계 형태소 자르기</span>
+                <span>${isSliceCorrect ? '✅ 성공 (+50점)' : '❌ 실패 (경계 재확인 필요)'}</span>
+            `;
+            expContainer.appendChild(sliceSummary);
+
+            // 각 형태소별 맞고 틀린 분석 결과 표시
+            evaluationDetails.forEach((m, idx) => {
+                const item = document.createElement('div');
+                item.className = "pt-3 pb-2 first:pt-0 border-b border-slate-100 last:border-b-0";
+
+                const indepBadge = m.isIndepCorrect 
+                    ? `<span class="px-2 py-0.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-300">✅ ${m.independence} 형태소 (+10)</span>`
+                    : `<span class="px-2 py-0.5 rounded-lg text-xs font-bold bg-rose-100 text-rose-700 border border-rose-300">❌ ${m.independence} (선택: ${m.userIndep})</span>`;
+
+                const substBadge = m.isSubstCorrect 
+                    ? `<span class="px-2 py-0.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-300">✅ ${m.substance} 형태소 (+10)</span>`
+                    : `<span class="px-2 py-0.5 rounded-lg text-xs font-bold bg-rose-100 text-rose-700 border border-rose-300">❌ ${m.substance} (선택: ${m.userSubst})</span>`;
+
+                item.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">${idx + 1}</span>
+                            <span class="text-lg font-black text-indigo-700">${m.text}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${indepBadge}
+                            ${substBadge}
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1 pl-8">${m.desc || '표준 국어 문법에 따른 형태소 구분입니다.'}</p>
+                `;
+                expContainer.appendChild(item);
+            });
+
+            const nextBtn = document.getElementById('next-stage-btn');
+            if (currentStageIdx >= currentQuestions.length - 1) {
+                nextBtn.innerHTML = `<span>완주! 메인으로</span><i class="fa-solid fa-flag-checkered"></i>`;
+            } else {
+                nextBtn.innerHTML = `<span>다음 문제 도전</span><i class="fa-solid fa-circle-arrow-right"></i>`;
+            }
+        }
+
+        function nextStage() {
+            if (currentStageIdx < currentQuestions.length - 1) {
+                currentStageIdx++;
+                loadStage(currentStageIdx);
+                showScreen('game-screen');
+            } else {
+                showScreen('mode-select');
+                showToast("모든 스테이지를 완주했습니다! 축하합니다 🏆", "fa-trophy");
+            }
+        }
+
+        /* ================= 4. CUSTOM SENTENCE EDITOR LOGIC ================= */
+        function generateCustomSlicer() {
+            const input = document.getElementById('custom-input-text').value.trim();
+            if (!input) {
+                showToast("문제로 만들 문장을 입력해주세요!", "fa-triangle-exclamation");
+                return;
+            }
+
+            customCutIndices.clear();
+            document.getElementById('custom-setup-area').classList.remove('hidden');
+            renderCustomSlicerBox(input);
+            updateCustomPiecesList(input);
+        }
+
+        function renderCustomSlicerBox(sentence) {
+            const container = document.getElementById('custom-slicer-box');
+            container.innerHTML = '';
+            const chars = sentence.split('');
+
+            chars.forEach((char, i) => {
+                if (char === ' ') {
+                    const spaceBox = document.createElement('div');
+                    spaceBox.className = "w-5 h-12 flex items-center justify-center text-slate-300 font-bold text-base";
+                    spaceBox.innerText = "␣";
+                    container.appendChild(spaceBox);
+                    return;
+                }
+
+                const charCard = document.createElement('div');
+                charCard.className = "w-10 h-12 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-xl font-bold text-slate-800 shadow-sm";
+                charCard.innerText = char;
+                container.appendChild(charCard);
+
+                if (i < chars.length - 1) {
+                    const isCut = customCutIndices.has(i);
+                    const gapBtn = document.createElement('button');
+                    gapBtn.className = "slice-gap w-5 h-12 flex items-center justify-center relative cursor-pointer group focus:outline-none";
+                    gapBtn.onclick = () => {
+                        if (customCutIndices.has(i)) customCutIndices.delete(i);
+                        else customCutIndices.add(i);
+                        renderCustomSlicerBox(sentence);
+                        updateCustomPiecesList(sentence);
+                    };
+
+                    const line = document.createElement('div');
+                    line.className = `cut-line w-1 h-9 rounded-full ${isCut ? 'active' : 'bg-slate-200 group-hover:bg-slate-400'}`;
+                    gapBtn.appendChild(line);
+                    container.appendChild(gapBtn);
+                }
+            });
+        }
+
+        function updateCustomPiecesList(sentence) {
+            const chars = sentence.split('');
+            let chunks = [];
+            let currentChunk = "";
+
+            chars.forEach((char, i) => {
+                if (char !== ' ') currentChunk += char;
+                if (customCutIndices.has(i) || i === chars.length - 1) {
+                    if (currentChunk.length > 0) {
+                        chunks.push(currentChunk);
+                        currentChunk = "";
+                    }
+                }
+            });
+
+            customClassifications = chunks.map((c, idx) => customClassifications[idx] || { independence: null, substance: null });
+
+            const container = document.getElementById('custom-pieces-list');
+            container.innerHTML = '';
+
+            chunks.forEach((chunk, idx) => {
+                const itemData = customClassifications[idx];
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 border border-slate-200 p-3 rounded-xl flex items-center justify-between";
+
+                const isJalib = itemData.independence === '자립';
+                const isEuijon = itemData.independence === '의존';
+                const isSiljil = itemData.substance === '실질';
+                const isHyeongsik = itemData.substance === '형식';
+
+                card.innerHTML = `
+                    <span class="font-bold text-slate-800 text-sm">${idx + 1}. ${chunk}</span>
+                    <div class="flex space-x-2">
+                        <div class="flex space-x-1 bg-white p-1 rounded-lg border border-slate-200">
+                            <button onclick="setCustomMorphAttr(${idx}, 'independence', '자립')" class="px-2 py-1 rounded text-xs font-bold ${isJalib ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:bg-slate-100'}">자립</button>
+                            <button onclick="setCustomMorphAttr(${idx}, 'independence', '의존')" class="px-2 py-1 rounded text-xs font-bold ${isEuijon ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:bg-slate-100'}">의존</button>
+                        </div>
+                        <div class="flex space-x-1 bg-white p-1 rounded-lg border border-slate-200">
+                            <button onclick="setCustomMorphAttr(${idx}, 'substance', '실질')" class="px-2 py-1 rounded text-xs font-bold ${isSiljil ? 'bg-emerald-600 text-white' : 'text-slate-500 hover:bg-slate-100'}">실질</button>
+                            <button onclick="setCustomMorphAttr(${idx}, 'substance', '형식')" class="px-2 py-1 rounded text-xs font-bold ${isHyeongsik ? 'bg-emerald-600 text-white' : 'text-slate-500 hover:bg-slate-100'}">형식</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function setCustomMorphAttr(idx, type, val) {
+            if (customClassifications[idx]) {
+                if (customClassifications[idx][type] === val) {
+                    customClassifications[idx][type] = null;
+                } else {
+                    customClassifications[idx][type] = val;
+                }
+                const sentence = document.getElementById('custom-input-text').value.trim();
+                updateCustomPiecesList(sentence);
+            }
+        }
+
+        function saveAndPlayCustom() {
+            const sentence = document.getElementById('custom-input-text').value.trim();
+            const chars = sentence.split('');
+            let chunks = [];
+            let currentChunk = "";
+
+            chars.forEach((char, i) => {
+                if (char !== ' ') currentChunk += char;
+                if (customCutIndices.has(i) || i === chars.length - 1) {
+                    if (currentChunk.length > 0) {
+                        chunks.push(currentChunk);
+                        currentChunk = "";
+                    }
+                }
+            });
+
+            if (chunks.length === 0) {
+                showToast("최소 1개 이상의 형태소 조각이 생성되어야 합니다!", "fa-triangle-exclamation");
+                return;
+            }
+
+            for (let i = 0; i < chunks.length; i++) {
+                const cls = customClassifications[i];
+                if (!cls || !cls.independence || !cls.substance) {
+                    showToast(`'${chunks[i]}' 형태소의 정답 속성을 모두 설정해주세요!`, "fa-triangle-exclamation");
+                    return;
+                }
+            }
+
+            const customQuestion = {
+                id: Date.now(),
+                sentence: sentence,
+                morphemes: chunks.map((chunkText, idx) => ({
+                    text: chunkText,
+                    independence: customClassifications[idx].independence,
+                    substance: customClassifications[idx].substance,
+                    desc: "사용자가 등록한 커스텀 문장의 형태소입니다."
+                }))
+            };
+
+            currentQuestions = [customQuestion];
+            currentStageIdx = 0;
+            score = 0;
+            combo = 0;
+            maxCombo = 0;
+            hintCount = 3;
+            updateStatsHeader();
+            loadStage(0);
+            showScreen('game-screen');
+            showToast("커스텀 문제로 게임을 시작합니다!", "fa-circle-check");
+        }
+    </script>
 </body>
 </html>
