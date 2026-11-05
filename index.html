@@ -3,73 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>형태소 게임 시리즈</title>
+<title>형태소 슬라이서 - 국어 문법 학습 탐험대</title>
 <style>
   :root {
-    --primary: #2563eb;
+    --primary: #4f46e5;
+    --primary-light: #e0e7ff;
     --boss: #dc2626;
     --bg: #f8fafc;
     --card: #ffffff;
     --border: #e2e8f0;
+    --text-main: #0f172a;
+    --text-sub: #64748b;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: Pretendard, -apple-system, sans-serif;
-    background: var(--bg);
-    color: #1e293b;
-    padding: 20px;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f8fafc;
+    color: var(--text-main);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
   }
-  .container {
+
+  /* 상단 헤더 */
+  .site-header {
     width: 100%;
-    max-width: 720px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+  }
+  .logo-text h1 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.2;
+  }
+  .logo-text p {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .main-wrapper {
+    width: 100%;
+    max-width: 760px;
+    padding: 32px 20px;
+  }
+
+  /* ---------------- HOME LANDING PAGE ---------------- */
+  #homeScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .badge-tag {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.35;
+    color: #1e1b4b;
+    margin-bottom: 12px;
+  }
+  .hero-title span {
+    color: var(--primary);
+  }
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-sub);
+    line-height: 1.6;
+    margin-bottom: 36px;
+    word-break: keep-all;
+  }
+
+  /* 모드 선택 카드 그리드 */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .mode-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+  .mode-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 12px 24px rgba(79, 70, 229, 0.12);
+  }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text-main);
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex-grow: 1;
+  }
+  .card-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* 형태소 요약 아코디언 */
+  .summary-accordion {
+    width: 100%;
+    background: #fffbeb;
+    border: 1.5px solid #fef3c7;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .accordion-header {
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #b45309;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .accordion-content {
+    display: none;
+    padding: 0 20px 20px 20px;
+    font-size: 14px;
+    color: #78350f;
+    line-height: 1.6;
+    text-align: left;
+    border-top: 1px dashed #fde68a;
+    margin-top: 4px;
+    padding-top: 14px;
+  }
+  .accordion-content.active { display: block; }
+
+  /* ---------------- GAME CONTAINER ---------------- */
+  #gameScreen {
+    display: none;
     background: var(--card);
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     padding: 24px;
   }
-
-  /* 상단 모드 선택 탭 */
-  .mode-selector {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 12px;
-  }
-  .mode-btn {
-    flex: 1;
-    padding: 12px 6px;
-    font-size: 14px;
-    font-weight: 700;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    background: #f1f5f9;
-    color: #64748b;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-  }
-  .mode-btn:hover { background: #e2e8f0; }
-  .mode-btn.active {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-  }
-
-  .header {
+  .top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--text-sub);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .back-btn:hover { color: var(--primary); }
+
   .stage-badge {
     background: var(--primary);
     color: white;
     padding: 4px 14px;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
   }
   .stage-badge.boss { background: var(--boss); }
@@ -137,7 +289,7 @@
   .gap-btn:hover::after { background: var(--primary); height: 36px; }
   .gap-btn.active::after { background: var(--primary); width: 4px; height: 44px; }
   
-  /* 형태소 분류하기 모드용 스타일 */
+  /* 형태소 분류하기 모드 */
   .classify-area {
     display: none;
     flex-direction: column;
@@ -195,7 +347,6 @@
     outline: none;
     font-weight: 700;
   }
-  .subjective-box input:focus { border-color: var(--boss); }
 
   .btn {
     width: 100%;
@@ -212,7 +363,7 @@
   .btn:hover { opacity: 0.9; }
   .btn.boss { background: var(--boss); }
   
-  /* 피드백 및 모범답안 영역 */
+  /* 피드백 & 모범 답안 해설 */
   .feedback {
     margin-top: 16px;
     padding: 16px;
@@ -224,7 +375,6 @@
   .feedback.success { background: #dcfce7; color: #15803d; display: block; }
   .feedback.error { background: #fee2e2; color: #b91c1c; display: block; }
 
-  /* 모범답안 카드 스타일 */
   .answer-row {
     font-size: 14px;
     color: #374151;
@@ -303,60 +453,118 @@
 </head>
 <body>
 
-<div class="container">
-  <!-- 모드 선택 탭 (1. 기본편 -> 2. 심화편 -> 3. 분류하기 순서) -->
-  <div class="mode-selector">
-    <button id="mode1" class="mode-btn active" onclick="switchMode('basic')">형태소 분석하기 기본편</button>
-    <button id="mode2" class="mode-btn" onclick="switchMode('advanced')">형태소 분석하기 심화편</button>
-    <button id="mode3" class="mode-btn" onclick="switchMode('classify')">형태소 분류하기</button>
+<!-- 상단 공통 헤더 -->
+<header class="site-header">
+  <div class="logo-icon">✂️</div>
+  <div class="logo-text">
+    <h1>형태소 슬라이서</h1>
+    <p>국어 문법 학습 탐험대</p>
   </div>
+</header>
 
-  <div class="header">
-    <h3 id="modeTitle">형태소 분석하기 기본편</h3>
-    <span id="badge" class="stage-badge">STAGE 1</span>
-  </div>
+<div class="main-wrapper">
+  <!-- 1. 첫 화면 랜딩 페이지 (HOME) -->
+  <div id="homeScreen">
+    <div class="badge-tag">MORPHEME LEARNING GAME</div>
+    <h2 class="hero-title">
+      뜻을 가진 가장 작은 말의 단위,<br>
+      <span>형태소</span>를 찾아라!
+    </h2>
+    <p class="hero-desc">
+      문장을 형태소 단위로 올바르게 자르고, 각 형태소의 성격과 유형을 맞춰 점수를 획득하세요.
+    </p>
 
-  <div class="hud">
-    <div>점수: <span id="scoreDisplay">0</span>점</div>
-    <div>시도 회차: <span id="tryDisplay">1</span>차</div>
-  </div>
+    <!-- 모드 선택 카드 3개 -->
+    <div class="card-grid">
+      <div class="mode-card" onclick="startApp('basic')">
+        <div>
+          <div class="card-icon">🎮</div>
+          <div class="card-title">형태소 분석하기 기본편</div>
+          <div class="card-desc">기초 단어들을 어근, 접사, 용언 어간과 어미 단위로 자르는 연습을 합니다.</div>
+        </div>
+        <div class="card-link">도전 시작하기 →</div>
+      </div>
 
-  <div id="sentenceDisplay" class="sentence-box"></div>
+      <div class="mode-card" onclick="startApp('advanced')">
+        <div>
+          <div class="card-icon">🚀</div>
+          <div class="card-title">형태소 분석하기 심화편</div>
+          <div class="card-desc">문장 속 형태소를 분해하고, 음운 축약이 일어난 보스 단어를 추론합니다.</div>
+        </div>
+        <div class="card-link">도전 시작하기 →</div>
+      </div>
 
-  <!-- 슬라이서 자르기 영역 -->
-  <div id="sliceContainer" class="slice-area"></div>
+      <div class="mode-card" onclick="startApp('classify')">
+        <div>
+          <div class="card-icon">🧩</div>
+          <div class="card-title">형태소 분류하기</div>
+          <div class="card-desc">자립/의존, 실질/형식 형태소의 특성을 퀴즈로 분류하며 개념을 다집니다.</div>
+        </div>
+        <div class="card-link">도전 시작하기 →</div>
+      </div>
+    </div>
 
-  <!-- 형태소 분류하기 문제 영역 -->
-  <div id="classifyContainer" class="classify-area">
-    <div class="classify-card">
-      <h4 id="classifyTarget"></h4>
-      <div class="classify-options" id="classifyOpts"></div>
+    <!-- 하단 1분 요약 아코디언 -->
+    <div class="summary-accordion">
+      <div class="accordion-header" onclick="toggleAccordion()">
+        <span>💡 형태소 개념 1분 요약 보기</span>
+        <span id="accIcon">▼</span>
+      </div>
+      <div class="accordion-content" id="accContent">
+        • <b>형태소</b>: 뜻을 가진 가장 작은 말의 단위<br>
+        • <b>자립성에 따라</b>: 자립 형태소(혼자 쓰임) / 의존 형태소(다른 말에 붙어 쓰임)<br>
+        • <b>실질적 의미에 따라</b>: 실질 형태소(구체적 의미) / 형식 형태소(문법적 기능)
+      </div>
     </div>
   </div>
 
-  <!-- 5번 보스 주관식 서술형 영역 -->
-  <div id="subjectiveContainer" class="subjective-box">
-    <div style="font-weight:700; color:#991b1b; font-size:18px;">👾 보스 특수 과제: '달렸다' 속 형태소를 직접 분리해보세요!</div>
-    <div style="font-size:14px; color:#7f1d1d;">'달렸다' 속 어간과 선어말어미/어말어미 원형을 찾아 직접 분리해 적으세요.</div>
-    <input type="text" id="subjectiveInput" placeholder="예: 달리/었/다">
-  </div>
+  <!-- 2. 게임 실행 화면 (GAME) -->
+  <div id="gameScreen">
+    <div class="top-nav">
+      <button class="back-btn" onclick="goHome()">← 홈으로 돌아가기</button>
+      <span id="badge" class="stage-badge">STAGE 1</span>
+    </div>
 
-  <button id="actionBtn" class="btn" onclick="checkAnswer()">확인 완료</button>
+    <h3 id="modeTitle" style="margin-bottom:12px; font-size:20px;">형태소 분석하기 기본편</h3>
 
-  <div id="feedbackBox" class="feedback"></div>
+    <div class="hud">
+      <div>점수: <span id="scoreDisplay">0</span>점</div>
+      <div>시도 회차: <span id="tryDisplay">1</span>차</div>
+    </div>
 
-  <!-- 누적 리포트 -->
-  <div id="reportCard" class="report-card">
-    <div class="report-title" id="reportTitle">🎉 스테이지 완주!</div>
-    <div style="text-align:center; margin-bottom:12px;" id="reportSummary"></div>
-    <div style="font-size:13px; font-weight:700; color:#475569;">📋 세션 누적 성적 기록</div>
-    <ul id="recordList" class="record-list"></ul>
-    <button class="btn" style="margin-top:16px;" onclick="resetGame()">다시 도전하기</button>
+    <div id="sentenceDisplay" class="sentence-box"></div>
+
+    <div id="sliceContainer" class="slice-area"></div>
+
+    <div id="classifyContainer" class="classify-area">
+      <div class="classify-card">
+        <h4 id="classifyTarget"></h4>
+        <div class="classify-options" id="classifyOpts"></div>
+      </div>
+    </div>
+
+    <div id="subjectiveContainer" class="subjective-box">
+      <div style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제: '달렸다' 속 형태소를 직접 분리해보세요!</div>
+      <div style="font-size:13px; color:#7f1d1d;">'달렸다' 속 어간과 선어말어미/어말어미 원형을 찾아 직접 분리해 적으세요.</div>
+      <input type="text" id="subjectiveInput" placeholder="예: 달리/었/다">
+    </div>
+
+    <button id="actionBtn" class="btn" onclick="checkAnswer()">확인 완료</button>
+
+    <div id="feedbackBox" class="feedback"></div>
+
+    <div id="reportCard" class="report-card">
+      <div class="report-title" id="reportTitle">🎉 스테이지 완주!</div>
+      <div style="text-align:center; margin-bottom:12px;" id="reportSummary"></div>
+      <div style="font-size:13px; font-weight:700; color:#475569;">📋 세션 누적 성적 기록</div>
+      <ul id="recordList" class="record-list"></ul>
+      <button class="btn" style="margin-top:16px;" onclick="resetGame()">다시 도전하기</button>
+    </div>
   </div>
 </div>
 
 <script>
-// 1. 형태소 분석하기 기본편 문제 세트 (모범답안 분해 카드 정보 포함)
+// 데이터 세트
 const basicData = [
   { id: 1, type: "click", text: "무지개", cuts: [], display: ["무지개"], types: ["명사(단일어)"] },
   { id: 2, type: "click", text: "구름", cuts: [], display: ["구름"], types: ["명사(단일어)"] },
@@ -386,69 +594,49 @@ const basicData = [
   { id: 26, type: "click", text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["명사 어근", "명사 어근"] }
 ];
 
-// 2. 형태소 분석하기 심화편 문제 세트
 const advancedData = [
-  { 
-    id: 1, type: "click", text: "새 신을 신고 달리고 있다.", cuts: [0, 1, 2, 3, 4, 6, 7, 8, 9],
-    display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"],
-    types: ["관형사", "명사", "조사", "어간", "어미", "어간", "어미", "보조어간", "어미"]
-  },
-  { 
-    id: 2, type: "click", text: "풋사과를 아주 맛있게 먹었어.", cuts: [0, 2, 3, 5, 6, 7, 8, 9, 10],
-    display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"],
-    types: ["접두사", "명사", "조사", "부사", "어근", "어간", "어미", "어간", "선어말어미", "어말어미"]
-  },
-  { 
-    id: 3, type: "click", text: "아침에 맨발로 강가를 건너고 있다.", cuts: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12],
-    display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"],
-    types: ["명사", "조사", "접두사", "명사", "조사", "명사", "명사", "조사", "어간", "어미", "보조어간", "어미"]
-  },
-  { 
-    id: 4, type: "click", text: "그분은 아주 환하게 웃었다.", cuts: [0, 1, 2, 4, 5, 6, 7, 8, 9],
-    display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"],
-    types: ["관형사", "의존명사", "조사", "부사", "어간", "어미", "어간", "선어말어미", "어말어미"]
-  },
-  { 
-    id: 5, 
-    type: "subjective", 
-    text: "새 신을 신고 길을 달렸다.", 
-    targetWord: "달렸다", 
-    answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"],
-    display: ["달리-", "-었-", "-다"],
-    types: ["동사 어간", "과거시제 선어말어미", "어말어미"]
-  }
+  { id: 1, type: "click", text: "새 신을 신고 달리고 있다.", cuts: [0, 1, 2, 3, 4, 6, 7, 8, 9], display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"], types: ["관형사", "명사", "조사", "어간", "어미", "어간", "어미", "보조어간", "어미"] },
+  { id: 2, type: "click", text: "풋사과를 아주 맛있게 먹었어.", cuts: [0, 2, 3, 5, 6, 7, 8, 9, 10], display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"], types: ["접두사", "명사", "조사", "부사", "어근", "어간", "어미", "어간", "선어말어미", "어말어미"] },
+  { id: 3, type: "click", text: "아침에 맨발로 강가를 건너고 있다.", cuts: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12], display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], types: ["명사", "조사", "접두사", "명사", "조사", "명사", "명사", "조사", "어간", "어미", "보조어간", "어미"] },
+  { id: 4, type: "click", text: "그분은 아주 환하게 웃었다.", cuts: [0, 1, 2, 4, 5, 6, 7, 8, 9], display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], types: ["관형사", "의존명사", "조사", "부사", "어간", "어미", "어간", "선어말어미", "어말어미"] },
+  { id: 5, type: "subjective", text: "새 신을 신고 길을 달렸다.", targetWord: "달렸다", answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"], display: ["달리-", "-었-", "-다"], types: ["동사 어간", "과거시제 선어말어미", "어말어미"] }
 ];
 
-// 3. 형태소 분류하기 문제 세트
 const classifyData = [
   { id: 1, type: "classify", text: "풋사과를 먹었다.", target: "'풋-'의 형태소 성격은?", opts: ["접사 (의존/형식)", "어근 (자립/실질)", "조사 (의존/형식)"], ans: 0, display: ["풋-"], types: ["파생 접두사"] },
   { id: 2, type: "classify", text: "하늘이 파랗다.", target: "'이'의 형태소 성격은?", opts: ["주격 조사 (의존/형식)", "서술격 조사", "접미사"], ans: 0, display: ["이"], types: ["주격 조사"] },
   { id: 3, type: "classify", text: "손수건을 챙겼다.", target: "'손수건'의 단어 짜임은?", opts: ["합성어 (어근+어근)", "파생어 (어근+접사)", "단일어"], ans: 0, display: ["손", "수건"], types: ["어근", "어근"] }
 ];
 
-let currentMode = "basic"; 
+let currentMode = "basic";
 let currentIdx = 0;
 let userCuts = new Set();
 let selectedClassifyOpt = -1;
 let score = 0;
 let sessionRecords = [];
 
-function switchMode(mode) {
+function toggleAccordion() {
+  const content = document.getElementById("accContent");
+  const icon = document.getElementById("accIcon");
+  if (content.classList.contains("active")) {
+    content.classList.remove("active");
+    icon.innerText = "▼";
+  } else {
+    content.classList.add("active");
+    icon.innerText = "▲";
+  }
+}
+
+function startApp(mode) {
   currentMode = mode;
-  currentIdx = 0;
-  score = 0;
-  document.getElementById("scoreDisplay").innerText = 0;
+  document.getElementById("homeScreen").style.display = "none";
+  document.getElementById("gameScreen").style.display = "block";
+  resetGame();
+}
 
-  document.getElementById("mode1").className = mode === "basic" ? "mode-btn active" : "mode-btn";
-  document.getElementById("mode2").className = mode === "advanced" ? "mode-btn active" : "mode-btn";
-  document.getElementById("mode3").className = mode === "classify" ? "mode-btn active" : "mode-btn";
-
-  const modeTitle = document.getElementById("modeTitle");
-  if (mode === "basic") modeTitle.innerText = "형태소 분석하기 기본편";
-  else if (mode === "advanced") modeTitle.innerText = "형태소 분석하기 심화편";
-  else modeTitle.innerText = "형태소 분류하기";
-
-  loadStage();
+function goHome() {
+  document.getElementById("gameScreen").style.display = "none";
+  document.getElementById("homeScreen").style.display = "flex";
 }
 
 function getActiveData() {
@@ -473,6 +661,11 @@ function loadStage() {
   const sliceContainer = document.getElementById("sliceContainer");
   const classifyContainer = document.getElementById("classifyContainer");
   const subjectiveContainer = document.getElementById("subjectiveContainer");
+  const modeTitle = document.getElementById("modeTitle");
+
+  if (currentMode === "basic") modeTitle.innerText = "형태소 분석하기 기본편";
+  else if (currentMode === "advanced") modeTitle.innerText = "형태소 분석하기 심화편";
+  else modeTitle.innerText = "형태소 분류하기";
 
   sentenceDisplay.innerText = `"${q.text}"`;
   document.getElementById("tryDisplay").innerText = sessionRecords.length + 1;
@@ -511,7 +704,6 @@ function loadStage() {
     });
     document.getElementById("classifyOpts").innerHTML = optsHtml;
   } else {
-    // 5번 보스 서술형
     badge.innerText = "BOSS STAGE";
     badge.className = "stage-badge boss";
     actionBtn.className = "btn boss";
@@ -540,7 +732,6 @@ function selectOpt(idx, el) {
   selectedClassifyOpt = idx;
 }
 
-// 모범답안 형태소 분해 카드 HTML 생성 함수
 function renderAnswerCard(q) {
   if (!q.display || !q.types) return "";
   let html = "<div class='answer-row'>";
@@ -654,8 +845,6 @@ function resetGame() {
   document.getElementById("scoreDisplay").innerText = 0;
   loadStage();
 }
-
-loadStage();
 </script>
 </body>
 </html>
