@@ -231,7 +231,7 @@
     font-weight: 700;
   }
   .stage-badge.boss { background: var(--boss); }
-  
+
   .hud {
     display: flex;
     gap: 16px;
@@ -294,8 +294,8 @@
   }
   .gap-btn:hover::after { background: var(--primary); height: 36px; }
   .gap-btn.active::after { background: var(--primary); width: 4px; height: 44px; }
-  
-  /* 형태소 분류하기 모드 (2단계 특성 선택) */
+
+  /* 형태소 분류하기 모드 2단계 선택 영역 */
   .classify-area {
     display: none;
     flex-direction: column;
@@ -310,13 +310,23 @@
     padding: 16px;
   }
   .classify-card h4 { margin-bottom: 10px; color: #334155; font-size: 16px; }
+  .classify-group {
+    margin-bottom: 10px;
+  }
+  .classify-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    display: block;
+    margin-bottom: 4px;
+  }
   .classify-options {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
   }
   .opt-btn {
-    padding: 8px 14px;
+    padding: 6px 12px;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
     background: white;
@@ -374,7 +384,7 @@
     cursor: not-allowed;
     opacity: 0.6;
   }
-  
+
   /* 피드백 & 모범 답안 해설 */
   .feedback {
     margin-top: 16px;
@@ -510,7 +520,7 @@
         <div>
           <div class="card-icon">🧩</div>
           <div class="card-title">형태소 분류하기</div>
-          <div class="card-desc">자르기 성공 후, 형태소별 자립/의존, 실질/형식 특성을 선택해 맞힙니다.</div>
+          <div class="card-desc">자르기 성공 후, 형태소별 '실질/형식' 및 '의존/자립' 성격을 선택해 맞힙니다.</div>
         </div>
         <div class="card-link">도전 시작하기 →</div>
       </div>
@@ -572,7 +582,7 @@
 </div>
 
 <script>
-// 데이터 세트 (어미, 접사, 어간, 어근, 조사 5가지 유형으로 단권화)
+// 데이터 세트 (어미, 접사, 어간, 어근, 조사 5가지 유형)
 const basicData = [
   { id: 1, type: "click", text: "무지개", cuts: [], display: ["무지개"], types: ["어근"] },
   { id: 2, type: "click", text: "구름", cuts: [], display: ["구름"], types: ["어근"] },
@@ -602,37 +612,37 @@ const basicData = [
   { id: 26, type: "click", text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] }
 ];
 
-// 심화편 데이터 (인덱스 보정 완벽 적용)
+// 심화편 데이터
 const advancedData = [
-  { id: 1, type: "click", text: "새 신을 신고 달리고 있다", cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"], types: ["어근", "어근", "조사", "어간", "어미", "어간", "어미", "어간", "어미"] },
-  { id: 2, type: "click", text: "풋사과를 아주 맛있게 먹었어", cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"], types: ["접사", "어근", "조사", "어근", "어근", "어간", "어미", "어간", "어미", "어미"] },
-  { id: 3, type: "click", text: "아침에 맨발로 강가를 건너고 있다", cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], types: ["어근", "조사", "접사", "어근", "조사", "어근", "어근", "조사", "어간", "어미", "어간", "어미"] },
-  { id: 4, type: "click", text: "그분은 아주 환하게 웃었다", cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] },
-  { id: 5, type: "subjective", text: "새 신을 신고 길을 달렸다", targetWord: "달렸다", answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"], display: ["달리-", "-었-", "-다"], types: ["어간", "어미", "어미"] }
+  { id: 1, type: "click", text: "새 신을 신고 달리고 있다", cuts: [0, 1, 2, 3, 4, 6, 7, 8], display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"], types: ["어근", "어근", "조사", "어간", "어미", "어간", "어미", "어간", "어미"] },
+  { id: 2, type: "click", text: "풋사과를 아주 맛있게 먹었어", cuts: [0, 2, 3, 5, 6, 7, 8, 9, 10], display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"], types: ["접사", "어근", "조사", "어근", "어근", "어간", "어미", "어간", "어미", "어미"] },
+  { id: 3, type: "click", text: "아침에 맨발로 강가를 건너고 있다", cuts: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12], display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], types: ["어근", "조사", "접사", "어근", "조사", "어근", "어근", "조사", "어간", "어미", "어간", "어미"] },
+  { id: 4, type: "click", text: "그분은 아주 환하게 웃었다", cuts: [0, 1, 2, 4, 6, 7, 8, 9], display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] },
+  { id: 5, type: "subjective", text: "새 신을 신고 길을 달렸다", targetWord: "달렸다", answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"], answerParts: ["달리", "었", "다"], display: ["달리-", "-었-", "-다"], types: ["어간", "어미", "어미"] }
 ];
 
-// 분류하기 데이터 (1단계: 자르기 -> 2단계: 4대 특성 분류)
+// 분류하기 데이터 (1단계 자르기 후 -> 2단계: 실질/형식 중 1개, 의존/자립 중 1개 선택)
 const classifyData = [
   {
     id: 1,
     type: "classify_flow",
     text: "풋사과를 먹었다",
-    cuts: [0, 2, 3, 4, 5], // 풋 / 사과 / 를 / 먹 / 었 / 다 -> 틈 0, 2, 3, 4, 5
+    cuts: [0, 2, 3, 4, 5],
     items: [
-      { text: "풋-", type: ["의존", "형식"], opts: ["자립 / 실질", "자립 / 형식", "의존 / 실질", "의존 / 형식"], ans: 3 },
-      { text: "사과", type: ["자립", "실질"], opts: ["자립 / 실질", "자립 / 형식", "의존 / 실질", "의존 / 형식"], ans: 0 },
-      { text: "를", type: ["의존", "형식"], opts: ["자립 / 실질", "자립 / 형식", "의존 / 실질", "의존 / 형식"], ans: 3 }
+      { text: "풋-", meaningAns: "형식", indepAns: "의존" },
+      { text: "사과", meaningAns: "실질", indepAns: "자립" },
+      { text: "를", meaningAns: "형식", indepAns: "의존" }
     ]
   },
   {
     id: 2,
     type: "classify_flow",
     text: "하늘이 파랗다",
-    cuts: [1, 2, 4], // 하늘 / 이 / 파랗 / 다 -> 틈 1, 2, 4
+    cuts: [1, 2, 4],
     items: [
-      { text: "하늘", type: ["자립", "실질"], opts: ["자립 / 실질", "자립 / 형식", "의존 / 실질", "의존 / 형식"], ans: 0 },
-      { text: "이", type: ["의존", "형식"], opts: ["자립 / 실질", "자립 / 형식", "의존 / 실질", "의존 / 형식"], ans: 3 },
-      { text: "파랗-", type: ["의존", "실질"], opts: ["자립 / 실질", "자립 / 형식", "의존 / 실질", "의존 / 형식"], ans: 2 }
+      { text: "하늘", meaningAns: "실질", indepAns: "자립" },
+      { text: "이", meaningAns: "형식", indepAns: "의존" },
+      { text: "파랗-", meaningAns: "실질", indepAns: "의존" }
     ]
   }
 ];
@@ -640,11 +650,11 @@ const classifyData = [
 let currentMode = "basic";
 let currentIdx = 0;
 let userCuts = new Set();
-let classifySelections = {};
+let classifySelections = {}; // { itemIndex: { meaning: '실질'/'형식', indep: '자립'/'의존' } }
 let score = 0;
 let sessionRecords = [];
 let isEvaluated = false;
-let classifyStep = 1; // 분류하기 모드 내 단계 (1: 자르기, 2: 특성 선택)
+let classifyStep = 1;
 
 function toggleAccordion() {
   const content = document.getElementById("accContent");
@@ -686,7 +696,7 @@ function loadStage() {
 
   document.getElementById("feedbackBox").style.display = "none";
   document.getElementById("reportCard").style.display = "none";
-  
+
   const actionBtn = document.getElementById("actionBtn");
   actionBtn.style.display = "block";
   actionBtn.disabled = false;
@@ -746,12 +756,15 @@ function toggleGap(idx, el) {
   }
 }
 
-function selectClassifyOpt(itemIdx, optIdx, el) {
+function selectClassifyChoice(itemIdx, category, val, el) {
   if (isEvaluated) return;
-  classifySelections[itemIdx] = optIdx;
+  if (!classifySelections[itemIdx]) {
+    classifySelections[itemIdx] = {};
+  }
+  classifySelections[itemIdx][category] = val;
+
   const parent = el.parentElement;
-  const btns = parent.querySelectorAll(".opt-btn");
-  btns.forEach(b => b.classList.remove("selected"));
+  parent.querySelectorAll(".opt-btn").forEach(b => b.classList.remove("selected"));
   el.classList.add("selected");
 }
 
@@ -774,7 +787,7 @@ function handleActionButton() {
     checkClassifySlicing();
     return;
   }
-  
+
   if (!isEvaluated) {
     checkAnswer();
   } else {
@@ -782,7 +795,7 @@ function handleActionButton() {
   }
 }
 
-// 형태소 분류하기 모드 - 1단계: 자르기 검증
+// 형태소 분류하기 모드 - 1단계 자르기 검증
 function checkClassifySlicing() {
   const q = classifyData[currentIdx];
   const fb = document.getElementById("feedbackBox");
@@ -796,13 +809,13 @@ function checkClassifySlicing() {
     return;
   }
 
-  // 자르기 성공시 100점 획득 & 2단계 특성 분류 화면으로 이동
+  // 자르기 성공시 100점 획득 & 2단계 진입
   score += 100;
   document.getElementById("scoreDisplay").innerText = score;
   classifyStep = 2;
-  
+
   fb.className = "feedback success";
-  fb.innerHTML = `🎉 <b>자르기 성공! (+100점)</b><br>각 형태소가 어떤 성격인지 4가지 중에서 선택하세요.`;
+  fb.innerHTML = `🎉 <b>자르기 성공! (+100점)</b><br>각 형태소 조각의 '실질/형식' 및 '자립/의존' 특성을 선택하세요.`;
   fb.style.display = "block";
 
   document.getElementById("sliceContainer").style.display = "none";
@@ -812,17 +825,28 @@ function checkClassifySlicing() {
   let html = "";
   q.items.forEach((item, idx) => {
     html += `<div class="classify-card">
-      <h4><b>'${item.text}'</b>의 형태소 성격은?</h4>
-      <div class="classify-options">`;
-    item.opts.forEach((opt, oIdx) => {
-      html += `<button class="opt-btn" onclick="selectClassifyOpt(${idx}, ${oIdx}, this)">${opt}</button>`;
-    });
-    html += `</div></div>`;
+      <h4><b>'${item.text}'</b> 형태소 분류</h4>
+
+      <div class="classify-group">
+        <label>1) 의미에 따라 (실질 / 형식)</label>
+        <div class="classify-options">
+          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'meaning', '실질', this)">실질 형태소</button>
+          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'meaning', '형식', this)">형식 형태소</button>
+        </div>
+      </div>
+
+      <div class="classify-group">
+        <label>2) 자립성에 따라 (자립 / 의존)</label>
+        <div class="classify-options">
+          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'indep', '자립', this)">자립 형태소</button>
+          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'indep', '의존', this)">의존 형태소</button>
+        </div>
+      </div>
+    </div>`;
   });
   classifyContainer.innerHTML = html;
 
-  const actionBtn = document.getElementById("actionBtn");
-  actionBtn.innerText = "분류 판정 제출";
+  document.getElementById("actionBtn").innerText = "분류 판정 제출";
 }
 
 function checkAnswer() {
@@ -835,16 +859,16 @@ function checkAnswer() {
   if (currentMode === "classify" && classifyStep === 2) {
     let addScore = 0;
     let detailHtml = "<ul style='margin-top:8px; text-align:left; font-size:14px;'>";
-    
+
     q.items.forEach((item, idx) => {
-      const uAns = classifySelections[idx];
-      const isOk = uAns === item.ans;
-      if (isOk) {
-        addScore += 50;
-        detailHtml += `<li>✅ <b>${item.text}</b>: 정답 (${item.opts[item.ans]}) <b>+50점</b></li>`;
-      } else {
-        detailHtml += `<li>❌ <b>${item.text}</b>: 오답 (정답: ${item.opts[item.ans]})</li>`;
-      }
+      const userSel = classifySelections[idx] || {};
+      const meaningOk = userSel.meaning === item.meaningAns;
+      const indepOk = userSel.indep === item.indepAns;
+
+      detailHtml += `<li><b>'${item.text}'</b>: `;
+      if (meaningOk) { addScore += 25; detailHtml += `[의미:정답(+25)] `; } else { detailHtml += `[의미:오답(정답:${item.meaningAns})] `; }
+      if (indepOk) { addScore += 25; detailHtml += `[자립성:정답(+25)]`; } else { detailHtml += `[자립성:오답(정답:${item.indepAns})]`; }
+      detailHtml += `</li>`;
     });
     detailHtml += "</ul>";
 
@@ -873,8 +897,9 @@ function checkAnswer() {
     }
   } else {
     const answerCardHtml = renderAnswerCard(q);
-    const input = document.getElementById("subjectiveInput").value.trim().replace(/\s+/g, "");
-    const isCorrect = q.answers.some(ans => input === ans.replace(/\s+/g, ""));
+    // 구분자(공백, -, /, ,)와 상관없이 형태소 목록을 순서대로 비교
+    const parts = document.getElementById("subjectiveInput").value.trim().split(/[\s\-\/,、·]+/).filter(p => p !== "");
+    const isCorrect = JSON.stringify(parts) === JSON.stringify(q.answerParts);
 
     if (isCorrect) {
       score += 200;
@@ -913,7 +938,7 @@ function showFinalReport() {
   document.getElementById("sliceContainer").style.display = "none";
   document.getElementById("classifyContainer").classList.remove("active");
   document.getElementById("subjectiveContainer").classList.remove("active");
-  
+
   const currentTry = sessionRecords.length + 1;
   sessionRecords.push({ try: currentTry, mode: currentMode, score: score });
 
