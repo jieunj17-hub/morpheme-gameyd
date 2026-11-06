@@ -622,9 +622,111 @@ const advancedData = [
 ];
 
 // 분류하기 데이터 (1단계 자르기 후 -> 2단계: 실질/형식 중 1개, 의존/자립 중 1개 선택)
+// 1~26: 기본편 단어 (기본편과 동일한 자르기 위치)
+// 27~28: 기존 문장 (기본편 단어 분석 이후에 출제)
 const classifyData = [
+  { id: 1, type: "classify_flow", text: "무지개", cuts: [], items: [
+    { text: "무지개", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 2, type: "classify_flow", text: "구름", cuts: [], items: [
+    { text: "구름", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 3, type: "classify_flow", text: "바람", cuts: [], items: [
+    { text: "바람", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 4, type: "classify_flow", text: "아침", cuts: [], items: [
+    { text: "아침", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 5, type: "classify_flow", text: "웃고", cuts: [0], items: [
+    { text: "웃-", meaningAns: "실질", indepAns: "의존" },
+    { text: "-고", meaningAns: "형식", indepAns: "의존" }
+  ]},
+  { id: 6, type: "classify_flow", text: "참기름", cuts: [0], items: [
+    { text: "참-", meaningAns: "형식", indepAns: "의존" },
+    { text: "기름", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 7, type: "classify_flow", text: "맨발", cuts: [0], items: [
+    { text: "맨-", meaningAns: "형식", indepAns: "의존" },
+    { text: "발", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 8, type: "classify_flow", text: "햇밤", cuts: [0], items: [
+    { text: "햇-", meaningAns: "형식", indepAns: "의존" },
+    { text: "밤", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 9, type: "classify_flow", text: "헛기침", cuts: [0], items: [
+    { text: "헛-", meaningAns: "형식", indepAns: "의존" },
+    { text: "기침", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 10, type: "classify_flow", text: "지우개", cuts: [1], items: [
+    { text: "지우-", meaningAns: "실질", indepAns: "의존" },
+    { text: "-개", meaningAns: "형식", indepAns: "의존" }
+  ]},
+  { id: 11, type: "classify_flow", text: "손수건", cuts: [0], items: [
+    { text: "손", meaningAns: "실질", indepAns: "자립" },
+    { text: "수건", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 12, type: "classify_flow", text: "돌다리", cuts: [0], items: [
+    { text: "돌", meaningAns: "실질", indepAns: "자립" },
+    { text: "다리", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 13, type: "classify_flow", text: "눈물", cuts: [0], items: [
+    { text: "눈", meaningAns: "실질", indepAns: "자립" },
+    { text: "물", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 14, type: "classify_flow", text: "발자국", cuts: [0], items: [
+    { text: "발", meaningAns: "실질", indepAns: "자립" },
+    { text: "자국", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 15, type: "classify_flow", text: "높다", cuts: [0], items: [
+    { text: "높-", meaningAns: "실질", indepAns: "의존" },
+    { text: "-다", meaningAns: "형식", indepAns: "의존" }
+  ]},
+  { id: 16, type: "classify_flow", text: "신고", cuts: [0], items: [
+    { text: "신-", meaningAns: "실질", indepAns: "의존" },
+    { text: "-고", meaningAns: "형식", indepAns: "의존" }
+  ]},
+  { id: 17, type: "classify_flow", text: "먹었다", cuts: [0, 1], items: [
+    { text: "먹-", meaningAns: "실질", indepAns: "의존" },
+    { text: "-었-", meaningAns: "형식", indepAns: "의존" },
+    { text: "-다", meaningAns: "형식", indepAns: "의존" }
+  ]},
+  { id: 18, type: "classify_flow", text: "맑아서", cuts: [0], items: [
+    { text: "맑-", meaningAns: "실질", indepAns: "의존" },
+    { text: "-아서", meaningAns: "형식", indepAns: "의존" }
+  ]},
+  { id: 19, type: "classify_flow", text: "파랗고", cuts: [1], items: [
+    { text: "파랗-", meaningAns: "실질", indepAns: "의존" },
+    { text: "-고", meaningAns: "형식", indepAns: "의존" }
+  ]},
+  { id: 20, type: "classify_flow", text: "산나물", cuts: [0], items: [
+    { text: "산", meaningAns: "실질", indepAns: "자립" },
+    { text: "나물", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 21, type: "classify_flow", text: "우리", cuts: [], items: [
+    { text: "우리", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 22, type: "classify_flow", text: "거울", cuts: [], items: [
+    { text: "거울", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 23, type: "classify_flow", text: "손발", cuts: [0], items: [
+    { text: "손", meaningAns: "실질", indepAns: "자립" },
+    { text: "발", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 24, type: "classify_flow", text: "민낯", cuts: [0], items: [
+    { text: "민-", meaningAns: "형식", indepAns: "의존" },
+    { text: "낯", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  { id: 25, type: "classify_flow", text: "걸레질", cuts: [1], items: [
+    { text: "걸레", meaningAns: "실질", indepAns: "자립" },
+    { text: "-질", meaningAns: "형식", indepAns: "의존" }
+  ]},
+  { id: 26, type: "classify_flow", text: "물걸레", cuts: [0], items: [
+    { text: "물", meaningAns: "실질", indepAns: "자립" },
+    { text: "걸레", meaningAns: "실질", indepAns: "자립" }
+  ]},
+  // 기존 문장 (기본편 단어 이후 출제)
   {
-    id: 1,
+    id: 27,
     type: "classify_flow",
     text: "풋사과를 먹었다",
     cuts: [0, 2, 3, 4, 5],
@@ -635,7 +737,7 @@ const classifyData = [
     ]
   },
   {
-    id: 2,
+    id: 28,
     type: "classify_flow",
     text: "하늘이 파랗다",
     cuts: [1, 2, 4],
@@ -643,79 +745,6 @@ const classifyData = [
       { text: "하늘", meaningAns: "실질", indepAns: "자립" },
       { text: "이", meaningAns: "형식", indepAns: "의존" },
       { text: "파랗-", meaningAns: "실질", indepAns: "의존" }
-    ]
-  },
-  // 심화편 문장 (심화편과 동일한 자르기 위치, 조각별 실질/형식 · 자립/의존 분류)
-  {
-    id: 3,
-    type: "classify_flow",
-    text: "새 신을 신고 달리고 있다",
-    cuts: [0, 1, 2, 3, 4, 6, 7, 8],
-    items: [
-      { text: "새", meaningAns: "실질", indepAns: "자립" },
-      { text: "신", meaningAns: "실질", indepAns: "자립" },
-      { text: "을", meaningAns: "형식", indepAns: "의존" },
-      { text: "신-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-고", meaningAns: "형식", indepAns: "의존" },
-      { text: "달리-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-고", meaningAns: "형식", indepAns: "의존" },
-      { text: "있-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-다", meaningAns: "형식", indepAns: "의존" }
-    ]
-  },
-  {
-    id: 4,
-    type: "classify_flow",
-    text: "풋사과를 아주 맛있게 먹었어",
-    cuts: [0, 2, 3, 5, 6, 7, 8, 9, 10],
-    items: [
-      { text: "풋-", meaningAns: "형식", indepAns: "의존" },
-      { text: "사과", meaningAns: "실질", indepAns: "자립" },
-      { text: "를", meaningAns: "형식", indepAns: "의존" },
-      { text: "아주", meaningAns: "실질", indepAns: "자립" },
-      { text: "맛", meaningAns: "실질", indepAns: "자립" },
-      { text: "-있-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-게", meaningAns: "형식", indepAns: "의존" },
-      { text: "먹-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-었-", meaningAns: "형식", indepAns: "의존" },
-      { text: "-어", meaningAns: "형식", indepAns: "의존" }
-    ]
-  },
-  {
-    id: 5,
-    type: "classify_flow",
-    text: "아침에 맨발로 강가를 건너고 있다",
-    cuts: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12],
-    items: [
-      { text: "아침", meaningAns: "실질", indepAns: "자립" },
-      { text: "에", meaningAns: "형식", indepAns: "의존" },
-      { text: "맨-", meaningAns: "형식", indepAns: "의존" },
-      { text: "발", meaningAns: "실질", indepAns: "자립" },
-      { text: "로", meaningAns: "형식", indepAns: "의존" },
-      { text: "강", meaningAns: "실질", indepAns: "자립" },
-      { text: "가", meaningAns: "실질", indepAns: "자립" },
-      { text: "를", meaningAns: "형식", indepAns: "의존" },
-      { text: "건너-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-고", meaningAns: "형식", indepAns: "의존" },
-      { text: "있-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-다", meaningAns: "형식", indepAns: "의존" }
-    ]
-  },
-  {
-    id: 6,
-    type: "classify_flow",
-    text: "그분은 아주 환하게 웃었다",
-    cuts: [0, 1, 2, 4, 6, 7, 8, 9],
-    items: [
-      { text: "그", meaningAns: "실질", indepAns: "자립" },
-      { text: "분", meaningAns: "실질", indepAns: "자립" },
-      { text: "은", meaningAns: "형식", indepAns: "의존" },
-      { text: "아주", meaningAns: "실질", indepAns: "자립" },
-      { text: "환하-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-게", meaningAns: "형식", indepAns: "의존" },
-      { text: "웃-", meaningAns: "실질", indepAns: "의존" },
-      { text: "-었-", meaningAns: "형식", indepAns: "의존" },
-      { text: "-다", meaningAns: "형식", indepAns: "의존" }
     ]
   }
 ];
