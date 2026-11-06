@@ -644,6 +644,79 @@ const classifyData = [
       { text: "이", meaningAns: "형식", indepAns: "의존" },
       { text: "파랗-", meaningAns: "실질", indepAns: "의존" }
     ]
+  },
+  // 심화편 문장 (심화편과 동일한 자르기 위치, 조각별 실질/형식 · 자립/의존 분류)
+  {
+    id: 3,
+    type: "classify_flow",
+    text: "새 신을 신고 달리고 있다",
+    cuts: [0, 1, 2, 3, 4, 6, 7, 8],
+    items: [
+      { text: "새", meaningAns: "실질", indepAns: "자립" },
+      { text: "신", meaningAns: "실질", indepAns: "자립" },
+      { text: "을", meaningAns: "형식", indepAns: "의존" },
+      { text: "신-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-고", meaningAns: "형식", indepAns: "의존" },
+      { text: "달리-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-고", meaningAns: "형식", indepAns: "의존" },
+      { text: "있-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-다", meaningAns: "형식", indepAns: "의존" }
+    ]
+  },
+  {
+    id: 4,
+    type: "classify_flow",
+    text: "풋사과를 아주 맛있게 먹었어",
+    cuts: [0, 2, 3, 5, 6, 7, 8, 9, 10],
+    items: [
+      { text: "풋-", meaningAns: "형식", indepAns: "의존" },
+      { text: "사과", meaningAns: "실질", indepAns: "자립" },
+      { text: "를", meaningAns: "형식", indepAns: "의존" },
+      { text: "아주", meaningAns: "실질", indepAns: "자립" },
+      { text: "맛", meaningAns: "실질", indepAns: "자립" },
+      { text: "-있-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-게", meaningAns: "형식", indepAns: "의존" },
+      { text: "먹-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-었-", meaningAns: "형식", indepAns: "의존" },
+      { text: "-어", meaningAns: "형식", indepAns: "의존" }
+    ]
+  },
+  {
+    id: 5,
+    type: "classify_flow",
+    text: "아침에 맨발로 강가를 건너고 있다",
+    cuts: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12],
+    items: [
+      { text: "아침", meaningAns: "실질", indepAns: "자립" },
+      { text: "에", meaningAns: "형식", indepAns: "의존" },
+      { text: "맨-", meaningAns: "형식", indepAns: "의존" },
+      { text: "발", meaningAns: "실질", indepAns: "자립" },
+      { text: "로", meaningAns: "형식", indepAns: "의존" },
+      { text: "강", meaningAns: "실질", indepAns: "자립" },
+      { text: "가", meaningAns: "실질", indepAns: "자립" },
+      { text: "를", meaningAns: "형식", indepAns: "의존" },
+      { text: "건너-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-고", meaningAns: "형식", indepAns: "의존" },
+      { text: "있-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-다", meaningAns: "형식", indepAns: "의존" }
+    ]
+  },
+  {
+    id: 6,
+    type: "classify_flow",
+    text: "그분은 아주 환하게 웃었다",
+    cuts: [0, 1, 2, 4, 6, 7, 8, 9],
+    items: [
+      { text: "그", meaningAns: "실질", indepAns: "자립" },
+      { text: "분", meaningAns: "실질", indepAns: "자립" },
+      { text: "은", meaningAns: "형식", indepAns: "의존" },
+      { text: "아주", meaningAns: "실질", indepAns: "자립" },
+      { text: "환하-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-게", meaningAns: "형식", indepAns: "의존" },
+      { text: "웃-", meaningAns: "실질", indepAns: "의존" },
+      { text: "-었-", meaningAns: "형식", indepAns: "의존" },
+      { text: "-다", meaningAns: "형식", indepAns: "의존" }
+    ]
   }
 ];
 
