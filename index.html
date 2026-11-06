@@ -364,15 +364,45 @@
     border-radius: 12px;
   }
   .subjective-box.active { display: flex; }
-  .subjective-box input {
+  .subj-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .subj-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .subj-cell label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #7f1d1d;
+  }
+  .subj-input {
     font-size: 20px;
-    padding: 12px 18px;
+    padding: 12px 10px;
     border: 2px solid #fca5a5;
     border-radius: 8px;
     text-align: center;
-    width: 85%;
+    width: 150px;
     outline: none;
     font-weight: 700;
+    background: #ffffff;
+  }
+  .subj-input.correct {
+    border-color: #16a34a;
+    background: #dcfce7;
+    color: #15803d;
+  }
+  .subj-input.wrong {
+    border-color: #dc2626;
+    background: #fee2e2;
+    color: #b91c1c;
   }
 
   .btn {
@@ -574,8 +604,21 @@
 
     <div id="subjectiveContainer" class="subjective-box">
       <div style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제: '달렸다' 속 형태소를 직접 분리해보세요!</div>
-      <div style="font-size:13px; color:#7f1d1d;">'달렸다' 속 형태소를 직접 분리해 적으세요.</div>
-      <input type="text" id="subjectiveInput" placeholder="">
+      <div style="font-size:13px; color:#7f1d1d;">각 칸에 형태소를 하나씩 적으세요.</div>
+      <div class="subj-inputs">
+        <div class="subj-cell">
+          <label>1번째 형태소</label>
+          <input type="text" id="subjectiveInput0" class="subj-input" placeholder="" autocomplete="off">
+        </div>
+        <div class="subj-cell">
+          <label>2번째 형태소</label>
+          <input type="text" id="subjectiveInput1" class="subj-input" placeholder="" autocomplete="off">
+        </div>
+        <div class="subj-cell">
+          <label>3번째 형태소</label>
+          <input type="text" id="subjectiveInput2" class="subj-input" placeholder="" autocomplete="off">
+        </div>
+      </div>
     </div>
 
     <button id="actionBtn" class="btn" onclick="handleActionButton()">확인 완료</button>
@@ -799,6 +842,10 @@ function getActiveData() {
   return classifyData;
 }
 
+function getSubjectiveInputs() {
+  return [0, 1, 2].map(i => document.getElementById(`subjectiveInput${i}`));
+}
+
 function loadStage() {
   isEvaluated = false;
   classifyStep = 1;
@@ -854,7 +901,11 @@ function loadStage() {
     sliceContainer.style.display = "none";
     classifyContainer.classList.remove("active");
     subjectiveContainer.classList.add("active");
-    document.getElementById("subjectiveInput").value = "";
+    getSubjectiveInputs().forEach(el => {
+      el.value = "";
+      el.disabled = false;
+      el.classList.remove("correct", "wrong");
+    });
   }
 }
 
@@ -1038,10 +1089,18 @@ function checkAnswer() {
       fb.innerHTML = `❌ <b>아쉬워요! 올바른 형태소 분석을 확인해보세요.</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
     }
   } else {
+    // 보스: 세 칸에 각각 형태소를 입력. 입력 칸마다 구분자를 제거하고 정답 형태소와 비교
     const answerCardHtml = renderAnswerCard(q);
-    // 구분자(공백, -, /, ,)와 상관없이 형태소 목록을 순서대로 비교
-    const parts = document.getElementById("subjectiveInput").value.trim().split(/[\s\-\/,、·]+/).filter(p => p !== "");
-    const isCorrect = JSON.stringify(parts) === JSON.stringify(q.answerParts);
+    const inputs = getSubjectiveInputs();
+    const values = inputs.map(el => el.value.trim().replace(/[\s\-\/,、·]/g, ""));
+    const cellOk = values.map((v, i) => v === q.answerParts[i]);
+    const isCorrect = values.length === q.answerParts.length && cellOk.every(ok => ok);
+
+    inputs.forEach((el, i) => {
+      el.disabled = true;
+      el.classList.remove("correct", "wrong");
+      el.classList.add(cellOk[i] ? "correct" : "wrong");
+    });
 
     if (isCorrect) {
       score += 200;
