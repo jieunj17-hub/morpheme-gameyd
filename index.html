@@ -339,6 +339,17 @@
     color: white;
     border-color: var(--primary);
   }
+  /* 정답 제출 후 채점 색상 */
+  .opt-btn.correct {
+    background: #16a34a;
+    color: white;
+    border-color: #16a34a;
+  }
+  .opt-btn.wrong {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+  }
 
   /* 보스 서술형 입력 영역 */
   .subjective-box {
@@ -870,6 +881,20 @@ function selectClassifyChoice(itemIdx, category, val, el) {
   el.classList.add("selected");
 }
 
+// 분류 채점 결과 표시: 정답은 초록, 사용자가 고른 오답은 빨강
+function markChoiceButtons(card, category, userVal, ansVal) {
+  if (!card) return;
+  card.querySelectorAll(`.opt-btn[data-cat="${category}"]`).forEach(btn => {
+    const val = btn.dataset.val;
+    btn.classList.remove("selected");
+    if (val === ansVal) {
+      btn.classList.add("correct");
+    } else if (val === userVal) {
+      btn.classList.add("wrong");
+    }
+  });
+}
+
 function renderAnswerCard(q) {
   if (!q.display || !q.types) return "";
   let html = "<div class='answer-row'>";
@@ -932,16 +957,16 @@ function checkClassifySlicing() {
       <div class="classify-group">
         <label>1) 의미에 따라 (실질 / 형식)</label>
         <div class="classify-options">
-          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'meaning', '실질', this)">실질 형태소</button>
-          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'meaning', '형식', this)">형식 형태소</button>
+          <button class="opt-btn" data-cat="meaning" data-val="실질" onclick="selectClassifyChoice(${idx}, 'meaning', '실질', this)">실질 형태소</button>
+          <button class="opt-btn" data-cat="meaning" data-val="형식" onclick="selectClassifyChoice(${idx}, 'meaning', '형식', this)">형식 형태소</button>
         </div>
       </div>
 
       <div class="classify-group">
         <label>2) 자립성에 따라 (자립 / 의존)</label>
         <div class="classify-options">
-          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'indep', '자립', this)">자립 형태소</button>
-          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'indep', '의존', this)">의존 형태소</button>
+          <button class="opt-btn" data-cat="indep" data-val="자립" onclick="selectClassifyChoice(${idx}, 'indep', '자립', this)">자립 형태소</button>
+          <button class="opt-btn" data-cat="indep" data-val="의존" onclick="selectClassifyChoice(${idx}, 'indep', '의존', this)">의존 형태소</button>
         </div>
       </div>
     </div>`;
@@ -960,16 +985,31 @@ function checkAnswer() {
 
   if (currentMode === "classify" && classifyStep === 2) {
     let addScore = 0;
-    let detailHtml = "<ul style='margin-top:8px; text-align:left; font-size:14px;'>";
+    let detailHtml = "<ul style='margin-top:8px; text-align:left; font-size:14px; list-style:none; padding-left:0;'>";
+    const cards = document.querySelectorAll("#classifyContainer .classify-card");
 
     q.items.forEach((item, idx) => {
       const userSel = classifySelections[idx] || {};
       const meaningOk = userSel.meaning === item.meaningAns;
       const indepOk = userSel.indep === item.indepAns;
 
-      detailHtml += `<li><b>'${item.text}'</b>: `;
-      if (meaningOk) { addScore += 25; detailHtml += `[의미:정답(+25)] `; } else { detailHtml += `[의미:오답(정답:${item.meaningAns})] `; }
-      if (indepOk) { addScore += 25; detailHtml += `[자립성:정답(+25)]`; } else { detailHtml += `[자립성:오답(정답:${item.indepAns})]`; }
+      // 버튼 색상 표시 (정답 초록, 틀린 선택 빨강)
+      markChoiceButtons(cards[idx], "meaning", userSel.meaning, item.meaningAns);
+      markChoiceButtons(cards[idx], "indep", userSel.indep, item.indepAns);
+
+      detailHtml += `<li style="margin-bottom:4px;"><b>'${item.text}'</b>: `;
+      if (meaningOk) {
+        addScore += 25;
+        detailHtml += `<span style="color:#15803d; font-weight:700;">[의미:정답(+25)]</span> `;
+      } else {
+        detailHtml += `<span style="color:#b91c1c; font-weight:700;">[의미:오답(정답:${item.meaningAns})]</span> `;
+      }
+      if (indepOk) {
+        addScore += 25;
+        detailHtml += `<span style="color:#15803d; font-weight:700;">[자립성:정답(+25)]</span>`;
+      } else {
+        detailHtml += `<span style="color:#b91c1c; font-weight:700;">[자립성:오답(정답:${item.indepAns})]</span>`;
+      }
       detailHtml += `</li>`;
     });
     detailHtml += "</ul>";
