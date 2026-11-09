@@ -107,7 +107,7 @@
     word-break: keep-all;
   }
 
-  /* 모드 선택 카드 그리드 */
+  /* 모드 선택 카드 그리드 (4개 탭) */
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -332,7 +332,38 @@
     border-color: var(--primary);
   }
 
-  /* 보스 서술형 입력 영역 */
+  /* 단어 짜임 분류하기 모드 선택 영역 */
+  .word-structure-area {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .word-structure-area.active { display: flex; }
+  .ws-options {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .ws-btn {
+    padding: 12px 20px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .ws-btn.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  /* 보스 서술형 입력 영역 (심화 스테이지 5번) */
   .subjective-box {
     display: none;
     flex-direction: column;
@@ -488,7 +519,7 @@
       문장을 형태소 단위로 올바르게 자르고, 각 형태소의 성격과 유형을 맞춰 점수를 획득하세요.
     </p>
 
-    <!-- 모드 선택 카드 3개 -->
+    <!-- 모드 선택 카드 4개 -->
     <div class="card-grid">
       <div class="mode-card" onclick="startApp('basic')">
         <div>
@@ -503,7 +534,7 @@
         <div>
           <div class="card-icon">🚀</div>
           <div class="card-title">형태소 심화 스테이지 (2차시)</div>
-          <div class="card-desc">문장 속에서 어간·어미를 구별하고, 축약된 보스 단어의 원형을 서술형으로 추론합니다.</div>
+          <div class="card-desc">문장 속에서 용언의 어간·어미를 구별하고, 축약된 보스 단어의 원형을 서술형으로 추론합니다.</div>
         </div>
         <div class="card-link">도전 시작하기 →</div>
       </div>
@@ -513,6 +544,15 @@
           <div class="card-icon">🧩</div>
           <div class="card-title">형태소 분류하기</div>
           <div class="card-desc">자르기 성공 후, 형태소별 '실질/형식' 및 '의존/자립' 성격을 선택해 맞힙니다.</div>
+        </div>
+        <div class="card-link">도전 시작하기 →</div>
+      </div>
+
+      <div class="mode-card" onclick="startApp('wordStructure')">
+        <div>
+          <div class="card-icon">📦</div>
+          <div class="card-title">단일어·합성어·파생어 분류</div>
+          <div class="card-desc">제시된 단어가 단일어, 합성어, 파생어 중 무엇인지 분류하고 형태소를 분석합니다.</div>
         </div>
         <div class="card-link">도전 시작하기 →</div>
       </div>
@@ -526,8 +566,9 @@
       </div>
       <div class="accordion-content" id="accContent">
         • <b>형태소</b>: 뜻을 가진 가장 작은 말의 단위<br>
-        • <b>자립성에 따라</b>: 자립 형태소(혼자 쓰임) / 의존 형태소(다른 말에 붙어 쓰임)<br>
-        • <b>실질적 의미에 따라</b>: 실질 형태소(구체적 의미) / 형식 형태소(문법적 기능)
+        • <b>단일어</b>: 하나의 어근으로 이루어진 단어 (예: 구름, 무지개)<br>
+        • <b>합성어</b>: 둘 이상의 어근이 합쳐진 단어 (예: 손수건, 돌다리)<br>
+        • <b>파생어</b>: 어근에 접사가 붙어서 된 단어 (예: 풋사과, 지우개)
       </div>
     </div>
   </div>
@@ -553,9 +594,20 @@
     <!-- 형태소 분류하기 모드 2단계 선택 영역 -->
     <div id="classifyContainer" class="classify-area"></div>
 
+    <!-- 단어 짜임 분류하기 모드 선택 영역 -->
+    <div id="wordStructureContainer" class="word-structure-area">
+      <div style="font-weight:700; color:#334155; font-size:16px;">이 단어의 짜임은 무엇일까요?</div>
+      <div class="ws-options">
+        <button class="ws-btn" onclick="selectWordStructure('단일어', this)">단일어</button>
+        <button class="ws-btn" onclick="selectWordStructure('합성어', this)">합성어</button>
+        <button class="ws-btn" onclick="selectWordStructure('파생어', this)">파생어</button>
+      </div>
+    </div>
+
+    <!-- 심화 스테이지 5번 보스 서술형 입력 영역 -->
     <div id="subjectiveContainer" class="subjective-box">
       <div style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제: '달렸다' 속 형태소를 직접 분리해보세요!</div>
-      <div style="font-size:13px; color:#7f1d1d;">'달렸다' 속 형태소를 어간/선어말어미/어말어미 원형으로 적으세요.</div>
+      <div style="font-size:13px; color:#7f1d1d;">'달렸다' 속 형태소를 어간/선어말어미/어말어미 원형으로 적으세요 (예: 달리/었/다).</div>
       <input type="text" id="subjectiveInput" placeholder="예: 달리/었/다">
     </div>
 
@@ -584,7 +636,7 @@ const basicData = [
   { id: 6, type: "click", text: "지우개", cuts: [1], display: ["지우-", "-개"], types: ["어근", "접사"] }
 ];
 
-// 심화 스테이지 (2차시 최종 5선: 한자어 '신발' -> 순우리말 '신' 교체, 1~4번 클릭 슬라이서, 5번 보스 서술형)
+// 심화 스테이지 (2차시 최종 5선: 신발->신 교체, 사이시옷·한자·피동사동 제외, 글자단위 분리, 5번 보스 서술형 '달리/었/다')
 const advancedData = [
   { 
     id: 1, 
@@ -655,329 +707,57 @@ const classifyData = [
   }
 ];
 
+// 단일어 10개, 합성어 10개, 파생어 10개 (총 30개)
+const wordStructureData = [
+  // --- 단일어 (10개) ---
+  { id: 1, type: "ws_flow", text: "무지개", structure: "단일어", cuts: [], display: ["무지개"], types: ["어근"] },
+  { id: 2, type: "ws_flow", text: "구름", structure: "단일어", cuts: [], display: ["구름"], types: ["어근"] },
+  { id: 3, type: "ws_flow", text: "바람", structure: "단일어", cuts: [], display: ["바람"], types: ["어근"] },
+  { id: 4, type: "ws_flow", text: "하늘", structure: "단일어", cuts: [], display: ["하늘"], types: ["어근"] },
+  { id: 5, type: "ws_flow", text: "돌", structure: "단일어", cuts: [], display: ["돌"], types: ["어근"] },
+  { id: 6, type: "ws_flow", text: "밤", structure: "단일어", cuts: [], display: ["밤"], types: ["어근"] },
+  { id: 7, type: "ws_flow", text: "산", structure: "단일어", cuts: [], display: ["산"], types: ["어근"] },
+  { id: 8, type: "ws_flow", text: "물", structure: "단일어", cuts: [], display: ["물"], types: ["어근"] },
+  { id: 9, type: "ws_flow", text: "풀", structure: "단일어", cuts: [], display: ["풀"], types: ["어근"] },
+  { id: 10, type: "ws_flow", text: "흙", structure: "단일어", cuts: [], display: ["흙"], types: ["어근"] },
+
+  // --- 합성어 (10개) ---
+  { id: 11, type: "ws_flow", text: "손수건", structure: "합성어", cuts: [0], display: ["손", "수건"], types: ["어근", "어근"] },
+  { id: 12, type: "ws_flow", text: "돌다리", structure: "합성어", cuts: [0], display: ["돌", "다리"], types: ["어근", "어근"] },
+  { id: 13, type: "ws_flow", text: "눈물", structure: "합성어", cuts: [0], display: ["눈", "물"], types: ["어근", "어근"] },
+  { id: 14, type: "ws_flow", text: "발자국", structure: "합성어", cuts: [0], display: ["발", "자국"], types: ["어근", "어근"] },
+  { id: 15, type: "ws_flow", text: "산나물", structure: "합성어", cuts: [0], display: ["산", "나물"], types: ["어근", "어근"] },
+  { id: 16, type: "ws_flow", text: "손발", structure: "합성어", cuts: [0], display: ["손", "발"], types: ["어근", "어근"] },
+  { id: 17, type: "ws_flow", text: "물걸레", structure: "합성어", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] },
+  { id: 18, type: "ws_flow", text: "밤하늘", structure: "합성어", cuts: [0], display: ["밤", "하늘"], types: ["어근", "어근"] },
+  { id: 19, type: "ws_flow", text: "강가", structure: "합성어", cuts: [0], display: ["강", "가"], types: ["어근", "어근"] },
+  { id: 20, type: "ws_flow", text: "책가방", structure: "합성어", cuts: [1], display: ["책", "가방"], types: ["어근", "어근"] },
+
+  // --- 파생어 (10개) ---
+  { id: 21, type: "ws_flow", text: "풋사과", structure: "파생어", cuts: [0], display: ["풋-", "사과"], types: ["접사", "어근"] },
+  { id: 22, type: "ws_flow", text: "참기름", structure: "파생어", cuts: [0], display: ["참-", "기름"], types: ["접사", "어근"] },
+  { id: 23, type: "ws_flow", text: "맨발", structure: "파생어", cuts: [0], display: ["맨-", "발"], types: ["접사", "어근"] },
+  { id: 24, type: "ws_flow", text: "햇밤", structure: "파생어", cuts: [0], display: ["햇-", "밤"], types: ["접사", "어근"] },
+  { id: 25, type: "ws_flow", text: "헛기침", structure: "파생어", cuts: [0], display: ["헛-", "기침"], types: ["접사", "어근"] },
+  { id: 26, type: "ws_flow", text: "지우개", structure: "파생어", cuts: [1], display: ["지우-", "-개"], types: ["어근", "접사"] },
+  { id: 27, type: "ws_flow", text: "걸레질", structure: "파생어", cuts: [1], display: ["걸레", "-질"], types: ["어근", "접사"] },
+  { id: 28, type: "ws_flow", text: "민낯", structure: "파생어", cuts: [0], display: ["민-", "낯"], types: ["접사", "어근"] },
+  { id: 29, type: "ws_flow", text: "첫째", structure: "파생어", cuts: [0], display: ["첫", "-째"], types: ["어근", "접사"] },
+  { id: 30, type: "ws_flow", text: "멋쟁이", structure: "파생어", cuts: [1], display: ["멋", "-쟁이"], types: ["어근", "접사"] }
+];
+
 let currentMode = "basic";
 let currentIdx = 0;
 let userCuts = new Set();
 let classifySelections = {}; 
+let userSelectedStructure = "";
 let score = 0;
 let sessionRecords = [];
 let isEvaluated = false;
 let classifyStep = 1;
+let wordStructureStep = 1;
 
 function toggleAccordion() {
   const content = document.getElementById("accContent");
   const icon = document.getElementById("accIcon");
-  if (content.classList.contains("active")) {
-    content.classList.remove("active");
-    icon.innerText = "▼";
-  } else {
-    content.classList.add("active");
-    icon.innerText = "▲";
-  }
-}
-
-function startApp(mode) {
-  currentMode = mode;
-  document.getElementById("homeScreen").style.display = "none";
-  document.getElementById("gameScreen").style.display = "block";
-  resetGame();
-}
-
-function goHome() {
-  document.getElementById("gameScreen").style.display = "none";
-  document.getElementById("homeScreen").style.display = "flex";
-}
-
-function getActiveData() {
-  if (currentMode === "basic") return basicData;
-  if (currentMode === "advanced") return advancedData;
-  return classifyData;
-}
-
-function loadStage() {
-  isEvaluated = false;
-  classifyStep = 1;
-  const dataList = getActiveData();
-  const q = dataList[currentIdx];
-  userCuts.clear();
-  classifySelections = {};
-
-  document.getElementById("feedbackBox").style.display = "none";
-  document.getElementById("reportCard").style.display = "none";
-  
-  const actionBtn = document.getElementById("actionBtn");
-  actionBtn.style.display = "block";
-  actionBtn.disabled = false;
-
-  const badge = document.getElementById("badge");
-  const sentenceDisplay = document.getElementById("sentenceDisplay");
-  const sliceContainer = document.getElementById("sliceContainer");
-  const classifyContainer = document.getElementById("classifyContainer");
-  const subjectiveContainer = document.getElementById("subjectiveContainer");
-  const modeTitle = document.getElementById("modeTitle");
-
-  if (currentMode === "basic") modeTitle.innerText = "형태소 분석하기 기본편";
-  else if (currentMode === "advanced") modeTitle.innerText = "형태소 심화 스테이지 (2차시)";
-  else modeTitle.innerText = "형태소 분류하기";
-
-  sentenceDisplay.innerText = `"${q.text}"`;
-  document.getElementById("tryDisplay").innerText = sessionRecords.length + 1;
-
-  if (q.type === "click" || q.type === "classify_flow") {
-    badge.innerText = `STAGE ${q.id}`;
-    badge.className = "stage-badge";
-    actionBtn.className = "btn";
-    actionBtn.innerText = "자르기 완료!";
-    sliceContainer.style.display = "flex";
-    classifyContainer.classList.remove("active");
-    subjectiveContainer.classList.remove("active");
-
-    const chars = q.text.replace(/[.\s]/g, "").split("");
-    let html = "";
-    chars.forEach((c, idx) => {
-      html += `<div class="char-box">${c}</div>`;
-      if (idx < chars.length - 1) {
-        html += `<div class="gap-btn" data-pos="${idx}" onclick="toggleGap(${idx}, this)"></div>`;
-      }
-    });
-    sliceContainer.innerHTML = html;
-  } else {
-    badge.innerText = "BOSS STAGE";
-    badge.className = "stage-badge boss";
-    actionBtn.className = "btn boss";
-    actionBtn.innerText = "보스 공격 (제출)";
-    sliceContainer.style.display = "none";
-    classifyContainer.classList.remove("active");
-    subjectiveContainer.classList.add("active");
-    document.getElementById("subjectiveInput").value = "";
-  }
-}
-
-function toggleGap(idx, el) {
-  if (isEvaluated) return;
-  if (userCuts.has(idx)) {
-    userCuts.delete(idx);
-    el.classList.remove("active");
-  } else {
-    userCuts.add(idx);
-    el.classList.add("active");
-  }
-}
-
-function selectClassifyChoice(itemIdx, category, val, el) {
-  if (isEvaluated) return;
-  if (!classifySelections[itemIdx]) {
-    classifySelections[itemIdx] = {};
-  }
-  classifySelections[itemIdx][category] = val;
-
-  const parent = el.parentElement;
-  parent.querySelectorAll(".opt-btn").forEach(b => b.classList.remove("selected"));
-  el.classList.add("selected");
-}
-
-function renderAnswerCard(q) {
-  if (!q.display || !q.types) return "";
-  let html = "<div class='answer-row'>";
-  for (let i = 0; i < q.display.length; i++) {
-    html += "<div class='m-box'>";
-    html += "<div class='m-text'>" + q.display[i] + "</div>";
-    html += "<div class='m-type'>" + q.types[i] + "</div>";
-    html += "</div>";
-    if (i < q.display.length - 1) html += "<span class='m-plus'>+</span>";
-  }
-  html += "</div>";
-  return html;
-}
-
-function handleActionButton() {
-  if (currentMode === "classify" && classifyStep === 1 && !isEvaluated) {
-    checkClassifySlicing();
-    return;
-  }
-  
-  if (!isEvaluated) {
-    checkAnswer();
-  } else {
-    nextQuestion();
-  }
-}
-
-function checkClassifySlicing() {
-  const q = classifyData[currentIdx];
-  const fb = document.getElementById("feedbackBox");
-  const userArray = Array.from(userCuts).sort((a, b) => a - b);
-  const isCorrect = userArray.length === q.cuts.length && userArray.every((val, index) => val === q.cuts[index]);
-
-  if (!isCorrect) {
-    fb.className = "feedback error";
-    fb.innerHTML = `❌ <b>자르기가 틀렸습니다!</b><br>올바른 경계를 다시 잘라야 2단계 특성 분류로 넘어갈 수 있습니다.`;
-    fb.style.display = "block";
-    return;
-  }
-
-  score += 100;
-  document.getElementById("scoreDisplay").innerText = score;
-  classifyStep = 2;
-  
-  fb.className = "feedback success";
-  fb.innerHTML = `🎉 <b>자르기 성공! (+100점)</b><br>각 형태소 조각의 '실질/형식' 및 '자립/의존' 특성을 선택하세요.`;
-  fb.style.display = "block";
-
-  document.getElementById("sliceContainer").style.display = "none";
-  const classifyContainer = document.getElementById("classifyContainer");
-  classifyContainer.classList.add("active");
-
-  let html = "";
-  q.items.forEach((item, idx) => {
-    html += `<div class="classify-card">
-      <h4><b>'${item.text}'</b> 형태소 분류</h4>
-      
-      <div class="classify-group">
-        <label>1) 의미에 따라 (실질 / 형식)</label>
-        <div class="classify-options">
-          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'meaning', '실질', this)">실질 형태소</button>
-          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'meaning', '형식', this)">형식 형태소</button>
-        </div>
-      </div>
-
-      <div class="classify-group">
-        <label>2) 자립성에 따라 (자립 / 의존)</label>
-        <div class="classify-options">
-          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'indep', '자립', this)">자립 형태소</button>
-          <button class="opt-btn" onclick="selectClassifyChoice(${idx}, 'indep', '의존', this)">의존 형태소</button>
-        </div>
-      </div>
-    </div>`;
-  });
-  classifyContainer.innerHTML = html;
-
-  document.getElementById("actionBtn").innerText = "분류 판정 제출";
-}
-
-function checkAnswer() {
-  isEvaluated = true;
-  const dataList = getActiveData();
-  const q = dataList[currentIdx];
-  const fb = document.getElementById("feedbackBox");
-  const actionBtn = document.getElementById("actionBtn");
-
-  if (currentMode === "classify" && classifyStep === 2) {
-    let addScore = 0;
-    let detailHtml = "<ul style='margin-top:8px; text-align:left; font-size:14px;'>";
-    
-    q.items.forEach((item, idx) => {
-      const userSel = classifySelections[idx] || {};
-      const meaningOk = userSel.meaning === item.meaningAns;
-      const indepOk = userSel.indep === item.indepAns;
-
-      detailHtml += `<li><b>'${item.text}'</b>: `;
-      if (meaningOk) { addScore += 25; detailHtml += `[의미:정답(+25)] `; } else { detailHtml += `[의미:오답(정답:${item.meaningAns})] `; }
-      if (indepOk) { addScore += 25; detailHtml += `[자립성:정답(+25)]`; } else { detailHtml += `[자립성:오답(정답:${item.indepAns})]`; }
-      detailHtml += `</li>`;
-    });
-    detailHtml += "</ul>";
-
-    score += addScore;
-    document.getElementById("scoreDisplay").innerText = score;
-
-    fb.className = "feedback " + (addScore > 0 ? "success" : "error");
-    fb.innerHTML = `<b>분류 결과! (+${addScore}점 획득)</b>` + detailHtml;
-  } else if (q.type === "click") {
-    const answerCardHtml = renderAnswerCard(q);
-    const userArray = Array.from(userCuts).sort((a, b) => a - b);
-    const isCorrect = userArray.length === q.cuts.length && userArray.every((val, index) => val === q.cuts[index]);
-
-    if (isCorrect) {
-      score += 100;
-      document.getElementById("scoreDisplay").innerText = score;
-      fb.className = "feedback success";
-      if (q.cuts.length === 0) {
-        fb.innerHTML = `<b>🎉 정답입니다! (+100점)</b><br><b>'${q.text}'</b>은 더 이상 쪼갤 수 없는 단일어 형태소입니다.<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
-      } else {
-        fb.innerHTML = `<b>🎉 정답입니다! (+100점)</b><br>형태소 경계를 정확하게 분석했습니다.<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
-      }
-    } else {
-      fb.className = "feedback error";
-      fb.innerHTML = `❌ <b>아쉬워요! 올바른 형태소 분석을 확인해보세요.</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
-    }
-  } else {
-    // 5번 보스 스테이지 (서술형)
-    const answerCardHtml = renderAnswerCard(q);
-    const input = document.getElementById("subjectiveInput").value.trim().replace(/\s+/g, "");
-    const isCorrect = q.answers.some(ans => input === ans.replace(/\s+/g, ""));
-
-    if (isCorrect) {
-      score += 200;
-      document.getElementById("scoreDisplay").innerText = score;
-      fb.className = "feedback success";
-      fb.innerHTML = `🎉 <b>보스 클리어 성공! (+200점)</b><br><b>'달렸다'</b> 속에 숨은 형태소 원형(<b>달리- + -었- + -다</b>)을 정확히 추론해내셨습니다!<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
-    } else {
-      fb.className = "feedback error";
-      fb.innerHTML = `❌ <b>아쉬워요! 보스 공략 원형 분해를 확인하세요.</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
-    }
-  }
-
-  fb.style.display = "block";
-
-  if (currentIdx < dataList.length - 1) {
-    actionBtn.innerText = "다음 문제 →";
-    actionBtn.className = "btn next";
-  } else {
-    actionBtn.innerText = "최종 결과 보기 🏆";
-    actionBtn.className = "btn next";
-  }
-}
-
-function nextQuestion() {
-  const dataList = getActiveData();
-  if (currentIdx < dataList.length - 1) {
-    currentIdx++;
-    loadStage();
-  } else {
-    showFinalReport();
-  }
-}
-
-function showFinalReport() {
-  document.getElementById("actionBtn").style.display = "none";
-  document.getElementById("sliceContainer").style.display = "none";
-  document.getElementById("classifyContainer").classList.remove("active");
-  document.getElementById("subjectiveContainer").classList.remove("active");
-  
-  const currentTry = sessionRecords.length + 1;
-  sessionRecords.push({ try: currentTry, mode: currentMode, score: score });
-
-  const maxScore = Math.max(...sessionRecords.map(r => r.score));
-
-  document.getElementById("reportSummary").innerHTML = `
-    이번 회차 점수: <b>${score}점</b> / 최고 점수: <b>${maxScore}점</b>
-  `;
-
-  let listHtml = "";
-  [...sessionRecords].reverse().forEach(r => {
-    const isLatest = r.try === currentTry;
-    let modeLabel = "기본편";
-    if (r.mode === "advanced") modeLabel = "심화 스테이지 (2차시)";
-    else if (r.mode === "classify") modeLabel = "분류하기";
-
-    listHtml += `
-      <li class="record-item ${isLatest ? 'latest' : ''}">
-        <span>${r.try}차 시도 [${modeLabel}] ${isLatest ? '<b>[현재]</b>' : ''}</span>
-        <span><b>${r.score}점</b></span>
-      </li>
-    `;
-  });
-  document.getElementById("recordList").innerHTML = listHtml;
-  document.getElementById("reportCard").style.display = "block";
-}
-
-function resetGame() {
-  currentIdx = 0;
-  score = 0;
-  document.getElementById("scoreDisplay").innerText = 0;
-  loadStage();
-}
-</script>
-</body>
-</html>
+  if (content.classList.contains("active
