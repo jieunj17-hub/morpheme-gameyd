@@ -502,8 +502,8 @@
       <div class="mode-card" onclick="startApp('advanced')">
         <div>
           <div class="card-icon">🚀</div>
-          <div class="card-title">형태소 분석하기 심화편 (2차시)</div>
-          <div class="card-desc">문장 속에서 어간·어미를 구별하고, 축약된 보스 단어의 원형을 주관식으로 추론합니다.</div>
+          <div class="card-title">형태소 심화 스테이지 (2차시)</div>
+          <div class="card-desc">문장 속에서 어간·어미를 구별하고, 축약된 보스 단어의 원형을 서술형으로 추론합니다.</div>
         </div>
         <div class="card-link">도전 시작하기 →</div>
       </div>
@@ -584,7 +584,7 @@ const basicData = [
   { id: 6, type: "click", text: "지우개", cuts: [1], display: ["지우-", "-개"], types: ["어근", "접사"] }
 ];
 
-// 심화편 데이터 세트 (2차시 최종 확정 5선: 한자어/사이시옷 제외, 피동사동 제외, 5번 보스 서술형)
+// 심화 스테이지 (2차시 최종 5선: 한자어 '신발' -> 순우리말 '신' 교체, 1~4번 클릭 슬라이서, 5번 보스 서술형)
 const advancedData = [
   { 
     id: 1, 
@@ -717,7 +717,7 @@ function loadStage() {
   const modeTitle = document.getElementById("modeTitle");
 
   if (currentMode === "basic") modeTitle.innerText = "형태소 분석하기 기본편";
-  else if (currentMode === "advanced") modeTitle.innerText = "형태소 분석하기 심화편 (2차시)";
+  else if (currentMode === "advanced") modeTitle.innerText = "형태소 심화 스테이지 (2차시)";
   else modeTitle.innerText = "형태소 분류하기";
 
   sentenceDisplay.innerText = `"${q.text}"`;
@@ -958,7 +958,7 @@ function showFinalReport() {
   [...sessionRecords].reverse().forEach(r => {
     const isLatest = r.try === currentTry;
     let modeLabel = "기본편";
-    if (r.mode === "advanced") modeLabel = "심화편 (2차시)";
+    if (r.mode === "advanced") modeLabel = "심화 스테이지 (2차시)";
     else if (r.mode === "classify") modeLabel = "분류하기";
 
     listHtml += `
