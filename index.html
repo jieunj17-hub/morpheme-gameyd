@@ -1,686 +1,722 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<script>
-/*! Chart.js v4.4.1 */
-!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):(t="undefined"!=typeof globalThis?globalThis:t||self).Chart=e()}(this,(function(){"use strict";var t=Object.freeze({__proto__:null});function e(){}const i=(()=>{let t=0;return()=>t++})();function s(t){return null==t}function n(t){if(Array.isArray&&Array.isArray(t))return!0;const e=Object.prototype.toString.call(t);return"[object"===e.slice(0,7)&&"Array]"===e.slice(-6)}function o(t){return null!==t&&"[object Object]"===Object.prototype.toString.call(t)}function a(t){return("number"==typeof t||t instanceof Number)&&isFinite(+t)}function r(t,e){return a(t)?t:e}function l(t,e){return void 0===t?e:t}const h=(t,e)=>"string"==typeof t&&t.endsWith("%")?parseFloat(t)/100:+t/e,c=(t,e)=>"string"==typeof t&&t.endsWith("%")?parseFloat(t)/100*e:+t;function d(t,e,i){if(t&&"function"==typeof t.call)return t.apply(i,e)}function u(t,e,i,s){let a,r,l;if(n(t))if(r=t.length,s)for(a=r-1;a>=0;a--)e.call(i,t[a],a);else for(a=0;a<r;a++)e.call(i,t[a],a);else if(o(t))for(l=Object.keys(t),r=l.length,a=0;a<r;a++)e.call(i,t[l[a]],l[a])}function f(t,e){let i,s,n,o;if(!t||!e||t.length!==e.length)return!1;for(i=0,s=t.length;i<s;++i)if(n=t[i],o=e[i],n.datasetIndex!==o.datasetIndex||n.index!==o.index)return!1;return!0}function g(t){if(n(t))return t.map(g);if(o(t)){const e=Object.create(null),i=Object.keys(t),s=i.length;let n=0;for(;n<s;++n)e[i[n]]=g(t[i[n]]);return e}return t}function p(t){return-1===["__proto__","prototype","constructor"].indexOf(t)}function m(t,e,i,s){if(!p(t))return;const n=e[t],a=i[t];o(n)&&o(a)?b(n,a,s):e[t]=g(a)}function b(t,e,i){const s=n(e)?e:[e],a=s.length;if(!o(t))return t;const r=(i=i||{}).merger||m;let l;for(let e=0;e<a;++e){if(l=s[e],!o(l))continue;const n=Object.keys(l);for(let e=0,s=n.length;e<s;++e)r(n[e],t,l,i)}return t}function x(t,e){return b(t,e,{merger:_})}function _(t,e,i){if(!p(t))return;const s=e[t],n=i[t];o(s)&&o(n)?x(s,n):Object.prototype.hasOwnProperty.call(e,t)||(e[t]=g(n))}const y={"":t=>t,x:t=>t.x,y:t=>t.y};function v(t){const e=t.split("."),i=[];let s="";for(const t of e)s+=t,s.endsWith("\\")?s=s.slice(0,-1)+".":(i.push(s),s="");return i}function M(t,e){const i=y[e]||(y[e]=function(t){const e=v(t);return t=>{for(const i of e){if(""===i)break;t=t&&t[i]}return t}}(e));return i(t)}function w(t){return t.charAt(0).toUpperCase()+t.slice(1)}const k=t=>void 0!==t,S=t=>"function"==typeof t,P=(t,e)=>{if(t.size!==e.size)return!1;for(const i of t)if(!e.has(i))return!1;return!0};function D(t){return"mouseup"===t.type||"click"===t.type||"contextmenu"===t.type}const C=Math.PI,O=2*C,A=O+C,T=Number.POSITIVE_INFINITY,L=C/180,E=C/2,R=C/4,I=2*C/3,z=Math.log10,F=Math.sign;function V(t,e,i){return Math.abs(t-e)<i}function B(t){const e=Math.round(t);t=V(t,e,t/1e3)?e:t;const i=Math.pow(10,Math.floor(z(t))),s=t/i;return(s<=1?1:s<=2?2:s<=5?5:10)*i}function W(t){const e=[],i=Math.sqrt(t);let s;for(s=1;s<i;s++)t%s==0&&(e.push(s),e.push(t/s));return i===(0|i)&&e.push(i),e.sort(((t,e)=>t-e)).pop(),e}function N(t){return!isNaN(parseFloat(t))&&isFinite(t)}function H(t,e){const i=Math.round(t);return i-e<=t&&i+e>=t}function j(t,e,i){let s,n,o;for(s=0,n=t.length;s<n;s++)o=t[s][i],isNaN(o)||(e.min=Math.min(e.min,o),e.max=Math.max(e.max,o))}function $(t){return t*(C/180)}function Y(t){return t*(180/C)}function U(t){if(!a(t))return;let e=1,i=0;for(;Math.round(t*e)/e!==t;)e*=10,i++;return i}function X(t,e){const i=e.x-t.x,s=e.y-t.y,n=Math.sqrt(i*i+s*s);let o=Math.atan2(s,i);return o<-.5*C&&(o+=O),{angle:o,distance:n}}function q(t,e){return Math.sqrt(Math.pow(e.x-t.x,2)+Math.pow(e.y-t.y,2))}function K(t,e){return(t-e+A)%O-C}function G(t){return(t%O+O)%O}function Z(t,e,i,s){const n=G(t),o=G(e),a=G(i),r=G(o-n),l=G(a-n),h=G(n-o),c=G(n-a);return n===o||n===a||s&&o===a||r>l&&h<c}function J(t,e,i){return Math.max(e,Math.min(i,t))}function Q(t){return J(t,-32768,32767)}function tt(t,e,i,s=1e-6){return t>=Math.min(e,i)-s&&t<=Math.max(e,i)+s}function et(t,e,i){i=i||(i=>t[i]<e);let s,n=t.length-1,o=0;for(;n-o>1;)s=o+n>>1,i(s)?o=s:n=s;return{lo:o,hi:n}}const rt=(t,e,i,s)=>et(t,i,s?s=>{const n=t[s][e];return n<i||n===i&&t[s+1][e]===i}:s=>t[s][e]<i),st=(t,e,i)=>et(t,i,(s=>t[s][e]>=i));function nt(t,e,i){let s=0,n=t.length;for(;s<n&&t[s]<e;)s++;for(;n>s&&t[n-1]>i;)n--;return s>0||n<t.length?t.slice(s,n):t}const ot=["push","pop","shift","splice","unshift"];function at(t,e){t._chartjs?t._chartjs.listeners.push(e):(Object.defineProperty(t,"_chartjs",{configurable:!0,enumerable:!1,value:{listeners:[e]}}),ot.forEach((e=>{const i="_onData"+w(e),s=t[e];Object.defineProperty(t,e,{configurable:!0,enumerable:!1,value(...e){const n=s.apply(this,e);return t._chartjs.listeners.forEach((t=>{"function"==typeof t[i]&&t[i](...e)})),n}})})))}function lt(t){const e=t._chartjs;if(!i)return;const s=i.listeners,n=s.indexOf(e);-1!==n&&s.splice(n,1),s.length>0||(ot.forEach((e=>{delete t[e]})),delete t._chartjs)}function ht(t){const e=new Set(t);return e.size===t.length?t:Array.from(e)}const ct="undefined"==typeof window?function(t){return t()}:window.requestAnimationFrame;function dt(t,e){let i=[],s=!1;return function(...n){i=n,s||(s=!0,ct.call(window,(()=>{s=!1,t.apply(e,i)})))}}function ut(t,e){let i;return function(...s){return e?(clearTimeout(i),i=setTimeout(t,e,s)):t.apply(this,s),e}}const ft=t=>"start"===t?"left":"end"===t?"right":"center",gt=(t,e,i)=>"start"===t?e:"end"===t?i:(e+i)/2,pt=(t,e,i,s)=>t===(s?"left":"right")?i:"center"===t?(e+i)/2:e;function mt(t,e,i){const s=e.length;let n=0,o=s;if(t._sorted){const{iScale:a,_parsed:r}=t,l=a.axis,{min:h,max:c,minDefined:d,maxDefined:u}=a.getUserBounds();d&&(n=J(Math.min(rt(r,l,h).lo,i?s:rt(e,l,a.getPixelForValue(h)).lo),0,s-1)),o=u?J(Math.max(rt(r,a.axis,c,!0).hi+1,i?0:rt(e,l,a.getPixelForValue(c),!0).hi+1),n,s)-n:s-n}return{start:n,count:o}}function bt(t){const{xScale:e,yScale:i,_scaleRanges:s}=t,n={xmin:e.min,xmax:e.max,ymin:i.min,ymax:i.max};if(!s)return t._scaleRanges=n,!0;const o=s.xmin!==e.min||s.xmax!==e.max||s.ymin!==i.min||s.ymax!==i.max;return Object.assign(s,n),o}class xt{constructor(){this._request=null,this._charts=new Map,this._running=!1,this._lastDate=void 0}_notify(t,e,i,s){const n=e.listeners[s],o=e.duration;n.forEach((s=>s({chart:t,initial:e.initial,numSteps:o,currentStep:Math.min(i-e.start,o)})))}_refresh(){this._request||(this._running=!0,this._request=ct.call(window,(()=>{this._update(),this._request=null,this._running&&this._refresh()})))}_update(t=Date.now()){let e=0;this._charts.forEach(((i,s)=>{if(!i.running||!i.items.length)return;const n=i.items;let o,a=n.length-1,r=!1;for(;a>=0;--a)o=n[a],o._active?(o._total>i.duration&&(i.duration=o._total),o.tick(t),r=!0):(n[a]=n[n.length-1],n.pop());r&&(s.draw(),this._notify(s,i,t,"progress")),n.length||(i.running=!1,this._notify(s,i,t,"complete"),i.initial=!1),e+=n.length})),this._lastDate=t,0===e&&(this._running=!1)}_getAnims(t){const e=this._charts;let i=e.get(t);return i||(i={running:!1,initial:!0,items:[],listeners:{complete:[],progress:[]}},e.set(t,i)),i}listen(t,e,i){this._getAnims(t).listeners[e].push(i)}add(t,e){e&&e.length&&this._getAnims(t).items.push(...e)}has(t){return this._getAnims(t).items.length>0}start(t){const e=this._charts.get(t);e&&(e.running=!0,e.start=Date.now(),e.duration=e.items.reduce(((t,e)=>Math.max(t,e._duration)),0),this._refresh())}running(t){if(!this._running)return!1;const e=this._charts.get(t);return!!(e&&e.running&&e.items.length)}stop(t){const e=this._charts.get(t);if(!e||!e.items.length)return;const i=e.items;let s=i.length-1;for(;s>=0;--s)i[s].cancel();e.items=[],this._notify(t,e,Date.now(),"complete")}remove(t){return this._charts.delete(t)}}var _t=new xt;
-window.Chart = Chart;
-}));
-</script>
 <meta charset="UTF-8">
-<title>형태소 슬라이서 - 문장 심화 스테이지</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>형태소 슬라이서 - 국어 문법 학습 탐험대</title>
 <style>
-:root {
-  --wrks-viz-font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --wrks-viz-primary: #2563eb;
-  --wrks-viz-boss: #dc2626;
-  --wrks-viz-bg: #ffffff;
-  --wrks-viz-fg: #111827;
-  --wrks-viz-border: #d1d5db;
-  --wrks-viz-radius: 8px;
-  --wrks-viz-space-1: 4px;
-  --wrks-viz-space-2: 8px;
-  --wrks-viz-space-3: 12px;
-  --wrks-viz-space-4: 16px;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: var(--wrks-viz-font-family);
-  background: var(--wrks-viz-bg);
-  color: var(--wrks-viz-fg);
-  padding: var(--wrks-viz-space-4);
-}
-.container {
-  max-width: 760px;
-  margin: 0 auto;
-}
-h1 {
-  font-size: 20px;
-  margin-bottom: var(--wrks-viz-space-2);
-  letter-spacing: -0.3px;
-}
-.subtitle {
-  font-size: 13px;
-  color: #6b7280;
-  margin-bottom: var(--wrks-viz-space-4);
-}
-.hud {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--wrks-viz-space-2);
-  margin-bottom: var(--wrks-viz-space-3);
-}
-.hud-cell {
-  border: 1px solid var(--wrks-viz-border);
-  border-radius: var(--wrks-viz-radius);
-  padding: var(--wrks-viz-space-2) var(--wrks-viz-space-3);
-}
-.hud-label {
-  font-size: 11px;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.hud-value {
-  font-size: 22px;
-  font-weight: 600;
-  margin-top: 2px;
-}
-.stage {
-  border: 1px solid var(--wrks-viz-border);
-  border-radius: var(--wrks-viz-radius);
-  padding: var(--wrks-viz-space-4);
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--wrks-viz-space-3);
-  position: relative;
-}
-.stage.boss-theme {
-  border-color: #fca5a5;
-  background: #fff5f5;
-}
-.hint {
-  position: absolute;
-  top: var(--wrks-viz-space-3);
-  left: var(--wrks-viz-space-3);
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 600;
-}
-.word-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 0;
-  user-select: none;
-  line-height: 1.8;
-}
-.char {
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-.gap {
-  width: 16px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-}
-.gap::before {
-  content: "";
-  display: block;
-  width: 2px;
-  height: 50%;
-  background: transparent;
-  transition: background 0.15s;
-}
-.gap:hover::before {
-  background: #d1d5db;
-}
-.gap.cut::before {
-  background: var(--wrks-viz-primary);
-  width: 3px;
-  height: 85%;
-}
-.gap.correct::before {
-  background: #16a34a;
-  width: 3px;
-  height: 85%;
-}
-.gap.wrong::before {
-  background: #dc2626;
-  width: 3px;
-  height: 85%;
-}
-.gap.missed::before {
-  background: #f59e0b;
-  width: 3px;
-  height: 85%;
-}
+  :root {
+    --primary: #4f46e5;
+    --primary-light: #e0e7ff;
+    --boss: #dc2626;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text-main: #0f172a;
+    --text-sub: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f8fafc;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
 
-/* 주관식 입력 폼 (보스 스테이지 전용) */
-.subjective-box {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  margin-top: 10px;
-}
-.subjective-box.active { display: flex; }
-.subjective-box input {
-  font-size: 18px;
-  padding: 10px 14px;
-  border: 2px solid #fca5a5;
-  border-radius: 8px;
-  text-align: center;
-  width: 85%;
-  max-width: 380px;
-  outline: none;
-}
-.subjective-box input:focus { border-color: var(--wrks-viz-boss); }
+  /* 상단 헤더 */
+  .site-header {
+    width: 100%;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10;
+  }
+  .site-header:hover .logo-text h1 {
+    color: var(--primary);
+  }
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+  }
+  .logo-text h1 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.2;
+    transition: color 0.2s;
+  }
+  .logo-text p {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 700;
+  }
 
-.feedback {
-  margin-top: var(--wrks-viz-space-3);
-  font-size: 14px;
-  min-height: 42px;
-  text-align: center;
-  padding: var(--wrks-viz-space-2);
-  width: 100%;
-}
-.feedback.ok { color: #16a34a; }
-.feedback.ng { color: #dc2626; }
+  .main-wrapper {
+    width: 100%;
+    max-width: 760px;
+    padding: 32px 20px;
+  }
 
-.answer-row {
-  font-size: 15px;
-  color: #374151;
-  margin-top: var(--wrks-viz-space-2);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: var(--wrks-viz-space-1);
-}
-.answer-row .m-box {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 6px 10px;
-  border: 1px solid var(--wrks-viz-border);
-  border-radius: 4px;
-  background: #f9fafb;
-  min-width: 45px;
-  margin-bottom: 4px;
-}
-.answer-row .m-text {
-  font-weight: 600;
-  font-size: 15px;
-}
-.answer-row .m-type {
-  font-size: 11px;
-  color: #6b7280;
-  margin-top: 2px;
-  white-space: nowrap;
-}
-.answer-row .m-plus {
-  align-self: center;
-  color: #9ca3af;
-  font-weight: 600;
-  padding: 0 2px;
-}
+  /* ---------------- HOME LANDING PAGE ---------------- */
+  #homeScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .badge-tag {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.35;
+    color: #1e1b4b;
+    margin-bottom: 12px;
+  }
+  .hero-title span {
+    color: var(--primary);
+  }
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-sub);
+    line-height: 1.6;
+    margin-bottom: 36px;
+    word-break: keep-all;
+  }
 
-.controls {
-  display: flex;
-  gap: var(--wrks-viz-space-2);
-  justify-content: center;
-}
-button {
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: var(--wrks-viz-radius);
-  border: 1px solid var(--wrks-viz-border);
-  background: var(--wrks-viz-bg);
-  color: var(--wrks-viz-fg);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-button:hover:not(:disabled) {
-  background: #f3f4f6;
-}
-button.primary {
-  background: var(--wrks-viz-primary);
-  color: #ffffff;
-  border-color: var(--wrks-viz-primary);
-}
-button.primary:hover:not(:disabled) {
-  background: #1d4ed8;
-}
-button.boss {
-  background: var(--wrks-viz-boss);
-  color: #ffffff;
-  border-color: var(--wrks-viz-boss);
-}
-button.boss:hover:not(:disabled) {
-  background: #b91c1c;
-}
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.legend {
-  margin-top: var(--wrks-viz-space-3);
-  font-size: 12px;
-  color: #6b7280;
-  text-align: center;
-}
-.legend span {
-  display: inline-block;
-  margin: 0 var(--wrks-viz-space-2);
-}
-.legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  vertical-align: middle;
-  margin-right: 4px;
-}
+  /* 모드 선택 카드 그리드 (4개 메인 탭) */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .mode-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    position: relative;
+    z-index: 5;
+  }
+  .mode-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 12px 24px rgba(79, 70, 229, 0.12);
+  }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text-main);
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex-grow: 1;
+  }
+  .card-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 
-/* 기록 리포트 카드 */
-.report-card {
-  width: 100%;
-  text-align: left;
-  background: #f9fafb;
-  border: 1px solid var(--wrks-viz-border);
-  border-radius: var(--wrks-viz-radius);
-  padding: 16px;
-  margin-top: 12px;
-  color: #111827;
-}
-.report-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: var(--wrks-viz-primary);
-  text-align: center;
-}
-.report-stats {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 16px;
-  background: #ffffff;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-}
-.stat-item { text-align: center; }
-.stat-item .lbl { font-size: 11px; color: #6b7280; }
-.stat-item .val { font-size: 18px; font-weight: 700; color: #1f2937; }
+  /* 형태소 요약 아코디언 */
+  .summary-accordion {
+    width: 100%;
+    background: #fffbeb;
+    border: 1.5px solid #fef3c7;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .accordion-header {
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #b45309;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .accordion-content {
+    display: none;
+    padding: 0 20px 20px 20px;
+    font-size: 14px;
+    color: #78350f;
+    line-height: 1.6;
+    text-align: left;
+    border-top: 1px dashed #fde68a;
+    margin-top: 4px;
+    padding-top: 14px;
+  }
+  .accordion-content.active { display: block; }
 
-.record-list {
-  list-style: none;
-  max-height: 150px;
-  overflow-y: auto;
-  border-top: 1px dashed var(--wrks-viz-border);
-  padding-top: 8px;
-}
-.record-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  padding: 4px 8px;
-  border-bottom: 1px solid #f3f4f6;
-}
-.record-item.latest {
-  font-weight: 700;
-  background: #eff6ff;
-  color: var(--wrks-viz-primary);
-  border-radius: 4px;
-}
+  /* ---------------- GAME CONTAINER ---------------- */
+  #gameScreen {
+    display: none;
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 24px;
+  }
+  .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--text-sub);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .back-btn:hover { color: var(--primary); }
+
+  .stage-badge {
+    background: var(--primary);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .stage-badge.boss { background: var(--boss); }
+  
+  .hud {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    background: #f1f5f9;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .hud span { color: var(--primary); font-weight: 700; }
+
+  .sentence-box {
+    background: #f8fafc;
+    border: 2px solid var(--border);
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+  .slice-area {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    margin: 20px 0;
+    user-select: none;
+  }
+  .char-box {
+    font-size: 26px;
+    font-weight: 800;
+    padding: 8px 10px;
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    margin: 2px 0;
+  }
+
+  .gap-btn {
+    width: 16px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .gap-btn::after {
+    content: '';
+    width: 3px;
+    height: 24px;
+    background: #cbd5e1;
+    border-radius: 2px;
+    transition: 0.2s;
+  }
+  .gap-btn:hover::after { background: var(--primary); height: 36px; }
+  .gap-btn.active::after { background: var(--primary); width: 4px; height: 44px; }
+  
+  /* 형태소 분류하기 모드 2단계 선택 영역 */
+  .classify-area {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .classify-area.active { display: flex; }
+  .classify-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .classify-card h4 { margin-bottom: 10px; color: #334155; font-size: 16px; }
+  .classify-group { margin-bottom: 10px; }
+  .classify-group label { font-size: 13px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px; }
+  .classify-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .opt-btn {
+    padding: 6px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .opt-btn.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  /* 단어 짜임 분류하기 모드 선택 영역 */
+  .word-structure-area {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .word-structure-area.active { display: flex; }
+  .ws-options {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .ws-btn {
+    padding: 12px 20px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .ws-btn.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  /* 보스 서술형 입력 영역 */
+  .subjective-box {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin: 20px 0;
+    background: #fff5f5;
+    padding: 24px;
+    border: 2px dashed var(--boss);
+    border-radius: 12px;
+  }
+  .subjective-box.active { display: flex; }
+  .subjective-box input {
+    font-size: 20px;
+    padding: 12px 18px;
+    border: 2px solid #fca5a5;
+    border-radius: 8px;
+    text-align: center;
+    width: 85%;
+    outline: none;
+    font-weight: 700;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .btn:hover:not(:disabled) { opacity: 0.9; }
+  .btn.next { background: #16a34a; }
+  .btn.boss { background: var(--boss); }
+  .btn:disabled {
+    background: #94a3b8 !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  /* 피드백 & 모범 답안 해설 */
+  .feedback {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 10px;
+    display: none;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .feedback.success { background: #dcfce7; color: #15803d; display: block; }
+  .feedback.error { background: #fee2e2; color: #b91c1c; display: block; }
+
+  .answer-row {
+    font-size: 14px;
+    color: #374151;
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .answer-row .m-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #ffffff;
+    min-width: 50px;
+  }
+  .answer-row .m-text {
+    font-weight: 700;
+    font-size: 15px;
+    color: #1e293b;
+  }
+  .answer-row .m-type {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+  .answer-row .m-plus {
+    align-self: center;
+    color: #94a3b8;
+    font-weight: 700;
+    padding: 0 2px;
+  }
+
+  .report-card {
+    display: none;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .report-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .record-list {
+    list-style: none;
+    max-height: 160px;
+    overflow-y: auto;
+    border-top: 1px dashed var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  .record-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .record-item.latest {
+    font-weight: 700;
+    background: #eff6ff;
+    color: var(--primary);
+    border-radius: 6px;
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>형태소 슬라이서 - 문장 심화 스테이지</h1>
-  <div class="subtitle">글자 사이를 마우스로 클릭해 문장을 형태소 단위로 슬라이스하세요!</div>
 
-  <div class="hud">
-    <div class="hud-cell">
-      <div class="hud-label">문제</div>
-      <div class="hud-value" id="qnum">1 / 5</div>
+<!-- 상단 공통 헤더 -->
+<header class="site-header" onclick="goHome()">
+  <div class="logo-icon">✂️</div>
+  <div class="logo-text">
+    <h1>형태소 슬라이서</h1>
+    <p>국어 문법 학습 탐험대</p>
+  </div>
+</header>
+
+<div class="main-wrapper">
+  <!-- 1. 첫 화면 랜딩 페이지 (HOME) -->
+  <div id="homeScreen">
+    <div class="badge-tag">MORPHEME LEARNING GAME</div>
+    <h2 class="hero-title">
+      뜻을 가진 가장 작은 말의 단위,<br>
+      <span>형태소</span>를 찾아라!
+    </h2>
+    <p class="hero-desc">
+      문장을 형태소 단위로 올바르게 자르고, 각 형태소의 성격과 유형을 맞춰 점수를 획득하세요.
+    </p>
+
+    <!-- 모드 선택 카드 4개 (기존 4가지 메인 탭) -->
+    <div class="card-grid">
+      <div class="mode-card" onclick="startApp('basic')">
+        <div>
+          <div class="card-icon">🎮</div>
+          <div class="card-title">형태소 분석하기 기본편</div>
+          <div class="card-desc">기초 단어들을 어근, 접사, 용언 어간과 어미 단위로 자르는 연습을 합니다.</div>
+        </div>
+        <div class="card-link">도전 시작하기 →</div>
+      </div>
+
+      <div class="mode-card" onclick="startApp('advanced')">
+        <div>
+          <div class="card-icon">🚀</div>
+          <div class="card-title">형태소 심화 스테이지 (2차시)</div>
+          <div class="card-desc">문장 속에서 어간·어미를 구별하고, 축약된 보스 단어의 원형을 서술형으로 추론합니다.</div>
+        </div>
+        <div class="card-link">도전 시작하기 →</div>
+      </div>
+
+      <div class="mode-card" onclick="startApp('classify')">
+        <div>
+          <div class="card-icon">🧩</div>
+          <div class="card-title">형태소 분류하기</div>
+          <div class="card-desc">자르기 성공 후, 형태소별 '실질/형식' 및 '의존/자립' 성격을 선택해 맞힙니다.</div>
+        </div>
+        <div class="card-link">도전 시작하기 →</div>
+      </div>
+
+      <div class="mode-card" onclick="startApp('wordStructure')">
+        <div>
+          <div class="card-icon">📦</div>
+          <div class="card-title">단일어·합성어·파생어 분류</div>
+          <div class="card-desc">제시된 단어가 단일어, 합성어, 파생어 중 무엇인지 분류하고 형태소를 분석합니다.</div>
+        </div>
+        <div class="card-link">도전 시작하기 →</div>
+      </div>
     </div>
-    <div class="hud-cell">
-      <div class="hud-label">점수</div>
-      <div class="hud-value" id="score">0</div>
-    </div>
-    <div class="hud-cell">
-      <div class="hud-label">연속 정답</div>
-      <div class="hud-value" id="combo">0</div>
-    </div>
-    <div class="hud-cell">
-      <div class="hud-label">시도 회차</div>
-      <div class="hud-value" id="playCount">1차</div>
+
+    <!-- 하단 1분 요약 아코디언 -->
+    <div class="summary-accordion">
+      <div class="accordion-header" onclick="toggleAccordion()">
+        <span>💡 형태소 개념 1분 요약 보기</span>
+        <span id="accIcon">▼</span>
+      </div>
+      <div class="accordion-content" id="accContent">
+        • <b>형태소</b>: 뜻을 가진 가장 작은 말의 단위<br>
+        • <b>단일어</b>: 하나의 어근으로 이루어진 단어 (예: 구름, 무지개)<br>
+        • <b>합성어</b>: 둘 이상의 어근이 합쳐진 단어 (예: 손수건, 돌다리)<br>
+        • <b>파생어</b>: 어근에 접사가 붙어서 된 단어 (예: 풋사과, 지우개)
+      </div>
     </div>
   </div>
 
-  <div class="stage" id="stageCard">
-    <div class="hint" id="hint">글자 사이를 클릭하세요</div>
-    <div class="word-row" id="word"></div>
-    
-    <!-- 보스 스테이지 서술형 입력창 -->
-    <div class="subjective-box" id="subjectiveArea">
-      <div style="font-weight:700; color:#991b1b; font-size:15px;">👾 보스 특수 문제: '달렸다' 속에 숨은 형태소를 직접 써보세요!</div>
-      <div style="font-size:13px; color:#7f1d1d;">입력 방식 예시: <b>달리/었/다</b> 또는 <b>달리- / -었- / -다</b></div>
-      <input type="text" id="subjectiveInput" placeholder="정답 입력 (예: 달리/었/다)">
+  <!-- 2. 게임 실행 화면 (GAME) -->
+  <div id="gameScreen">
+    <div class="top-nav">
+      <button class="back-btn" onclick="goHome()">← 홈으로 돌아가기</button>
+      <span id="badge" class="stage-badge">STAGE 1</span>
     </div>
 
-    <div class="feedback" id="feedback"></div>
-  </div>
+    <h3 id="modeTitle" style="margin-bottom:12px; font-size:20px;">형태소 분석하기 기본편</h3>
 
-  <div class="controls">
-    <button id="checkBtn" class="primary">잘라!</button>
-    <button id="nextBtn" disabled>다음 문제</button>
-    <button id="resetBtn">처음부터 다시</button>
-  </div>
+    <div class="hud">
+      <div>점수: <span id="scoreDisplay">0</span>점</div>
+      <div>시도 회차: <span id="tryDisplay">1</span>차</div>
+    </div>
 
-  <div class="legend" id="legend">
-    <span><span class="legend-dot" style="background:#2563eb"></span>내가 자른 곳</span>
-    <span><span class="legend-dot" style="background:#16a34a"></span>정답</span>
-    <span><span class="legend-dot" style="background:#dc2626"></span>오답</span>
-    <span><span class="legend-dot" style="background:#f59e0b"></span>놓친 경계</span>
+    <div id="sentenceDisplay" class="sentence-box"></div>
+
+    <div id="sliceContainer" class="slice-area"></div>
+
+    <!-- 형태소 분류하기 모드 2단계 선택 영역 -->
+    <div id="classifyContainer" class="classify-area"></div>
+
+    <!-- 단어 짜임 분류하기 모드 선택 영역 -->
+    <div id="wordStructureContainer" class="word-structure-area">
+      <div style="font-weight:700; color:#334155; font-size:16px;">이 단어의 짜임은 무엇일까요?</div>
+      <div class="ws-options">
+        <button class="ws-btn" onclick="selectWordStructure('단일어', this)">단일어</button>
+        <button class="ws-btn" onclick="selectWordStructure('합성어', this)">합성어</button>
+        <button class="ws-btn" onclick="selectWordStructure('파생어', this)">파생어</button>
+      </div>
+    </div>
+
+    <div id="subjectiveContainer" class="subjective-box">
+      <div style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제: '달렸다' 속 형태소를 직접 분리해보세요!</div>
+      <div style="font-size:13px; color:#7f1d1d;">'달렸다' 속 형태소를 어간/선어말어미/어말어미 원형으로 적으세요. (예: 달리/었/다)</div>
+      <input type="text" id="subjectiveInput" placeholder="예: 달리/었/다">
+    </div>
+
+    <button id="actionBtn" class="btn" onclick="handleActionButton()">확인 완료</button>
+
+    <div id="feedbackBox" class="feedback"></div>
+
+    <div id="reportCard" class="report-card">
+      <div class="report-title" id="reportTitle">🎉 스테이지 완주!</div>
+      <div style="text-align:center; margin-bottom:12px;" id="reportSummary"></div>
+      <div style="font-size:13px; font-weight:700; color:#475569;">📋 세션 누적 성적 기록</div>
+      <ul id="recordList" class="record-list"></ul>
+      <button class="btn" style="margin-top:16px;" onclick="resetGame()">다시 도전하기</button>
+    </div>
   </div>
 </div>
 
 <script>
-const problems = [
-  // ===== 2차시: 형태소 심화 문장 스테이지 (5선) =====
+// 기본편 데이터 세트
+const basicData = [
+  { id: 1, type: "click", text: "무지개", cuts: [], display: ["무지개"], types: ["어근"] },
+  { id: 2, type: "click", text: "구름", cuts: [], display: ["구름"], types: ["어근"] },
+  { id: 3, type: "click", text: "바람", cuts: [], display: ["바람"], types: ["어근"] },
+  { id: 4, type: "click", text: "웃고", cuts: [0], display: ["웃-", "-고"], types: ["어간", "어미"] },
+  { id: 5, type: "click", text: "참기름", cuts: [0], display: ["참-", "기름"], types: ["접사", "어근"] },
+  { id: 6, type: "click", text: "지우개", cuts: [1], display: ["지우-", "-개"], types: ["어근", "접사"] }
+];
+
+// 심화 스테이지 (2차시 최종 5선)
+const advancedData = [
   { 
-    mode: "click",
-    word: "새 신을 신고 달리고 있다.", 
-    cuts: [1, 2, 3, 5, 6, 7, 9, 10, 12, 13], 
+    id: 1, 
+    type: "click", 
+    text: "새 신을 신고 달리고 있다", 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], 
     display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"], 
-    types: ["관형사", "명사", "조사", "어간", "어미", "어간", "어미", "어간", "어미"], 
-    level: "심화 문장 1", 
-    hint: "새 / 신 / 을 / 신 / 고 / 달 / 리 / 고 / 있 / 다" 
+    types: ["어근", "어근", "조사", "어간", "어미", "어간", "어미", "어간", "어미"] 
   },
   { 
-    mode: "click",
-    word: "풋사과를 아주 맛있게 먹었어.", 
-    cuts: [1, 3, 4, 6, 7, 8, 10, 11, 13, 14], 
+    id: 2, 
+    type: "click", 
+    text: "풋사과를 아주 맛있게 먹었어", 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 
     display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"], 
-    types: ["접두사", "명사", "조사", "부사", "어근", "어간", "어미", "어간", "선어말어미", "어말어미"], 
-    level: "심화 문장 2", 
-    hint: "풋 / 사 / 과 / 를 / 아 / 주 / 맛 / 있 / 게 / 먹 / 었 / 어" 
+    types: ["접사", "어근", "조사", "어근", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
   { 
-    mode: "click",
-    word: "아침에 맨발로 강가를 건너고 있다.", 
-    cuts: [2, 3, 4, 6, 7, 8, 10, 11, 13, 14, 16, 17], 
+    id: 3, 
+    type: "click", 
+    text: "아침에 맨발로 강가를 건너고 있다", 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 
     display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], 
-    types: ["명사", "조사", "접두사", "명사", "조사", "명사", "명사", "조사", "어간", "어미", "어간", "어미"], 
-    level: "심화 문장 3", 
-    hint: "아 / 침 / 에 / 맨 / 발 / 로 / 강 / 가 / 를 / 건 / 너 / 고 / 있 / 다" 
+    types: ["어근", "조사", "접사", "어근", "조사", "어근", "어근", "조사", "어간", "어미", "어간", "어미"] 
   },
   { 
-    mode: "click",
-    word: "그분은 아주 환하게 웃었다.", 
-    cuts: [1, 2, 3, 5, 6, 8, 9, 10, 12, 13], 
+    id: 4, 
+    type: "click", 
+    text: "그분은 아주 환하게 웃었다", 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], 
     display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
-    types: ["관형사", "의존명사", "조사", "부사", "어간", "어미", "어간", "선어말어미", "어말어미"], 
-    level: "심화 문장 4", 
-    hint: "그 / 분 / 은 / 아 / 주 / 환 / 하 / 게 / 웃 / 었 / 다" 
+    types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
   { 
-    mode: "subjective",
-    word: "새 신을 신고 길을 달렸다.",
-    targetWord: "달렸다",
-    keywords: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리,었,다"],
-    display: ["새", "신", "을", "신-", "-고", "길", "을", "달리-", "-었-", "-다"],
-    types: ["관형사", "명사", "조사", "어간", "어미", "명사", "조사", "어간", "선어말어미", "어말어미"],
-    level: "심화 보스 👾",
-    hint: "'달렸다' 속 어간('달리-')과 과거시제 어미('-었-')의 원형을 밝혀 쓰세요!"
+    id: 5, 
+    type: "subjective", 
+    text: "새 신을 신고 길을 달렸다", 
+    targetWord: "달렸다", 
+    answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"], 
+    display: ["달리-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
   }
 ];
 
-let sessionRecords = [];
-let state = {
-  idx: 0,
-  score: 0,
-  combo: 0,
-  cuts: new Set(),
-  checked: false
-};
-
-const wordEl = document.getElementById("word");
-const feedbackEl = document.getElementById("feedback");
-const qnumEl = document.getElementById("qnum");
-const scoreEl = document.getElementById("score");
-const comboEl = document.getElementById("combo");
-const playCountEl = document.getElementById("playCount");
-const checkBtn = document.getElementById("checkBtn");
-const nextBtn = document.getElementById("nextBtn");
-const resetBtn = document.getElementById("resetBtn");
-const hintEl = document.getElementById("hint");
-const legendEl = document.getElementById("legend");
-const stageCard = document.getElementById("stageCard");
-const subjectiveArea = document.getElementById("subjectiveArea");
-const subjectiveInput = document.getElementById("subjectiveInput");
-
-function render() {
-  const p = problems[state.idx];
-  wordEl.style.display = "flex";
-  wordEl.innerHTML = "";
-  
-  if (p.mode === "click") {
-    stageCard.className = "stage";
-    checkBtn.className = "primary";
-    checkBtn.innerText = "잘라!";
-    subjectiveArea.classList.remove("active");
-
-    const chars = p.word.split("");
-    for (let i = 0; i < chars.length; i++) {
-      if (i > 0) {
-        const gap = document.createElement("div");
-        gap.className = "gap";
-        gap.dataset.pos = i;
-        if (state.cuts.has(i)) {
-          gap.classList.add("cut");
-        }
-        if (state.checked) {
-          const isCorrectCut = p.cuts.includes(i);
-          const userCut = state.cuts.has(i);
-          if (userCut && isCorrectCut) {
-            gap.classList.remove("cut");
-            gap.classList.add("correct");
-          } else if (userCut && !isCorrectCut) {
-            gap.classList.remove("cut");
-            gap.classList.add("wrong");
-          } else if (!userCut && isCorrectCut) {
-            gap.classList.add("missed");
-          }
-        }
-        if (!state.checked) {
-          gap.addEventListener("click", () => toggleCut(i));
-        }
-        wordEl.appendChild(gap);
-      }
-      const c = document.createElement("div");
-      c.className = "char";
-      c.textContent = chars[i];
-      wordEl.appendChild(c);
-    }
-  } else {
-    stageCard.className = "stage boss-theme";
-    checkBtn.className = "boss";
-    checkBtn.innerText = "보스 공격 (제출)";
-    subjectiveArea.classList.add("active");
-    subjectiveInput.value = "";
-    wordEl.innerHTML = `<span style="color:#b91c1c; font-size:28px;">"${p.word}"</span>`;
+// 분류하기 데이터
+const classifyData = [
+  {
+    id: 1,
+    type: "classify_flow",
+    text: "풋사과를 먹었다",
+    cuts: [0, 2, 3, 4, 5], 
+    items: [
+      { text: "풋-", meaningAns: "형식", indepAns: "의존" },
+      { text: "사과", meaningAns: "실질", indepAns: "자립" },
+      { text: "를", meaningAns: "형식", indepAns: "의존" }
+    ]
+  },
+  {
+    id: 2,
+    type: "classify_flow",
+    text: "하늘이 파랗다",
+    cuts: [1, 2, 4], 
+    items: [
+      { text: "하늘", meaningAns: "실질", indepAns: "자립" },
+      { text: "이", meaningAns: "형식", indepAns: "의존" },
+      { text: "파랗-", meaningAns: "실질", indepAns: "의존" }
+    ]
   }
+];
 
-  qnumEl.textContent = (state.idx + 1) + " / " + problems.length;
-  scoreEl.textContent = state.score;
-  comboEl.textContent = state.combo;
-  playCountEl.textContent = (sessionRecords.length + 1) + "차";
-  hintEl.textContent = `[${p.level}] ${p.hint}`;
-  legendEl.style.display = (p.mode === "click") ? "block" : "none";
-}
-
-function toggleCut(pos) {
-  if (state.cuts.has(pos)) {
-    state.cuts.delete(pos);
-  } else {
-    state.cuts.add(pos);
-  }
-  render();
-}
-
-function renderAnswer(p) {
-  let html = "<div class='answer-row'>";
-  for (let i = 0; i < p.display.length; i++) {
-    html += "<div class='m-box'>";
-    html += "<div class='m-text'>" + p.display[i] + "</div>";
-    html += "<div class='m-type'>" + p.types[i] + "</div>";
-    html += "</div>";
-    if (i < p.display.length - 1) html += "<span class='m-plus'>+</span>";
-  }
-  html += "</div>";
-  return html;
-}
-
-function check() {
-  const p = problems[state.idx];
-  state.checked = true;
-
-  if (p.mode === "click") {
-    const correct = new Set(p.cuts);
-    const user = state.cuts;
-    let hits = 0, misses = 0, wrongs = 0;
-    correct.forEach(c => { if (user.has(c)) hits++; else misses++; });
-    user.forEach(u => { if (!correct.has(u)) wrongs++; });
-
-    const perfect = misses === 0 && wrongs === 0;
-    if (perfect) {
-      state.combo++;
-      const bonus = state.combo >= 3 ? 50 : 0;
-      const gained = 100 + bonus;
-      state.score += gained;
-      feedbackEl.className = "feedback ok";
-      let msg = "정답! +" + gained + "점";
-      if (bonus) msg += " (연속 " + state.combo + "번째 보너스!)";
-      msg += renderAnswer(p);
-      feedbackEl.innerHTML = msg;
-    } else {
-      state.combo = 0;
-      feedbackEl.className = "feedback ng";
-      let msg = "아쉬워요. ";
-      if (misses) msg += "놓친 경계 " + misses + "곳";
-      if (misses && wrongs) msg += ", ";
-      if (wrongs) msg += "잘못 자른 곳 " + wrongs + "곳";
-      msg += "<div style='margin-top:8px'>정답 해설:</div>" + renderAnswer(p);
-      feedbackEl.innerHTML = msg;
-    }
-  } else {
-    const val = subjectiveInput.value.trim().replace(/\s+/g, "");
-    const isCorrect = p.keywords.some(k => val === k.replace(/\s+/g, ""));
-
-    if (isCorrect) {
-      state.combo++;
-      const gained = 300;
-      state.score += gained;
-      feedbackEl.className = "feedback ok";
-      feedbackEl.innerHTML = `🎉 <b>보스 클리어 성공! (+${gained}점)</b><br>'<b>달렸다</b>' 속 3개의 형태소(<b>달리-</b> + <b>-었-</b> + <b>-다</b>)를 정확하게 추론해냈습니다!` + renderAnswer(p);
-    } else {
-      state.combo = 0;
-      feedbackEl.className = "feedback ng";
-      feedbackEl.innerHTML = `❌ <b>보스 공격 실패!</b><br>정답 표기 방식: <b>달리/었/다</b> ('달리-' + '-었-' + '-다')` + renderAnswer(p);
-    }
-  }
-
-  checkBtn.disabled = true;
-  nextBtn.disabled = false;
-  render();
-}
-
-function next() {
-  if (state.idx < problems.length - 1) {
-    state.idx++;
-    state.cuts = new Set();
-    state.checked = false;
-    feedbackEl.textContent = "";
-    feedbackEl.className = "feedback";
-    checkBtn.disabled = false;
-    nextBtn.disabled = true;
-    render();
-  } else {
-    showFinalResult();
-  }
-}
-
-function showFinalResult() {
-  const currentTry = sessionRecords.length + 1;
-  sessionRecords.push({
-    tryCount: currentTry,
-    score: state.score,
-    date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  });
-
-  const maxScore = Math.max(...sessionRecords.map(r => r.score));
-  
-  wordEl.style.display = "none";
-  subjectiveArea.classList.remove("active");
-  hintEl.textContent = "🏆 게임 종료!";
-  legendEl.style.display = "none";
-
-  feedbackEl.className = "feedback ok";
-  
-  let reportHtml = `
-    <div style="font-size:20px; font-weight:700; margin-bottom:8px;">축하합니다! 형태소 심화 문장까지 모두 정복했습니다.</div>
-    <div class="report-card">
-      <div class="report-title"> 🏆 누적 플레이 성적 </div>
-      <div class="report-stats">
-        <div class="stat-item">
-          <div class="lbl">이번 회차 점수</div>
-          <div class="val" style="color:#2563eb;">${state.score}점</div>
-        </div>
-        <div class="stat-item">
-          <div class="lbl">최고 점수</div>
-          <div class="val" style="color:#16a34a;">${maxScore}점</div>
-        </div>
-        <div class="stat-item">
-          <div class="lbl">총 도전 횟수</div>
-          <div class="val">${sessionRecords.length}회차</div>
-        </div>
-      </div>
-      <div style="font-size:12px; font-weight:600; color:#4b5563; margin-bottom:6px;"> 📜 누적 플레이 기록</div>
-      <ul class="record-list">
-  `;
-
-  [...sessionRecords].reverse().forEach(rec => {
-    const isLatest = rec.tryCount === currentTry;
-    reportHtml += `
-      <li class="record-item ${isLatest ? 'latest' : ''}">
-        <span>${rec.tryCount}차 시도 (${rec.date}) ${isLatest ? '<b>[NEW]</b>' : ''}</span>
-        <span><b>${rec.score}점</b></span>
-      </li>
-    `;
-  });
-
-  reportHtml += `
-      </ul>
-    </div>
-  `;
-
-  feedbackEl.innerHTML = reportHtml;
-  checkBtn.disabled = true;
-  nextBtn.disabled = true;
-}
-
-function reset() {
-  state = { idx: 0, score: 0, combo: 0, cuts: new Set(), checked: false };
-  feedbackEl.textContent = "";
-  feedbackEl.className = "feedback";
-  checkBtn.disabled = false;
-  nextBtn.disabled = true;
-  render();
-}
-
-checkBtn.addEventListener("click", check);
-nextBtn.addEventListener("click", next);
-resetBtn.addEventListener("click", reset);
-
-render();
-</script>
-</body>
-</html>
+// 단일어 10개, 합성어 10개, 파생어 10개 (총 30개)
+const wordStructureData = [
+  // --- 단일어 (10개) ---
+  { id: 1, type: "ws_flow", text: "무지개", structure: "단일어", cuts: [], display: ["무지개"], types: ["어근"] },
+  { id: 2, type: "ws_flow", text: "구름", structure: "단일어", cuts: [], display: ["구름"], types: ["어근"] },
+  { id: 3, type: "ws_flow", text: "바람", structure: "단일어", cuts: [], display: ["바람"], types: ["어근"] },
+  { id: 4, type: "ws_flow", text: "하늘", structure: "단일어", cuts: [], display: ["하늘"], types: ["어근"] },
+  { id: 5, type: "ws_flow", text: "돌", structure: "단일어", cuts: [], display: ["돌"], types: ["어근"] },
+  { id: 6, type: "ws_flow", text: "밤", structure: "단일어", cuts: [], display: ["밤"], types: ["어근"] },
+  { id: 7, type: "ws_flow", text: "산", structure: "단일어", cuts: [], display: ["산"], types: ["어근"] },
+  { id: 8, type: "ws_flow", text: "물", structure: "단일어", cuts: [], display: ["물"], types: ["어근"] },
