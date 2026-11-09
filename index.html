@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>형태소 슬라이서 - 2차시 심화 스테이지</title>
+<title>형태소 슬라이서 - 국어 문법 학습 탐험대</title>
 <style>
   :root {
     --primary: #4f46e5;
@@ -108,6 +108,7 @@
     word-break: keep-all;
   }
 
+  /* 모드 선택 카드 그리드 (2개 탭: 기본편 / 심화 스테이지) */
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -169,6 +170,37 @@
     align-items: center;
     gap: 4px;
   }
+
+  /* 형태소 요약 아코디언 */
+  .summary-accordion {
+    width: 100%;
+    background: #fffbeb;
+    border: 1.5px solid #fef3c7;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .accordion-header {
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #b45309;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .accordion-content {
+    display: none;
+    padding: 0 20px 20px 20px;
+    font-size: 14px;
+    color: #78350f;
+    line-height: 1.6;
+    text-align: left;
+    border-top: 1px dashed #fde68a;
+    margin-top: 4px;
+    padding-top: 14px;
+  }
+  .accordion-content.active { display: block; }
 
   /* ---------------- GAME CONTAINER ---------------- */
   #gameScreen {
@@ -423,6 +455,7 @@
       문장을 형태소 단위로 올바르게 자르고, 각 형태소의 성격과 유형을 맞춰 점수를 획득하세요.
     </p>
 
+    <!-- 모드 선택 카드 2개 -->
     <div class="card-grid">
       <div class="mode-card" onclick="startApp('basic')">
         <div>
@@ -440,6 +473,20 @@
           <div class="card-desc">문장 속에서 어간·어미를 구별하고, 축약된 보스 단어의 원형을 서술형으로 추론합니다.</div>
         </div>
         <div class="card-link">도전 시작하기 →</div>
+      </div>
+    </div>
+
+    <!-- 하단 1분 요약 아코디언 -->
+    <div class="summary-accordion">
+      <div class="accordion-header" onclick="toggleAccordion()">
+        <span>💡 형태소 개념 1분 요약 보기</span>
+        <span id="accIcon">▼</span>
+      </div>
+      <div class="accordion-content" id="accContent">
+        • <b>형태소</b>: 뜻을 가진 가장 작은 말의 단위<br>
+        • <b>단일어</b>: 하나의 어근으로 이루어진 단어 (예: 구름, 무지개)<br>
+        • <b>합성어</b>: 둘 이상의 어근이 합쳐진 단어 (예: 손수건, 돌다리)<br>
+        • <b>파생어</b>: 어근에 접사가 붙어서 된 단어 (예: 풋사과, 지우개)
       </div>
     </div>
   </div>
