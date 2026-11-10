@@ -293,7 +293,7 @@
   .gap-btn:hover::after { background: var(--primary); height: 36px; }
   .gap-btn.active::after { background: var(--primary); width: 4px; height: 44px; }
 
-  /* 형태소 분류하기 선택 영점 */
+  /* 형태소 분류하기 선택 영역 */
   .classify-area {
     display: none;
     flex-direction: column;
@@ -325,7 +325,7 @@
     border-color: var(--primary);
   }
 
-  /* 5번 보스 서술형 입력 영역 */
+  /* 보스 서술형 입력 영역 */
   .subjective-box {
     display: none;
     flex-direction: column;
@@ -477,7 +477,7 @@
         <div>
           <div class="card-icon">🚀</div>
           <div class="card-title">형태소 분석하기 심화편</div>
-          <div class="card-desc">문장 속 형태소를 분리하고, 축약된 보스 단어 '달렸다'의 원형을 서술형으로 분석합니다.</div>
+          <div class="card-desc">문장 속 형태소를 분리하고, 축약된 보스 단어 9개의 원형을 서술형으로 분석합니다.</div>
         </div>
         <div class="card-link">도전 시작하기 →</div>
       </div>
@@ -543,10 +543,10 @@
       </div>
     </div>
 
-    <!-- 3. 5번 보스 서술형 입력 영역 -->
+    <!-- 3. 보스 서술형 입력 영역 -->
     <div id="subjectiveContainer" class="subjective-box">
-      <div style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제: '달렸다' 속 형태소를 직접 분리해보세요!</div>
-      <div style="font-size:13px; color:#7f1d1d;">'달렸다' 속 형태소를 어간/선어말어미/어말어미 원형으로 적으세요.</div>
+      <div id="bossPromptTitle" style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제</div>
+      <div id="bossPromptSub" style="font-size:13px; color:#7f1d1d;">숨은 형태소를 어간/선어말어미/어말어미 원형으로 직접 분리해 적으세요.</div>
       <input type="text" id="subjectiveInput" placeholder="">
     </div>
 
@@ -595,7 +595,7 @@ const basicData = [
   { id: 26, type: "click", text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] }
 ];
 
-// 2. 형태소 분석하기 심화편 (5개 문제 세트)
+// 2. 형태소 분석하기 심화편 (1~4번 자르기 4개 + 8개 보스 서술형 문장 세트 추가 반영)
 const advancedData = [
   { 
     id: 1, 
@@ -618,8 +618,8 @@ const advancedData = [
     type: "click", 
     text: "아침에 맨발로 강가를 건너고 있다", 
     cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 
-    display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], 
-    types: ["어근", "조사", "접사", "어근", "조사", "어근", "어근", "조사", "어간", "어미", "어간", "어미"] 
+    display: ["아침", "에", "맨-", "발", "로", "강", "가", "건너-", "-고", "있-", "-다"], 
+    types: ["어근", "조사", "접사", "어근", "조사", "어근", "어근", "어간", "어미", "어간", "어미"] 
   },
   { 
     id: 4, 
@@ -629,14 +629,95 @@ const advancedData = [
     display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
+  // 보스 단어 1: 달렸다
   { 
     id: 5, 
     type: "subjective", 
     text: "새 신을 신고 길을 달렸다", 
     targetWord: "달렸다", 
     answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"], 
-    display: ["새", "신", "을", "신-", "-고", "길", "을", "달리-", "-었-", "-다"], 
-    types: ["어근", "어근", "조사", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
+    display: ["달리-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
+  },
+  // 보스 단어 2: 꿨다
+  { 
+    id: 6, 
+    type: "subjective", 
+    text: "나는 어제 좋은 꿈을 꿨다", 
+    targetWord: "꿨다", 
+    answers: ["꾸/었/다", "꾸- / -었- / -다", "꾸 / 었 / 다", "꾸,-었-,-다", "꾸 었 다"], 
+    display: ["꾸-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
+  },
+  // 보스 단어 3: 마셨다
+  { 
+    id: 7, 
+    type: "subjective", 
+    text: "시원한 물을 마셨다", 
+    targetWord: "마셨다", 
+    answers: ["마시/었/다", "마시- / -었- / -다", "마시 / 었 / 다", "마시,-었-,-다", "마시 었 다"], 
+    display: ["마시-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
+  },
+  // 보스 단어 4: 기다렸다
+  { 
+    id: 8, 
+    type: "subjective", 
+    text: "버스를 오랫동안 기다렸다", 
+    targetWord: "기다렸다", 
+    answers: ["기다리/었/다", "기다리- / -었- / -다", "기다리 / 었 / 다", "기다리,-었-,-다", "기다리 었 다"], 
+    display: ["기다리-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
+  },
+  // 보스 단어 5: 섰다
+  { 
+    id: 9, 
+    type: "subjective", 
+    text: "신호등 앞에 딱 섰다", 
+    targetWord: "섰다", 
+    answers: ["서/었/다", "서- / -었- / -다", "서 / 었 / 다", "서,-었-,-다", "서 었 다"], 
+    display: ["서-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
+  },
+  // 보스 단어 6: 건넜다
+  { 
+    id: 10, 
+    type: "subjective", 
+    text: "조심해서 횡단보도를 건넜다", 
+    targetWord: "건넜다", 
+    answers: ["건너/었/다", "건너- / -었- / -다", "건너 / 었 / 다", "건너,-었-,-다", "건너 었 다"], 
+    display: ["건너-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
+  },
+  // 보스 단어 7: 폈다
+  { 
+    id: 11, 
+    type: "subjective", 
+    text: "기지개를 길게 폈다", 
+    targetWord: "폈다", 
+    answers: ["피/었/다", "피- / -었- / -다", "피 / 었 / 다", "피,-었-,-다", "피 었 다"], 
+    display: ["피-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
+  },
+  // 보스 단어 8: 봤다
+  { 
+    id: 12, 
+    type: "subjective", 
+    text: "하늘에서 별을 봤다", 
+    targetWord: "봤다", 
+    answers: ["보/았/다", "보- / -았- / -다", "보 / 았 / 다", "보,-았-,-다", "보 았 다"], 
+    display: ["보-", "-았-", "-다"], 
+    types: ["어간", "어미", "어미"] 
+  },
+  // 보스 단어 9: 챙겼다
+  { 
+    id: 13, 
+    type: "subjective", 
+    text: "가방 안에 준비물을 챙겼다", 
+    targetWord: "챙겼다", 
+    answers: ["챙기/었/다", "챙기- / -었- / -다", "챙기 / 었 / 다", "챙기,-었-,-다", "챙기 었 다"], 
+    display: ["챙기-", "-었-", "-다"], 
+    types: ["어간", "어미", "어미"] 
   }
 ];
 
@@ -649,7 +730,6 @@ const classifyData = [
 
 // 4. 단일어·합성어·파생어 분류하기 (30개 단어 세트)
 const wordTypeData = [
-  // 단일어 (10개)
   { id: 1, type: "classify", text: "무지개", target: "'무지개'의 단어 짜임은?", opts: ["단일어", "합성어", "파생어"], ans: 0 },
   { id: 2, type: "classify", text: "구름", target: "'구름'의 단어 짜임은?", opts: ["단일어", "합성어", "파생어"], ans: 0 },
   { id: 3, type: "classify", text: "바람", target: "'바람'의 단어 짜임은?", opts: ["단일어", "합성어", "파생어"], ans: 0 },
@@ -660,7 +740,6 @@ const wordTypeData = [
   { id: 8, type: "classify", text: "물", target: "'물'의 단어 짜임은?", opts: ["단일어", "합성어", "파생어"], ans: 0 },
   { id: 9, type: "classify", text: "우리", target: "'우리'의 단어 짜임은?", opts: ["단일어", "합성어", "파생어"], ans: 0 },
   { id: 10, type: "classify", text: "거울", target: "'거울'의 단어 짜임은?", opts: ["단일어", "합성어", "파생어"], ans: 0 },
-  // 합성어 (10개)
   { id: 11, type: "classify", text: "손수건", target: "'손수건' (손 + 수건)의 단어 짜임은?", opts: ["합성어", "단일어", "파생어"], ans: 0 },
   { id: 12, type: "classify", text: "돌다리", target: "'돌다리' (돌 + 다리)의 단어 짜임은?", opts: ["합성어", "단일어", "파생어"], ans: 0 },
   { id: 13, type: "classify", text: "눈물", target: "'눈물' (눈 + 물)의 단어 짜임은?", opts: ["합성어", "단일어", "파생어"], ans: 0 },
@@ -671,7 +750,6 @@ const wordTypeData = [
   { id: 18, type: "classify", text: "밤하늘", target: "'밤하늘' (밤 + 하늘)의 단어 짜임은?", opts: ["합성어", "단일어", "파생어"], ans: 0 },
   { id: 19, type: "classify", text: "강가", target: "'강가' (강 + 가)의 단어 짜임은?", opts: ["합성어", "단일어", "파생어"], ans: 0 },
   { id: 20, type: "classify", text: "책가방", target: "'책가방' (책 + 가방)의 단어 짜임은?", opts: ["합성어", "단일어", "파생어"], ans: 0 },
-  // 파생어 (10개)
   { id: 21, type: "classify", text: "풋사과", target: "'풋사과' (접두사 풋- + 사과)의 단어 짜임은?", opts: ["파생어", "단일어", "합성어"], ans: 0 },
   { id: 22, type: "classify", text: "참기름", target: "'참기름' (접두사 참- + 기름)의 단어 짜임은?", opts: ["파생어", "단일어", "합성어"], ans: 0 },
   { id: 23, type: "classify", text: "맨발", target: "'맨발' (접두사 맨- + 발)의 단어 짜임은?", opts: ["파생어", "단일어", "합성어"], ans: 0 },
@@ -785,13 +863,17 @@ function loadStage() {
     });
     document.getElementById("classifyOpts").innerHTML = optsHtml;
   } else {
-    badge.innerText = "BOSS STAGE";
+    // 서술형 보스 문제
+    badge.innerText = `BOSS STAGE (${currentIdx - 3} / ${dataList.length - 4})`;
     badge.className = "stage-badge boss";
     actionBtn.className = "btn boss";
     actionBtn.innerText = "보스 공격 (제출)";
     sliceContainer.style.display = "none";
     classifyContainer.classList.remove("active");
     subjectiveContainer.classList.add("active");
+
+    document.getElementById("bossPromptTitle").innerText = `👾 보스 특수 과제: '${q.targetWord}' 속 형태소를 직접 분리해보세요!`;
+    document.getElementById("bossPromptSub").innerText = `'${q.targetWord}' 속 형태소를 어간/선어말어미/어말어미 원형으로 적으세요.`;
     document.getElementById("subjectiveInput").value = "";
   }
 }
@@ -881,7 +963,7 @@ function checkAnswer() {
       score += 200;
       document.getElementById("scoreDisplay").innerText = score;
       fb.className = "feedback success";
-      fb.innerHTML = `🎉 <b>보스 클리어 성공! (+200점)</b><br><b>'달렸다'</b> 속에 숨은 형태소 원형(<b>달리- + -었- + -다</b>)을 정확히 추론해내셨습니다!<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
+      fb.innerHTML = `🎉 <b>보스 클리어 성공! (+200점)</b><br><b>'${q.targetWord}'</b> 속에 숨은 형태소 원형을 정확히 추론해내셨습니다!<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
     } else {
       fb.className = "feedback error";
       fb.innerHTML = `❌ <b>아쉬워요! 보스 공략 원형 분해를 확인하세요.</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
