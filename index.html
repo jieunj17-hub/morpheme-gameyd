@@ -734,8 +734,11 @@ function checkAnswer() {
   if (currentMode === "basic" || (currentMode === "advanced" && q.type === "click")) {
     isEvaluated = true;
     const answerCardHtml = renderAnswerCard(q);
+    
+    // 배열 변환 후 오름차순 정렬하여 1:1 비교 (클릭 순서에 구애받지 않는 완벽한 채점식)
     const userArray = Array.from(userCuts).sort((a, b) => a - b);
-    const isCorrect = userArray.length === q.cuts.length && userArray.every((val, index) => val === q.cuts[index]);
+    const isCorrect = (userArray.length === q.cuts.length) && 
+                      userArray.every((val, index) => val === q.cuts[index]);
 
     if (isCorrect) {
       score += 100;
@@ -750,7 +753,7 @@ function checkAnswer() {
     isEvaluated = true;
     const answerCardHtml = renderAnswerCard(q);
     
-    // 강건한 정규화 검증: 슬래시(/), 대시(-), 쉼표(,), 공백 모두 제거하여 순수 글자 조합 비교
+    // 기호 정규화 비교: 슬래시, 대시, 공백, 쉼표 무시 후 순수 알맹이 글자만 비교
     const cleanInput = document.getElementById("subjectiveInput").value.trim().replace(/[-\s\/,]/g, "");
     const cleanTarget = q.rawTarget;
 
@@ -768,7 +771,8 @@ function checkAnswer() {
   } else if (currentMode === "classify") {
     if (!q.morphemesStepCompleted) {
       const userArray = Array.from(userCuts).sort((a, b) => a - b);
-      const isCorrect = userArray.length === q.cuts.length && userArray.every((val, index) => val === q.cuts[index]);
+      const isCorrect = (userArray.length === q.cuts.length) && 
+                        userArray.every((val, index) => val === q.cuts[index]);
 
       if (isCorrect) {
         score += 50;
