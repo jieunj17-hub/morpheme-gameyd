@@ -132,7 +132,7 @@
   .gap-btn:hover::after { background: var(--primary); height: 36px; }
   .gap-btn.active::after { background: var(--primary); width: 4px; height: 44px; }
 
-  /* 형태소 분류하기 (2지선다 버튼 피드백 스타일) */
+  /* 형태소 분류하기 */
   .classify-area { display: none; flex-direction: column; gap: 16px; margin: 20px 0; }
   .classify-area.active { display: flex; }
   .morpheme-card { background: #f8fafc; border: 2px solid var(--border); border-radius: 12px; padding: 16px; }
@@ -151,12 +151,11 @@
   .opt-btn:hover:not(:disabled) { background: #f1f5f9; }
   .opt-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
   
-  /* 채점 후 초록/빨강 상태 */
   .opt-btn.correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
   .opt-btn.wrong { background: var(--error) !important; color: white !important; border-color: var(--error) !important; }
   .opt-btn.dimmed { opacity: 0.45; }
 
-  /* 단일어/합성어/파생어 탭 모드 */
+  /* 단일어/합성어/파생어 탭 */
   .type-quiz-area { display: none; flex-direction: column; gap: 16px; margin: 20px 0; }
   .type-quiz-area.active { display: flex; }
   .type-opts { display: flex; gap: 10px; justify-content: center; }
@@ -193,7 +192,6 @@
   .btn.boss { background: var(--boss); }
   .btn:disabled { background: #94a3b8 !important; cursor: not-allowed; opacity: 0.6; }
   
-  /* 피드백 & 모범 답안 해설 */
   .feedback { margin-top: 16px; padding: 16px; border-radius: 10px; display: none; font-size: 15px; line-height: 1.5; }
   .feedback.success { background: #dcfce7; color: #15803d; display: block; }
   .feedback.error { background: #fee2e2; color: #b91c1c; display: block; }
@@ -220,7 +218,6 @@
 </head>
 <body>
 
-<!-- 상단 공통 헤더 -->
 <header class="site-header" onclick="goHome()">
   <div class="logo-icon">✂️</div>
   <div class="logo-text">
@@ -230,7 +227,7 @@
 </header>
 
 <div class="main-wrapper">
-  <!-- 1. 메인 홈 랜딩 화면 (4개 탭) -->
+  <!-- HOME LANDING SCREEN -->
   <div id="homeScreen">
     <div class="badge-tag">MORPHEME LEARNING GAME</div>
     <h2 class="hero-title">
@@ -241,7 +238,6 @@
       문장을 형태소 단위로 올바르게 자르고, 각 형태소의 성격과 단어의 짜임을 분류하여 탐험을 완수하세요.
     </p>
 
-    <!-- 4개 모드 탭 배치 -->
     <div class="card-grid">
       <div class="mode-card" onclick="startApp('basic')">
         <div>
@@ -281,7 +277,7 @@
     </div>
   </div>
 
-  <!-- 2. 게임 실행 화면 -->
+  <!-- GAME PLAY SCREEN -->
   <div id="gameScreen">
     <div class="top-nav">
       <button class="back-btn" onclick="goHome()">← 홈으로 돌아가기</button>
@@ -299,13 +295,10 @@
 
     <div id="sentenceDisplay" class="sentence-box"></div>
 
-    <!-- 1단계: 글자 슬라이스 영역 -->
     <div id="sliceContainer" class="slice-area"></div>
 
-    <!-- 형태소 분류하기 (실질/형식, 의존/자립 2지선다 버튼 영역) -->
     <div id="classifyContainer" class="classify-area"></div>
 
-    <!-- 단일어/합성어/파생어 선택 영역 -->
     <div id="typeQuizContainer" class="type-quiz-area">
       <div class="type-opts">
         <button class="type-btn" onclick="selectWordType('단일어', this)">단일어</button>
@@ -314,7 +307,6 @@
       </div>
     </div>
 
-    <!-- 5번 보스 서술형 입력 영역 -->
     <div id="subjectiveContainer" class="subjective-box">
       <div style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제: '달렸다' 속 형태소를 직접 분리해보세요!</div>
       <div style="font-size:13px; color:#7f1d1d;">'달렸다' 속 어간과 선어말어미/어말어미 원형을 찾아 직접 분리해 적으세요.</div>
@@ -325,7 +317,6 @@
 
     <div id="feedbackBox" class="feedback"></div>
 
-    <!-- 최종 세션 누적 리포트 -->
     <div id="reportCard" class="report-card">
       <div class="report-title" id="reportTitle">🎉 스테이지 완주!</div>
       <div style="text-align:center; margin-bottom:12px;" id="reportSummary"></div>
@@ -337,7 +328,7 @@
 </div>
 
 <script>
-// 1. 형태소 분석하기 기본편 26개 단어 전량 데이터
+// 1. 기본편 26개 단어
 const basicData = [
   { id: 1, text: "무지개", cuts: [], display: ["무지개"], types: ["어근"] },
   { id: 2, text: "구름", cuts: [], display: ["구름"], types: ["어근"] },
@@ -367,16 +358,41 @@ const basicData = [
   { id: 26, text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] }
 ];
 
-// 2. 형태로 분석하기 심화편 5선 (온점 제거, 보스 서술형 '달렸다')
+// 2. 심화편 데이터 (순서 고정)
 const advancedData = [
-  { id: 1, type: "click", text: "새 신을 신고 달리고 있다", cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"], types: ["어근", "어근", "조사", "어간", "어미", "어간", "어미", "어간", "어미"] },
-  { id: 2, type: "click", text: "풋사과를 아주 맛있게 먹었어", cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"], types: ["접사", "어근", "조사", "어근", "어근", "어간", "어미", "어간", "어미", "어미"] },
-  { id: 3, type: "click", text: "아침에 맨발로 강가를 건너고 있다", cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], types: ["어근", "조사", "접사", "어근", "조사", "어근", "어근", "조사", "어간", "어미", "어간", "어미"] },
-  { id: 4, type: "click", text: "그분은 아주 환하게 웃었다", cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] },
-  { id: 5, type: "subjective", text: "새 신을 신고 길을 달렸다", targetWord: "달렸다", answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"], display: ["새", "신", "을", "신-", "-고", "길", "을", "달리-", "-었-", "-다"], types: ["어근", "어근", "조사", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] }
+  { 
+    id: 1, type: "click", text: "새 신을 신고 달리고 있다", 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], 
+    display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"], 
+    types: ["어근", "어근", "조사", "어간", "어미", "어간", "어미", "어간", "어미"] 
+  },
+  { 
+    id: 2, type: "click", text: "풋사과를 아주 맛있게 먹었어", 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 
+    display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"], 
+    types: ["접사", "어근", "조사", "어근", "어근", "어간", "어미", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 3, type: "click", text: "아침에 맨발로 강가를 건너고 있다", 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 
+    display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], 
+    types: ["어근", "조사", "접사", "어근", "조사", "어근", "어근", "조사", "어간", "어미", "어간", "어미"] 
+  },
+  { 
+    id: 4, type: "click", text: "그분은 아주 환하게 웃었다", 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], 
+    display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
+    types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "새 신을 신고 길을 달렸다", targetWord: "달렸다", 
+    answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다", "달리-,-었-,-다"], 
+    display: ["새", "신", "을", "신-", "-고", "길", "을", "달리-", "-었-", "-다"], 
+    types: ["어근", "어근", "조사", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
+  }
 ];
 
-// 3. 형태소 분류하기 데이터 (기본편 26개 단어 전량 세팅)
+// 3. 형태소 분류하기 데이터
 const classifyData = [
   { text: "무지개", cuts: [], morphemes: [{ text: "무지개", type1: "실질", type2: "자립", desc: "명사 어근" }] },
   { text: "구름", cuts: [], morphemes: [{ text: "구름", type1: "실질", type2: "자립", desc: "명사 어근" }] },
@@ -406,7 +422,7 @@ const classifyData = [
   { text: "물걸레", cuts: [0], morphemes: [{ text: "물", type1: "실질", type2: "자립", desc: "명사 어근" }, { text: "걸레", type1: "실질", type2: "자립", desc: "명사 어근" }] }
 ];
 
-// 4. 단일어/합성어/파생어 30개 데이터
+// 4. 단일어/합성어/파생어 데이터
 const wordTypeData = [
   { text: "무지개", targetType: "단일어", desc: "어근 1개로 이루어진 순우리말 단일어" },
   { text: "구름", targetType: "단일어", desc: "어근 1개로 이루어진 단일어" },
@@ -455,15 +471,18 @@ function startApp(mode) {
   document.getElementById("homeScreen").style.display = "none";
   document.getElementById("gameScreen").style.display = "block";
 
-  if (currentMode === "wordType") {
-    // 단일어/합성어/파생어는 순서 섞기(셔플)
-    activeQuestions = [...wordTypeData].sort(() => Math.random() - 0.5);
+  if (currentMode === "advanced") {
+    // 심화편만 1~5번(보스) 순서를 고정 출제
+    activeQuestions = JSON.parse(JSON.stringify(advancedData));
   } else if (currentMode === "basic") {
-    activeQuestions = [...basicData];
-  } else if (currentMode === "advanced") {
-    activeQuestions = [...advancedData];
+    // 기본편 무작위 셔플 출제
+    activeQuestions = JSON.parse(JSON.stringify(basicData)).sort(() => Math.random() - 0.5);
   } else if (currentMode === "classify") {
-    activeQuestions = [...classifyData];
+    // 형태소 분류하기 무작위 셔플 출제
+    activeQuestions = JSON.parse(JSON.stringify(classifyData)).sort(() => Math.random() - 0.5);
+  } else if (currentMode === "wordType") {
+    // 단일어/합성어/파생어 무작위 셔플 출제
+    activeQuestions = JSON.parse(JSON.stringify(wordTypeData)).sort(() => Math.random() - 0.5);
   }
 
   resetGame();
@@ -499,7 +518,6 @@ function loadStage() {
   const typeQuizContainer = document.getElementById("typeQuizContainer");
   const subjectiveContainer = document.getElementById("subjectiveContainer");
 
-  // UI 초기화
   sliceContainer.style.display = "none";
   classifyContainer.classList.remove("active");
   typeQuizContainer.classList.remove("active");
@@ -536,13 +554,11 @@ function loadStage() {
     stepBanner.style.display = "flex";
 
     if (!q.morphemesStepCompleted) {
-      // 1단계: 자르기
       stepBanner.innerHTML = "✂️ <b>[1단계]</b> 단어의 형태소 경계를 글자 사이 틈을 클릭해 자른 후 제출하세요!";
       actionBtn.innerText = "자르기 완료!";
       sliceContainer.style.display = "flex";
       setupSliceArea(q.text);
     } else {
-      // 2단계: 4대 특성 분류
       setupClassifyStep(q);
     }
   } else if (currentMode === "wordType") {
@@ -582,7 +598,6 @@ function toggleGap(idx, el) {
   }
 }
 
-// 형태소 분류하기 2단계 UI 구성
 function setupClassifyStep(q) {
   const stepBanner = document.getElementById("stepBanner");
   const classifyContainer = document.getElementById("classifyContainer");
@@ -685,8 +700,9 @@ function checkAnswer() {
   } else if (currentMode === "advanced" && q.type === "subjective") {
     isEvaluated = true;
     const answerCardHtml = renderAnswerCard(q);
-    const input = document.getElementById("subjectiveInput").value.trim().replace(/\s+/g, "");
-    const isCorrect = q.answers.some(ans => input === ans.replace(/\s+/g, ""));
+    
+    const cleanInput = document.getElementById("subjectiveInput").value.trim().replace(/[-\s]/g, "");
+    const isCorrect = q.answers.some(ans => cleanInput === ans.replace(/[-\s]/g, ""));
 
     if (isCorrect) {
       score += 200;
@@ -699,7 +715,6 @@ function checkAnswer() {
     }
   } else if (currentMode === "classify") {
     if (!q.morphemesStepCompleted) {
-      // 1단계: 자르기 검증
       const userArray = Array.from(userCuts).sort((a, b) => a - b);
       const isCorrect = userArray.length === q.cuts.length && userArray.every((val, index) => val === q.cuts[index]);
 
@@ -724,7 +739,6 @@ function checkAnswer() {
         return;
       }
     } else {
-      // 2단계: 4대 특성 2지선다 버튼 피드백 (초록/빨강 색상 변화 반영)
       for (let i = 0; i < q.morphemes.length; i++) {
         if (!userClassifySelections[i].type1 || !userClassifySelections[i].type2) {
           fb.className = "feedback error";
@@ -742,7 +756,6 @@ function checkAnswer() {
       q.morphemes.forEach((m, i) => {
         const sel = userClassifySelections[i];
         
-        // type1 (실질/형식) 버튼 색상 정답 반응
         const btn1_실질 = document.getElementById(`btn_${i}_type1_실질`);
         const btn1_형식 = document.getElementById(`btn_${i}_type1_형식`);
 
@@ -758,7 +771,6 @@ function checkAnswer() {
           else correctSubCount++;
         }
 
-        // type2 (의존/자립) 버튼 색상 정답 반응
         const btn2_의존 = document.getElementById(`btn_${i}_type2_의존`);
         const btn2_자립 = document.getElementById(`btn_${i}_type2_자립`);
 
