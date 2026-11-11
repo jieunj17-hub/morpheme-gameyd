@@ -384,58 +384,58 @@ const advancedData = [
     display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
-  // 보스 9종 후보
+  // 보스 서술형 후보 9종
   { 
     id: 5, type: "subjective", text: "새 신을 신고 길을 달렸다", targetWord: "달렸다", 
-    rawTarget: "달리었다",
+    rawTarget: "달리었다", answerDisplay: "달리 / 었 / 다",
     display: ["새", "신", "을", "신-", "-고", "길", "을", "달리-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
   },
   { 
     id: 5, type: "subjective", text: "나는 어제 좋은 꿈을 꿨다", targetWord: "꿨다", 
-    rawTarget: "꾸었다",
+    rawTarget: "꾸었다", answerDisplay: "꾸 / 었 / 다",
     display: ["나", "는", "어제", "좋-", "-은", "꿈", "을", "꾸-", "-었-", "-다"], 
     types: ["어근", "조사", "어근", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
   },
   { 
     id: 5, type: "subjective", text: "시원한 물을 마셨다", targetWord: "마셨다", 
-    rawTarget: "마시었다",
+    rawTarget: "마시었다", answerDisplay: "마시 / 었 / 다",
     display: ["시원하-", "-ㄴ", "물", "을", "마시-", "-었-", "-다"], 
     types: ["어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
   },
   { 
     id: 5, type: "subjective", text: "버스 정류장에서 기다렸다", targetWord: "기다렸다", 
-    rawTarget: "기다리었다",
+    rawTarget: "기다리었다", answerDisplay: "기다리 / 었 / 다",
     display: ["버스", "정류장", "에서", "기다리-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어간", "어미", "어미"] 
   },
   { 
     id: 5, type: "subjective", text: "자리에서 빠르게 섰다", targetWord: "섰다", 
-    rawTarget: "서었다",
+    rawTarget: "서었다", answerDisplay: "서 / 었 / 다",
     display: ["자리", "에서", "빠르-", "-게", "서-", "-었-", "-다"], 
     types: ["어근", "조사", "어간", "어미", "어간", "어미", "어미"] 
   },
   { 
     id: 5, type: "subjective", text: "횡단보도를 건넜다", targetWord: "건넜다", 
-    rawTarget: "건너었다",
+    rawTarget: "건너었다", answerDisplay: "건너 / 었 / 다",
     display: ["횡단보도", "를", "건너-", "-었-", "-다"], 
     types: ["어근", "조사", "어간", "어미", "어미"] 
   },
   { 
     id: 5, type: "subjective", text: "우산을 크게 폈다", targetWord: "폈다", 
-    rawTarget: "피었다",
+    rawTarget: "피었다", answerDisplay: "피 / 었 / 다",
     display: ["우산", "을", "크-", "-게", "피-", "-었-", "-다"], 
     types: ["어근", "조사", "어간", "어미", "어간", "어미", "어미"] 
   },
   { 
     id: 5, type: "subjective", text: "하늘에 뜬 무지개를 봤다", targetWord: "봤다", 
-    rawTarget: "보았다",
+    rawTarget: "보았다", answerDisplay: "보 / 았 / 다",
     display: ["하늘", "에", "뜨-", "-ㄴ", "무지개", "를", "보-", "-았-", "-다"], 
     types: ["어근", "조사", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
   },
   { 
     id: 5, type: "subjective", text: "자기 물건을 잘 챙겼다", targetWord: "챙겼다", 
-    rawTarget: "챙기었다",
+    rawTarget: "챙기었다", answerDisplay: "챙기 / 었 / 다",
     display: ["자기", "물건", "을", "잘", "챙기-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어근", "어간", "어미", "어미"] 
   }
@@ -521,12 +521,9 @@ function startApp(mode) {
   document.getElementById("gameScreen").style.display = "block";
 
   if (currentMode === "advanced") {
-    // 1~4번 문제 준비
     const normalSteps = JSON.parse(JSON.stringify(advancedData.filter(d => d.type === "click")));
-    // 5번 보스 후보군 9개 중 무작위 1개 추출
     const bossPool = JSON.parse(JSON.stringify(advancedData.filter(d => d.type === "subjective")));
     const randomBoss = bossPool[Math.floor(Math.random() * bossPool.length)];
-    
     activeQuestions = [...normalSteps, randomBoss];
   } else if (currentMode === "basic") {
     activeQuestions = JSON.parse(JSON.stringify(basicData)).sort(() => Math.random() - 0.5);
@@ -755,7 +752,7 @@ function checkAnswer() {
     isEvaluated = true;
     const answerCardHtml = renderAnswerCard(q);
     
-    // 특수기호/공백 정규화 판정: 띄어쓰기, 대시(-), 슬래시(/), 쉼표(,) 모두 정제하여 원형 글자 조합과 비교
+    // 강건한 정규화 검증: 슬래시(/), 대시(-), 쉼표(,), 공백 모두 제거하여 순수 글자 조합 비교
     const cleanInput = document.getElementById("subjectiveInput").value.trim().replace(/[-\s\/,]/g, "");
     const cleanTarget = q.rawTarget;
 
@@ -768,7 +765,7 @@ function checkAnswer() {
       fb.innerHTML = `🎉 <b>보스 클리어 성공! (+200점)</b><br><b>'${q.targetWord}'</b> 속에 숨은 형태소 원형을 정확히 추론해내셨습니다!<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
     } else {
       fb.className = "feedback error";
-      fb.innerHTML = `❌ <b>아쉬워요! 보스 공략 원형 분해를 확인하세요.</b><br>정답 예시: <b>${q.rawTarget}</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
+      fb.innerHTML = `❌ <b>아쉬워요! 보스 공략 원형 분해를 확인하세요.</b><br>정답 예시: <b>${q.answerDisplay}</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
     }
   } else if (currentMode === "classify") {
     if (!q.morphemesStepCompleted) {
