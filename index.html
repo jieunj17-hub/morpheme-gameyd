@@ -252,7 +252,7 @@
         <div>
           <div class="card-icon">🚀</div>
           <div class="card-title">형태소 분석하기 심화편</div>
-          <div class="card-desc">문장 속 형태소를 분해하고, 음운 축약이 일어난 보스 단어('달렸다')의 원형을 추론합니다.</div>
+          <div class="card-desc">문장 속 형태소를 분해하고, 음운 축약이 일어난 보스 단어('달렸다' 등)의 원형을 추론합니다.</div>
         </div>
         <div class="card-link">도전 시작하기 →</div>
       </div>
@@ -308,9 +308,9 @@
     </div>
 
     <div id="subjectiveContainer" class="subjective-box">
-      <div style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제: '달렸다' 속 형태소를 직접 분리해보세요!</div>
-      <div style="font-size:13px; color:#7f1d1d;">'달렸다' 속 어간과 선어말어미/어말어미 원형을 찾아 직접 분리해 적으세요.</div>
-      <input type="text" id="subjectiveInput" placeholder="예: 달리/었/다">
+      <div id="subjectiveTitle" style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제: 형태소를 직접 분리해보세요!</div>
+      <div id="subjectiveSubTitle" style="font-size:13px; color:#7f1d1d;">제시어 속에 숨은 형태소 원형을 찾아 직접 분리해 적으세요.</div>
+      <input type="text" id="subjectiveInput" placeholder="">
     </div>
 
     <button id="actionBtn" class="btn" onclick="handleActionButton()">자르기 완료!</button>
@@ -358,7 +358,7 @@ const basicData = [
   { id: 26, text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] }
 ];
 
-// 2. 심화편 데이터 (순서 고정)
+// 2. 심화편 데이터 (1~4번 자르기 + 5번 보스 서술형 9종)
 const advancedData = [
   { 
     id: 1, type: "click", text: "새 신을 신고 달리고 있다", 
@@ -384,11 +384,60 @@ const advancedData = [
     display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
+  // 보스 9종 후보
   { 
     id: 5, type: "subjective", text: "새 신을 신고 길을 달렸다", targetWord: "달렸다", 
-    answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다", "달리-,-었-,-다"], 
+    rawTarget: "달리었다",
     display: ["새", "신", "을", "신-", "-고", "길", "을", "달리-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "나는 어제 좋은 꿈을 꿨다", targetWord: "꿨다", 
+    rawTarget: "꾸었다",
+    display: ["나", "는", "어제", "좋-", "-은", "꿈", "을", "꾸-", "-었-", "-다"], 
+    types: ["어근", "조사", "어근", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "시원한 물을 마셨다", targetWord: "마셨다", 
+    rawTarget: "마시었다",
+    display: ["시원하-", "-ㄴ", "물", "을", "마시-", "-었-", "-다"], 
+    types: ["어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "버스 정류장에서 기다렸다", targetWord: "기다렸다", 
+    rawTarget: "기다리었다",
+    display: ["버스", "정류장", "에서", "기다리-", "-었-", "-다"], 
+    types: ["어근", "어근", "조사", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "자리에서 빠르게 섰다", targetWord: "섰다", 
+    rawTarget: "서었다",
+    display: ["자리", "에서", "빠르-", "-게", "서-", "-었-", "-다"], 
+    types: ["어근", "조사", "어간", "어미", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "횡단보도를 건넜다", targetWord: "건넜다", 
+    rawTarget: "건너었다",
+    display: ["횡단보도", "를", "건너-", "-었-", "-다"], 
+    types: ["어근", "조사", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "우산을 크게 폈다", targetWord: "폈다", 
+    rawTarget: "피었다",
+    display: ["우산", "을", "크-", "-게", "피-", "-었-", "-다"], 
+    types: ["어근", "조사", "어간", "어미", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "하늘에 뜬 무지개를 봤다", targetWord: "봤다", 
+    rawTarget: "보았다",
+    display: ["하늘", "에", "뜨-", "-ㄴ", "무지개", "를", "보-", "-았-", "-다"], 
+    types: ["어근", "조사", "어간", "어미", "어근", "조사", "어간", "어미", "어미"] 
+  },
+  { 
+    id: 5, type: "subjective", text: "자기 물건을 잘 챙겼다", targetWord: "챙겼다", 
+    rawTarget: "챙기었다",
+    display: ["자기", "물건", "을", "잘", "챙기-", "-었-", "-다"], 
+    types: ["어근", "어근", "조사", "어근", "어간", "어미", "어미"] 
   }
 ];
 
@@ -472,16 +521,18 @@ function startApp(mode) {
   document.getElementById("gameScreen").style.display = "block";
 
   if (currentMode === "advanced") {
-    // 심화편만 1~5번(보스) 순서를 고정 출제
-    activeQuestions = JSON.parse(JSON.stringify(advancedData));
+    // 1~4번 문제 준비
+    const normalSteps = JSON.parse(JSON.stringify(advancedData.filter(d => d.type === "click")));
+    // 5번 보스 후보군 9개 중 무작위 1개 추출
+    const bossPool = JSON.parse(JSON.stringify(advancedData.filter(d => d.type === "subjective")));
+    const randomBoss = bossPool[Math.floor(Math.random() * bossPool.length)];
+    
+    activeQuestions = [...normalSteps, randomBoss];
   } else if (currentMode === "basic") {
-    // 기본편 무작위 셔플 출제
     activeQuestions = JSON.parse(JSON.stringify(basicData)).sort(() => Math.random() - 0.5);
   } else if (currentMode === "classify") {
-    // 형태소 분류하기 무작위 셔플 출제
     activeQuestions = JSON.parse(JSON.stringify(classifyData)).sort(() => Math.random() - 0.5);
   } else if (currentMode === "wordType") {
-    // 단일어/합성어/파생어 무작위 셔플 출제
     activeQuestions = JSON.parse(JSON.stringify(wordTypeData)).sort(() => Math.random() - 0.5);
   }
 
@@ -545,6 +596,9 @@ function loadStage() {
       badge.className = "stage-badge boss";
       actionBtn.className = "btn boss";
       actionBtn.innerText = "보스 공격 (제출)";
+      
+      document.getElementById("subjectiveTitle").innerText = `👾 보스 과제: '${q.targetWord}' 속 형태소를 분리하세요!`;
+      document.getElementById("subjectiveSubTitle").innerText = `'${q.targetWord}' 속 어간과 어미 원형을 찾아 적으세요.`;
       subjectiveContainer.classList.add("active");
       document.getElementById("subjectiveInput").value = "";
     }
@@ -701,17 +755,20 @@ function checkAnswer() {
     isEvaluated = true;
     const answerCardHtml = renderAnswerCard(q);
     
-    const cleanInput = document.getElementById("subjectiveInput").value.trim().replace(/[-\s]/g, "");
-    const isCorrect = q.answers.some(ans => cleanInput === ans.replace(/[-\s]/g, ""));
+    // 특수기호/공백 정규화 판정: 띄어쓰기, 대시(-), 슬래시(/), 쉼표(,) 모두 정제하여 원형 글자 조합과 비교
+    const cleanInput = document.getElementById("subjectiveInput").value.trim().replace(/[-\s\/,]/g, "");
+    const cleanTarget = q.rawTarget;
+
+    const isCorrect = (cleanInput === cleanTarget);
 
     if (isCorrect) {
       score += 200;
       document.getElementById("scoreDisplay").innerText = score;
       fb.className = "feedback success";
-      fb.innerHTML = `🎉 <b>보스 클리어 성공! (+200점)</b><br><b>'달렸다'</b> 속에 숨은 형태소 원형을 정확히 추론해내셨습니다!<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
+      fb.innerHTML = `🎉 <b>보스 클리어 성공! (+200점)</b><br><b>'${q.targetWord}'</b> 속에 숨은 형태소 원형을 정확히 추론해내셨습니다!<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
     } else {
       fb.className = "feedback error";
-      fb.innerHTML = `❌ <b>아쉬워요! 보스 공략 원형 분해를 확인하세요.</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
+      fb.innerHTML = `❌ <b>아쉬워요! 보스 공략 원형 분해를 확인하세요.</b><br>정답 예시: <b>${q.rawTarget}</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
     }
   } else if (currentMode === "classify") {
     if (!q.morphemesStepCompleted) {
