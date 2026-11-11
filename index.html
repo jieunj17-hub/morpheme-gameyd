@@ -358,7 +358,7 @@ const basicData = [
   { id: 26, text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] }
 ];
 
-// 2. 심화편 데이터 (1~4번 자르기 + 5번 보스 서술형 9종)
+// 2. 심화편 데이터 (1~4번 인덱스 교정 완료 + 5번 보스 서술형 9종)
 const advancedData = [
   { 
     id: 1, type: "click", text: "새 신을 신고 달리고 있다", 
@@ -384,7 +384,6 @@ const advancedData = [
     display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
-  // 보스 서술형 후보 9종
   { 
     id: 5, type: "subjective", text: "새 신을 신고 길을 달렸다", targetWord: "달렸다", 
     rawTarget: "달리었다", answerDisplay: "달리 / 었 / 다",
@@ -731,7 +730,6 @@ function renderAnswerCard(q) {
 function checkAnswer() {
   const q = activeQuestions[currentIdx];
   const fb = document.getElementById("feedbackBox");
-  const actionBtn = document.getElementById("actionBtn");
 
   if (currentMode === "basic" || (currentMode === "advanced" && q.type === "click")) {
     isEvaluated = true;
@@ -889,6 +887,7 @@ function checkAnswer() {
 
   fb.style.display = "block";
 
+  const actionBtn = document.getElementById("actionBtn");
   if (currentIdx < activeQuestions.length - 1) {
     actionBtn.innerText = "다음 문제 →";
     actionBtn.className = "btn next";
