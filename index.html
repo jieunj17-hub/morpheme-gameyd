@@ -595,14 +595,13 @@ const basicData = [
   { id: 26, type: "click", text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] }
 ];
 
-// 2. 형태소 분석하기 심화편 (실제 형태소 경계 인덱스 cuts 완벽 교정)
+// 2. 형태소 분석하기 심화편 (1~4번 인덱스 완벽 정정 및 보스 서술형 9문항 완비)
 const advancedData = [
   { 
     id: 1, 
     type: "click", 
     text: "새 신을 신고 달리고 있다", 
-    // 새(0)신(1)을(2)신(3)고(4)달리(6)고(7)있(8)다 -> 2음절 '달리' 중간(5) 제외
-    cuts: [0, 1, 2, 3, 4, 6, 7, 8], 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], 
     display: ["새", "신", "을", "신-", "-고", "달리-", "-고", "있-", "-다"], 
     types: ["어근", "어근", "조사", "어간", "어미", "어간", "어미", "어간", "어미"] 
   },
@@ -610,8 +609,7 @@ const advancedData = [
     id: 2, 
     type: "click", 
     text: "풋사과를 아주 맛있게 먹었어", 
-    // 풋(0)사과(2)를(3)아주(5)맛(6)있(7)게(8)먹(9)었(10)어 -> 2음절 '사과'(1), '아주'(4) 중간 제외
-    cuts: [0, 2, 3, 5, 6, 7, 8, 9, 10], 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 
     display: ["풋-", "사과", "를", "아주", "맛", "-있-", "-게", "먹-", "-었-", "-어"], 
     types: ["접사", "어근", "조사", "어근", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
@@ -619,8 +617,7 @@ const advancedData = [
     id: 3, 
     type: "click", 
     text: "아침에 맨발로 강가를 건너고 있다", 
-    // 아침(1)에(2)맨(3)발(4)로(5)강(6)가(7)를(8)건너(10)고(11)있(12)다 -> 2음절 '아침'(0), '건너'(9) 중간 제외
-    cuts: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12], 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 
     display: ["아침", "에", "맨-", "발", "로", "강", "가", "를", "건너-", "-고", "있-", "-다"], 
     types: ["어근", "조사", "접사", "어근", "조사", "어근", "어근", "조사", "어간", "어미", "어간", "어미"] 
   },
@@ -628,8 +625,7 @@ const advancedData = [
     id: 4, 
     type: "click", 
     text: "그분은 아주 환하게 웃었다", 
-    // 그(0)분(1)은(2)아주(4)환하(6)게(7)웃(8)었(9)다 -> 2음절 '아주'(3), '환하'(5) 중간 제외
-    cuts: [0, 1, 2, 4, 6, 7, 8, 9], 
+    cuts: [0, 1, 2, 3, 4, 5, 6, 7, 8], 
     display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
@@ -639,7 +635,7 @@ const advancedData = [
     type: "subjective", 
     text: "새 신을 신고 길을 달렸다", 
     targetWord: "달렸다", 
-    rawTarget: "달리었다",
+    answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"], 
     display: ["달리-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
@@ -649,7 +645,7 @@ const advancedData = [
     type: "subjective", 
     text: "나는 어제 좋은 꿈을 꿨다", 
     targetWord: "꿨다", 
-    rawTarget: "꾸었다",
+    answers: ["꾸/었/다", "꾸- / -었- / -다", "꾸 / 었 / 다", "꾸,-었-,-다", "꾸 었 다"], 
     display: ["꾸-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
@@ -659,7 +655,7 @@ const advancedData = [
     type: "subjective", 
     text: "시원한 물을 마셨다", 
     targetWord: "마셨다", 
-    rawTarget: "마시었다",
+    answers: ["마시/었/다", "마시- / -었- / -다", "마시 / 었 / 다", "마시,-었-,-다", "마시 었 다"], 
     display: ["마시-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
@@ -669,7 +665,7 @@ const advancedData = [
     type: "subjective", 
     text: "버스를 오랫동안 기다렸다", 
     targetWord: "기다렸다", 
-    rawTarget: "기다리었다",
+    answers: ["기다리/었/다", "기다리- / -었- / -다", "기다리 / 었 / 다", "기다리,-었-,-다", "기다리 었 다"], 
     display: ["기다리-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
@@ -679,7 +675,7 @@ const advancedData = [
     type: "subjective", 
     text: "신호등 앞에 딱 섰다", 
     targetWord: "섰다", 
-    rawTarget: "서었다",
+    answers: ["서/었/다", "서- / -었- / -다", "서 / 었 / 다", "서,-었-,-다", "서 었 다"], 
     display: ["서-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
@@ -689,7 +685,7 @@ const advancedData = [
     type: "subjective", 
     text: "조심해서 횡단보도를 건넜다", 
     targetWord: "건넜다", 
-    rawTarget: "건너었다",
+    answers: ["건너/었/다", "건너- / -었- / -다", "건너 / 었 / 다", "건너,-었-,-다", "건너 었 다"], 
     display: ["건너-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
@@ -699,7 +695,7 @@ const advancedData = [
     type: "subjective", 
     text: "기지개를 길게 폈다", 
     targetWord: "폈다", 
-    rawTarget: "피었다",
+    answers: ["피/었/다", "피- / -었- / -다", "피 / 었 / 다", "피,-었-,-다", "피 었 다"], 
     display: ["피-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
@@ -709,7 +705,7 @@ const advancedData = [
     type: "subjective", 
     text: "하늘에서 별을 봤다", 
     targetWord: "봤다", 
-    rawTarget: "보았다",
+    answers: ["보/았/다", "보- / -았- / -다", "보 / 았 / 다", "보,-았-,-다", "보 았 다"], 
     display: ["보-", "-았-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
@@ -719,7 +715,7 @@ const advancedData = [
     type: "subjective", 
     text: "가방 안에 준비물을 챙겼다", 
     targetWord: "챙겼다", 
-    rawTarget: "챙기었다",
+    answers: ["챙기/었/다", "챙기- / -었- / -다", "챙기 / 었 / 다", "챙기,-었-,-다", "챙기 었 다"], 
     display: ["챙기-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   }
@@ -867,6 +863,7 @@ function loadStage() {
     });
     document.getElementById("classifyOpts").innerHTML = optsHtml;
   } else {
+    // 서술형 보스 문제
     badge.innerText = `BOSS STAGE (${currentIdx - 3} / ${dataList.length - 4})`;
     badge.className = "stage-badge boss";
     actionBtn.className = "btn boss";
@@ -931,6 +928,7 @@ function checkAnswer() {
 
   if (q.type === "click") {
     const answerCardHtml = renderAnswerCard(q);
+    // 클릭 순서와 관계없이 오름차순 정렬하여 안전 비교
     const userArray = Array.from(userCuts).sort((a, b) => a - b);
     const targetCuts = q.cuts.slice().sort((a, b) => a - b);
     const isCorrect = userArray.length === targetCuts.length && userArray.every((val, index) => val === targetCuts[index]);
@@ -951,4 +949,90 @@ function checkAnswer() {
   } else if (q.type === "classify") {
     if (selectedClassifyOpt === q.ans) {
       score += 100;
-      document.
+      document.getElementById("scoreDisplay").innerText = score;
+      fb.className = "feedback success";
+      fb.innerHTML = `<b>🎉 정답입니다! (+100점)</b><br>올바르게 분류하였습니다.`;
+    } else {
+      fb.className = "feedback error";
+      fb.innerHTML = `❌ <b>아쉬워요! 다시 한번 확인해보세요.</b><br>정답: <b>${q.opts[q.ans]}</b>`;
+    }
+  } else {
+    const answerCardHtml = renderAnswerCard(q);
+    const input = document.getElementById("subjectiveInput").value.trim().replace(/\s+/g, "");
+    const isCorrect = q.answers.some(ans => input === ans.replace(/\s+/g, ""));
+
+    if (isCorrect) {
+      score += 200;
+      document.getElementById("scoreDisplay").innerText = score;
+      fb.className = "feedback success";
+      fb.innerHTML = `🎉 <b>보스 클리어 성공! (+200점)</b><br><b>'${q.targetWord}'</b> 속에 숨은 형태소 원형을 정확히 추론해내셨습니다!<br><div style='margin-top:8px; font-weight:700; color:#15803d;'>[모범 답안 해설]</div>` + answerCardHtml;
+    } else {
+      fb.className = "feedback error";
+      fb.innerHTML = `❌ <b>아쉬워요! 보스 공략 원형 분해를 확인하세요.</b><br><div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[모범 답안 해설]</div>` + answerCardHtml;
+    }
+  }
+
+  fb.style.display = "block";
+
+  if (currentIdx < dataList.length - 1) {
+    actionBtn.innerText = "다음 문제 →";
+    actionBtn.className = "btn next";
+  } else {
+    actionBtn.innerText = "최종 결과 보기 🏆";
+    actionBtn.className = "btn next";
+  }
+}
+
+function nextQuestion() {
+  const dataList = getActiveData();
+  if (currentIdx < dataList.length - 1) {
+    currentIdx++;
+    loadStage();
+  } else {
+    showFinalReport();
+  }
+}
+
+function showFinalReport() {
+  document.getElementById("actionBtn").style.display = "none";
+  document.getElementById("sliceContainer").style.display = "none";
+  document.getElementById("classifyContainer").classList.remove("active");
+  document.getElementById("subjectiveContainer").classList.remove("active");
+  
+  const currentTry = sessionRecords.length + 1;
+  sessionRecords.push({ try: currentTry, mode: currentMode, score: score });
+
+  const maxScore = Math.max(...sessionRecords.map(r => r.score));
+
+  document.getElementById("reportSummary").innerHTML = `
+    이번 회차 점수: <b>${score}점</b> / 최고 점수: <b>${maxScore}점</b>
+  `;
+
+  let listHtml = "";
+  [...sessionRecords].reverse().forEach(r => {
+    const isLatest = r.try === currentTry;
+    let modeLabel = "기본편";
+    if (r.mode === "advanced") modeLabel = "심화편";
+    else if (r.mode === "classify") modeLabel = "분류하기";
+    else if (r.mode === "wordType") modeLabel = "단어 짜임";
+
+    listHtml += `
+      <li class="record-item ${isLatest ? 'latest' : ''}">
+        <span>${r.try}차 시도 [${modeLabel}] ${isLatest ? '<b>[현재]</b>' : ''}</span>
+        <span><b>${r.score}점</b></span>
+      </li>
+    `;
+  });
+  document.getElementById("recordList").innerHTML = listHtml;
+  document.getElementById("reportCard").style.display = "block";
+}
+
+function resetGame() {
+  currentIdx = 0;
+  score = 0;
+  document.getElementById("scoreDisplay").innerText = 0;
+  loadStage();
+}
+</script>
+</body>
+</html>
