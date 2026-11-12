@@ -595,7 +595,7 @@ const basicData = [
   { id: 26, type: "click", text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] }
 ];
 
-// 2. 형태소 분석하기 심화편 (1~4번 인덱스 완벽 정정 및 보스 서술형 9문항 완비)
+// 2. 형태소 분석하기 심화편 (1~4번 자르기 인덱스 & 해설 완벽 교정 + 9개 보스 서술형)
 const advancedData = [
   { 
     id: 1, 
@@ -629,93 +629,85 @@ const advancedData = [
     display: ["그", "분", "은", "아주", "환하-", "-게", "웃-", "-었-", "-다"], 
     types: ["어근", "어근", "조사", "어근", "어간", "어미", "어간", "어미", "어미"] 
   },
-  // 보스 단어 1: 달렸다
+  // 보스 단어 1~9 (기호와 공백을 제거한 rawTarget 기준으로 비교)
   { 
     id: 5, 
     type: "subjective", 
     text: "새 신을 신고 길을 달렸다", 
     targetWord: "달렸다", 
-    answers: ["달리/었/다", "달리- / -었- / -다", "달리 / 었 / 다", "달리,-었-,-다", "달리 었 다"], 
+    rawTarget: "달리었다", 
     display: ["달리-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
-  // 보스 단어 2: 꿨다
   { 
     id: 6, 
     type: "subjective", 
     text: "나는 어제 좋은 꿈을 꿨다", 
     targetWord: "꿨다", 
-    answers: ["꾸/었/다", "꾸- / -었- / -다", "꾸 / 었 / 다", "꾸,-었-,-다", "꾸 었 다"], 
+    rawTarget: "꾸었다", 
     display: ["꾸-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
-  // 보스 단어 3: 마셨다
   { 
     id: 7, 
     type: "subjective", 
     text: "시원한 물을 마셨다", 
     targetWord: "마셨다", 
-    answers: ["마시/었/다", "마시- / -었- / -다", "마시 / 었 / 다", "마시,-었-,-다", "마시 었 다"], 
+    rawTarget: "마시었다", 
     display: ["마시-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
-  // 보스 단어 4: 기다렸다
   { 
     id: 8, 
     type: "subjective", 
     text: "버스를 오랫동안 기다렸다", 
     targetWord: "기다렸다", 
-    answers: ["기다리/었/다", "기다리- / -었- / -다", "기다리 / 었 / 다", "기다리,-었-,-다", "기다리 었 다"], 
+    rawTarget: "기다리었다", 
     display: ["기다리-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
-  // 보스 단어 5: 섰다
   { 
     id: 9, 
     type: "subjective", 
     text: "신호등 앞에 딱 섰다", 
     targetWord: "섰다", 
-    answers: ["서/었/다", "서- / -었- / -다", "서 / 었 / 다", "서,-었-,-다", "서 었 다"], 
+    rawTarget: "서었다", 
     display: ["서-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
-  // 보스 단어 6: 건넜다
   { 
     id: 10, 
     type: "subjective", 
     text: "조심해서 횡단보도를 건넜다", 
     targetWord: "건넜다", 
-    answers: ["건너/었/다", "건너- / -었- / -다", "건너 / 었 / 다", "건너,-었-,-다", "건너 었 다"], 
+    rawTarget: "건너었다", 
     display: ["건너-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
-  // 보스 단어 7: 폈다
   { 
     id: 11, 
     type: "subjective", 
     text: "기지개를 길게 폈다", 
     targetWord: "폈다", 
-    answers: ["피/었/다", "피- / -었- / -다", "피 / 었 / 다", "피,-었-,-다", "피 었 다"], 
+    rawTarget: "피었다", 
     display: ["피-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
-  // 보스 단어 8: 봤다
   { 
     id: 12, 
     type: "subjective", 
     text: "하늘에서 별을 봤다", 
     targetWord: "봤다", 
-    answers: ["보/았/다", "보- / -았- / -다", "보 / 았 / 다", "보,-았-,-다", "보 았 다"], 
+    rawTarget: "보았다", 
     display: ["보-", "-았-", "-다"], 
     types: ["어간", "어미", "어미"] 
   },
-  // 보스 단어 9: 챙겼다
   { 
     id: 13, 
     type: "subjective", 
     text: "가방 안에 준비물을 챙겼다", 
     targetWord: "챙겼다", 
-    answers: ["챙기/었/다", "챙기- / -었- / -다", "챙기 / 었 / 다", "챙기,-었-,-다", "챙기 었 다"], 
+    rawTarget: "챙기었다", 
     display: ["챙기-", "-었-", "-다"], 
     types: ["어간", "어미", "어미"] 
   }
@@ -863,7 +855,6 @@ function loadStage() {
     });
     document.getElementById("classifyOpts").innerHTML = optsHtml;
   } else {
-    // 서술형 보스 문제
     badge.innerText = `BOSS STAGE (${currentIdx - 3} / ${dataList.length - 4})`;
     badge.className = "stage-badge boss";
     actionBtn.className = "btn boss";
@@ -928,7 +919,6 @@ function checkAnswer() {
 
   if (q.type === "click") {
     const answerCardHtml = renderAnswerCard(q);
-    // 클릭 순서와 관계없이 오름차순 정렬하여 안전 비교
     const userArray = Array.from(userCuts).sort((a, b) => a - b);
     const targetCuts = q.cuts.slice().sort((a, b) => a - b);
     const isCorrect = userArray.length === targetCuts.length && userArray.every((val, index) => val === targetCuts[index]);
@@ -958,8 +948,9 @@ function checkAnswer() {
     }
   } else {
     const answerCardHtml = renderAnswerCard(q);
-    const input = document.getElementById("subjectiveInput").value.trim().replace(/\s+/g, "");
-    const isCorrect = q.answers.some(ans => input === ans.replace(/\s+/g, ""));
+    // 모든 기호(-, /, ,, 공백)를 제거한 순수 형태소 원형 글자만 비교
+    const rawUser = document.getElementById("subjectiveInput").value.replace(/[-\s\/,+]/g, "");
+    const isCorrect = rawUser === q.rawTarget;
 
     if (isCorrect) {
       score += 200;
