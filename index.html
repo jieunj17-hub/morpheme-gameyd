@@ -242,6 +242,18 @@
   }
   .hud span { color: var(--primary); font-weight: 700; }
 
+  .step-guide {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #4338ca;
+    background: #eef2ff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    text-align: center;
+    display: none;
+  }
+
   .sentence-box {
     background: #f8fafc;
     border: 2px solid var(--border);
@@ -293,7 +305,83 @@
   .gap-btn:hover::after { background: var(--primary); height: 36px; }
   .gap-btn.active::after { background: var(--primary); width: 4px; height: 44px; }
 
-  /* 형태소 분류하기 선택 영역 */
+  /* 형태소 4대 특성 (실질/형식, 자립/의존) 2단계 카드 영역 */
+  .morpheme-props-area {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .morpheme-props-area.active { display: flex; }
+  .prop-card {
+    background: #f8fafc;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .prop-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .prop-morpheme {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 4px 12px;
+    border-radius: 8px;
+  }
+  .prop-group-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .prop-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .prop-btn {
+    padding: 10px 12px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: center;
+  }
+  .prop-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: #f5f3ff;
+  }
+  .prop-btn.selected {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+  }
+  /* 채점 후 정오답 피드백 스타일 (초록 / 빨강 / 미선택 불투명) */
+  .prop-btn.correct-ans {
+    background: #16a34a !important;
+    color: #ffffff !important;
+    border-color: #15803d !important;
+  }
+  .prop-btn.wrong-ans {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+    border-color: #b91c1c !important;
+  }
+  .prop-btn.dimmed {
+    opacity: 0.45;
+  }
+
+  /* 단일어/합성어/파생어 객관식 선택 영역 */
   .classify-area {
     display: none;
     flex-direction: column;
@@ -486,7 +574,7 @@
         <div>
           <div class="card-icon">🧩</div>
           <div class="card-title">형태소 분류하기</div>
-          <div class="card-desc">제시된 형태소가 자립/의존, 실질/형식 형태소 중 어디에 속하는지 성격을 분류합니다.</div>
+          <div class="card-desc">기본편 26개 단어를 자른 뒤, 각 형태소가 실질/형식 및 자립/의존 중 어디에 속하는지 분류합니다.</div>
         </div>
         <div class="card-link">도전 시작하기 →</div>
       </div>
@@ -509,9 +597,9 @@
       </div>
       <div class="accordion-content" id="accContent">
         • <b>형태소</b>: 뜻을 가진 가장 작은 말의 단위<br>
-        • <b>단일어</b>: 하나의 어근으로 이루어진 단어 (예: 구름, 무지개)<br>
-        • <b>합성어</b>: 둘 이상의 어근이 합쳐진 단어 (예: 손수건, 돌다리)<br>
-        • <b>파생어</b>: 어근에 접사가 붙어서 된 단어 (예: 풋사과, 지우개)
+        • <b>실질 / 형식</b>: 구체적 대상·동작의 뜻이 있으면 실질(어근·어간), 문법 기능만 하면 형식(접사·조사·어미)<br>
+        • <b>자립 / 의존</b>: 혼자 쓰일 수 있으면 자립(명사 등), 다른 말에 기대어야 쓰이면 의존(접사·조사·어간·어미)<br>
+        • <b>단일어 / 합성어 / 파생어</b>: 어근 1개(단일어), 어근+어근(합성어), 어근+접사(파생어)
       </div>
     </div>
   </div>
@@ -530,12 +618,17 @@
       <div>시도 회차: <span id="tryDisplay">1</span>차</div>
     </div>
 
+    <div id="stepGuide" class="step-guide"></div>
+
     <div id="sentenceDisplay" class="sentence-box"></div>
 
     <!-- 1. 자르기 게임 영역 -->
     <div id="sliceContainer" class="slice-area"></div>
 
-    <!-- 2. 객관식 선택 문제 영역 (분류하기 / 단어짜임) -->
+    <!-- 2. 형태소 분류하기 2단계 (실질/형식 & 자립/의존 선택 영역) -->
+    <div id="morphemePropsContainer" class="morpheme-props-area"></div>
+
+    <!-- 3. 단일어/합성어/파생어 객관식 선택 영역 -->
     <div id="classifyContainer" class="classify-area">
       <div class="classify-card">
         <h4 id="classifyTarget"></h4>
@@ -543,7 +636,7 @@
       </div>
     </div>
 
-    <!-- 3. 보스 서술형 입력 영역 -->
+    <!-- 4. 보스 서술형 입력 영역 -->
     <div id="subjectiveContainer" class="subjective-box">
       <div id="bossPromptTitle" style="font-weight:700; color:#991b1b; font-size:17px;">👾 보스 특수 과제</div>
       <div id="bossPromptSub" style="font-size:13px; color:#7f1d1d;">숨은 형태소를 어간/선어말어미/어말어미 원형으로 직접 분리해 적으세요.</div>
@@ -565,34 +658,34 @@
 </div>
 
 <script>
-// 1. 형태소 분석하기 기본편 (26개 단어 전체)
+// 1. 형태소 분석하기 기본편 (26개 단어 전체 + 실질/형식, 자립/의존 정답 메타데이터 포함)
 const basicData = [
-  { id: 1, type: "click", text: "무지개", cuts: [], display: ["무지개"], types: ["어근"] },
-  { id: 2, type: "click", text: "구름", cuts: [], display: ["구름"], types: ["어근"] },
-  { id: 3, type: "click", text: "바람", cuts: [], display: ["바람"], types: ["어근"] },
-  { id: 4, type: "click", text: "아침", cuts: [], display: ["아침"], types: ["어근"] },
-  { id: 5, type: "click", text: "웃고", cuts: [0], display: ["웃-", "-고"], types: ["어간", "어미"] },
-  { id: 6, type: "click", text: "참기름", cuts: [0], display: ["참-", "기름"], types: ["접사", "어근"] },
-  { id: 7, type: "click", text: "맨발", cuts: [0], display: ["맨-", "발"], types: ["접사", "어근"] },
-  { id: 8, type: "click", text: "햇밤", cuts: [0], display: ["햇-", "밤"], types: ["접사", "어근"] },
-  { id: 9, type: "click", text: "헛기침", cuts: [0], display: ["헛-", "기침"], types: ["접사", "어근"] },
-  { id: 10, type: "click", text: "지우개", cuts: [1], display: ["지우-", "-개"], types: ["어근", "접사"] },
-  { id: 11, type: "click", text: "손수건", cuts: [0], display: ["손", "수건"], types: ["어근", "어근"] },
-  { id: 12, type: "click", text: "돌다리", cuts: [0], display: ["돌", "다리"], types: ["어근", "어근"] },
-  { id: 13, type: "click", text: "눈물", cuts: [0], display: ["눈", "물"], types: ["어근", "어근"] },
-  { id: 14, type: "click", text: "발자국", cuts: [0], display: ["발", "자국"], types: ["어근", "어근"] },
-  { id: 15, type: "click", text: "높다", cuts: [0], display: ["높-", "-다"], types: ["어간", "어미"] },
-  { id: 16, type: "click", text: "신고", cuts: [0], display: ["신-", "-고"], types: ["어간", "어미"] },
-  { id: 17, type: "click", text: "먹었다", cuts: [0, 1], display: ["먹-", "-었-", "-다"], types: ["어간", "어미", "어미"] },
-  { id: 18, type: "click", text: "맑아서", cuts: [0], display: ["맑-", "-아서"], types: ["어간", "어미"] },
-  { id: 19, type: "click", text: "파랗고", cuts: [1], display: ["파랗-", "-고"], types: ["어간", "어미"] },
-  { id: 20, type: "click", text: "산나물", cuts: [0], display: ["산", "나물"], types: ["어근", "어근"] },
-  { id: 21, type: "click", text: "우리", cuts: [], display: ["우리"], types: ["어근"] },
-  { id: 22, type: "click", text: "거울", cuts: [], display: ["거울"], types: ["어근"] },
-  { id: 23, type: "click", text: "손발", cuts: [0], display: ["손", "발"], types: ["어근", "어근"] },
-  { id: 24, type: "click", text: "민낯", cuts: [0], display: ["민-", "낯"], types: ["접사", "어근"] },
-  { id: 25, type: "click", text: "걸레질", cuts: [1], display: ["걸레", "-질"], types: ["어근", "접사"] },
-  { id: 26, type: "click", text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"] }
+  { id: 1, type: "click", text: "무지개", cuts: [], display: ["무지개"], types: ["어근"], meaning: ["실질"], indep: ["자립"] },
+  { id: 2, type: "click", text: "구름", cuts: [], display: ["구름"], types: ["어근"], meaning: ["실질"], indep: ["자립"] },
+  { id: 3, type: "click", text: "바람", cuts: [], display: ["바람"], types: ["어근"], meaning: ["실질"], indep: ["자립"] },
+  { id: 4, type: "click", text: "아침", cuts: [], display: ["아침"], types: ["어근"], meaning: ["실질"], indep: ["자립"] },
+  { id: 5, type: "click", text: "웃고", cuts: [0], display: ["웃-", "-고"], types: ["어간", "어미"], meaning: ["실질", "형식"], indep: ["의존", "의존"] },
+  { id: 6, type: "click", text: "참기름", cuts: [0], display: ["참-", "기름"], types: ["접사", "어근"], meaning: ["형식", "실질"], indep: ["의존", "자립"] },
+  { id: 7, type: "click", text: "맨발", cuts: [0], display: ["맨-", "발"], types: ["접사", "어근"], meaning: ["형식", "실질"], indep: ["의존", "자립"] },
+  { id: 8, type: "click", text: "햇밤", cuts: [0], display: ["햇-", "밤"], types: ["접사", "어근"], meaning: ["형식", "실질"], indep: ["의존", "자립"] },
+  { id: 9, type: "click", text: "헛기침", cuts: [0], display: ["헛-", "기침"], types: ["접사", "어근"], meaning: ["형식", "실질"], indep: ["의존", "자립"] },
+  { id: 10, type: "click", text: "지우개", cuts: [1], display: ["지우-", "-개"], types: ["어근", "접사"], meaning: ["실질", "형식"], indep: ["의존", "의존"] },
+  { id: 11, type: "click", text: "손수건", cuts: [0], display: ["손", "수건"], types: ["어근", "어근"], meaning: ["실질", "실질"], indep: ["자립", "자립"] },
+  { id: 12, type: "click", text: "돌다리", cuts: [0], display: ["돌", "다리"], types: ["어근", "어근"], meaning: ["실질", "실질"], indep: ["자립", "자립"] },
+  { id: 13, type: "click", text: "눈물", cuts: [0], display: ["눈", "물"], types: ["어근", "어근"], meaning: ["실질", "실질"], indep: ["자립", "자립"] },
+  { id: 14, type: "click", text: "발자국", cuts: [0], display: ["발", "자국"], types: ["어근", "어근"], meaning: ["실질", "실질"], indep: ["자립", "자립"] },
+  { id: 15, type: "click", text: "높다", cuts: [0], display: ["높-", "-다"], types: ["어간", "어미"], meaning: ["실질", "형식"], indep: ["의존", "의존"] },
+  { id: 16, type: "click", text: "신고", cuts: [0], display: ["신-", "-고"], types: ["어간", "어미"], meaning: ["실질", "형식"], indep: ["의존", "의존"] },
+  { id: 17, type: "click", text: "먹었다", cuts: [0, 1], display: ["먹-", "-었-", "-다"], types: ["어간", "어미", "어미"], meaning: ["실질", "형식", "형식"], indep: ["의존", "의존", "의존"] },
+  { id: 18, type: "click", text: "맑아서", cuts: [0], display: ["맑-", "-아서"], types: ["어간", "어미"], meaning: ["실질", "형식"], indep: ["의존", "의존"] },
+  { id: 19, type: "click", text: "파랗고", cuts: [1], display: ["파랗-", "-고"], types: ["어간", "어미"], meaning: ["실질", "형식"], indep: ["의존", "의존"] },
+  { id: 20, type: "click", text: "산나물", cuts: [0], display: ["산", "나물"], types: ["어근", "어근"], meaning: ["실질", "실질"], indep: ["자립", "자립"] },
+  { id: 21, type: "click", text: "우리", cuts: [], display: ["우리"], types: ["어근"], meaning: ["실질"], indep: ["자립"] },
+  { id: 22, type: "click", text: "거울", cuts: [], display: ["거울"], types: ["어근"], meaning: ["실질"], indep: ["자립"] },
+  { id: 23, type: "click", text: "손발", cuts: [0], display: ["손", "발"], types: ["어근", "어근"], meaning: ["실질", "실질"], indep: ["자립", "자립"] },
+  { id: 24, type: "click", text: "민낯", cuts: [0], display: ["민-", "낯"], types: ["접사", "어근"], meaning: ["형식", "실질"], indep: ["의존", "자립"] },
+  { id: 25, type: "click", text: "걸레질", cuts: [1], display: ["걸레", "-질"], types: ["어근", "접사"], meaning: ["실질", "형식"], indep: ["자립", "의존"] },
+  { id: 26, type: "click", text: "물걸레", cuts: [0], display: ["물", "걸레"], types: ["어근", "어근"], meaning: ["실질", "실질"], indep: ["자립", "자립"] }
 ];
 
 // 2. 형태소 분석하기 심화편 (형태소 경계 기준 cuts 정확 반영 + 보스 9문항)
@@ -712,14 +805,7 @@ const advancedData = [
   }
 ];
 
-// 3. 형태소 분류하기 (3개 문제)
-const classifyData = [
-  { id: 1, type: "classify", text: "풋사과를 먹었다.", target: "'풋-'의 형태소 성격은?", opts: ["접사 (의존 / 형식)", "어근 (자립 / 실질)", "조사 (의존 / 형식)"], correctText: "접사 (의존 / 형식)" },
-  { id: 2, type: "classify", text: "하늘이 파랗다.", target: "'이'의 형태소 성격은?", opts: ["조사 (의존 / 형식)", "어근 (자립 / 실질)", "접사 (의존 / 형식)"], correctText: "조사 (의존 / 형식)" },
-  { id: 3, type: "classify", text: "손수건을 챙겼다.", target: "'손수건'의 형태소 구성은?", opts: ["어근 + 어근 (합성어)", "어근 + 접사 (파생어)", "단일어"], correctText: "어근 + 어근 (합성어)" }
-];
-
-// 4. 단일어·합성어·파생어 분류하기 (30개 단어 세트 - 질문 내 힌트 제거 및 보기 셔플 대응)
+// 3. 단일어·합성어·파생어 분류하기 (30개 단어 세트 - 질문 내 힌트 제거 및 보기 셔플 대응)
 const wordTypeData = [
   { id: 1, type: "classify", text: "무지개", target: "'무지개'의 단어 짜임은?", opts: ["단일어", "합성어", "파생어"], correctText: "단일어" },
   { id: 2, type: "classify", text: "구름", target: "'구름'의 단어 짜임은?", opts: ["단일어", "합성어", "파생어"], correctText: "단일어" },
@@ -762,6 +848,10 @@ let score = 0;
 let sessionRecords = [];
 let isEvaluated = false;
 
+// '형태소 분류하기' 2단계 진행 상태 변수
+let classifyStep = 1; // 1: 자르기 단계, 2: 실질/형식 & 자립/의존 선택 단계
+let userPropSelections = {}; // { idx: { meaning: "실질"|"형식", indep: "자립"|"의존" } }
+
 function shuffleArray(arr) {
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {
@@ -797,13 +887,15 @@ function goHome() {
 
 function prepareDataList() {
   if (currentMode === "basic") currentDataList = shuffleArray(basicData);
-  else if (currentMode === "advanced") currentDataList = [...advancedData]; // 심화편은 단계별 순서 유지
-  else if (currentMode === "classify") currentDataList = shuffleArray(classifyData);
+  else if (currentMode === "advanced") currentDataList = [...advancedData]; // 심화편 순서 고정
+  else if (currentMode === "classify") currentDataList = shuffleArray(basicData); // 기본편 26개 단어 랜덤 출제
   else currentDataList = shuffleArray(wordTypeData);
 }
 
 function loadStage() {
   isEvaluated = false;
+  classifyStep = 1;
+  userPropSelections = {};
   const q = currentDataList[currentIdx];
   userCuts.clear();
   selectedClassifyText = "";
@@ -817,9 +909,15 @@ function loadStage() {
   const badge = document.getElementById("badge");
   const sentenceDisplay = document.getElementById("sentenceDisplay");
   const sliceContainer = document.getElementById("sliceContainer");
+  const morphemePropsContainer = document.getElementById("morphemePropsContainer");
   const classifyContainer = document.getElementById("classifyContainer");
   const subjectiveContainer = document.getElementById("subjectiveContainer");
+  const stepGuide = document.getElementById("stepGuide");
   const modeTitle = document.getElementById("modeTitle");
+
+  morphemePropsContainer.classList.remove("active");
+  morphemePropsContainer.innerHTML = "";
+  stepGuide.style.display = "none";
 
   if (currentMode === "basic") modeTitle.innerText = "형태소 분석하기 기본편";
   else if (currentMode === "advanced") modeTitle.innerText = "형태소 분석하기 심화편";
@@ -829,7 +927,21 @@ function loadStage() {
   sentenceDisplay.innerText = `"${q.text}"`;
   document.getElementById("tryDisplay").innerText = sessionRecords.length + 1;
 
-  if (q.type === "click") {
+  if (currentMode === "classify") {
+    // 형태소 분류하기 1단계: 먼저 형태소 경계 자르기
+    badge.innerText = `STAGE ${currentIdx + 1} / ${currentDataList.length}`;
+    badge.className = "stage-badge";
+    stepGuide.style.display = "block";
+    stepGuide.innerText = "1단계: 먼저 단어의 형태소 경계를 정확히 잘라주세요! (자르기 성공 시 2단계로 이동)";
+    actionBtn.className = "btn";
+    actionBtn.innerText = "1단계: 자르기 완료!";
+    
+    sliceContainer.style.display = "flex";
+    classifyContainer.classList.remove("active");
+    subjectiveContainer.classList.remove("active");
+
+    renderSliceGaps(q.text);
+  } else if (q.type === "click") {
     badge.innerText = `STAGE ${currentIdx + 1} / ${currentDataList.length}`;
     badge.className = "stage-badge";
     actionBtn.className = "btn";
@@ -838,15 +950,7 @@ function loadStage() {
     classifyContainer.classList.remove("active");
     subjectiveContainer.classList.remove("active");
 
-    const chars = q.text.replace(/[.\s]/g, "").split("");
-    let html = "";
-    chars.forEach((c, idx) => {
-      html += `<div class="char-box">${c}</div>`;
-      if (idx < chars.length - 1) {
-        html += `<div class="gap-btn" data-pos="${idx}" onclick="toggleGap(${idx}, this)"></div>`;
-      }
-    });
-    sliceContainer.innerHTML = html;
+    renderSliceGaps(q.text);
   } else if (q.type === "classify") {
     badge.innerText = `STAGE ${currentIdx + 1} / ${currentDataList.length}`;
     badge.className = "stage-badge";
@@ -857,8 +961,6 @@ function loadStage() {
     classifyContainer.classList.add("active");
 
     document.getElementById("classifyTarget").innerText = q.target;
-    
-    // 선택지(보기) 순서도 매번 무작위로 셔플하여 정답 위치 고정 방지
     const shuffledOpts = shuffleArray(q.opts);
     let optsHtml = "";
     shuffledOpts.forEach((opt) => {
@@ -880,8 +982,22 @@ function loadStage() {
   }
 }
 
+function renderSliceGaps(text) {
+  const sliceContainer = document.getElementById("sliceContainer");
+  const chars = text.replace(/[.\s]/g, "").split("");
+  let html = "";
+  chars.forEach((c, idx) => {
+    html += `<div class="char-box">${c}</div>`;
+    if (idx < chars.length - 1) {
+      html += `<div class="gap-btn" data-pos="${idx}" onclick="toggleGap(${idx}, this)"></div>`;
+    }
+  });
+  sliceContainer.innerHTML = html;
+}
+
 function toggleGap(idx, el) {
   if (isEvaluated) return;
+  if (currentMode === "classify" && classifyStep === 2) return;
   if (userCuts.has(idx)) {
     userCuts.delete(idx);
     el.classList.remove("active");
@@ -914,10 +1030,188 @@ function renderAnswerCard(q) {
 }
 
 function handleActionButton() {
+  if (currentMode === "classify") {
+    if (classifyStep === 1) {
+      checkClassifyStep1();
+    } else if (!isEvaluated) {
+      checkClassifyStep2();
+    } else {
+      nextQuestion();
+    }
+    return;
+  }
+
   if (!isEvaluated) {
     checkAnswer();
   } else {
     nextQuestion();
+  }
+}
+
+// 형태소 분류하기 1단계(자르기) 판정: 틀리면 못 넘어가고 재시도, 맞으면 2단계 오픈
+function checkClassifyStep1() {
+  const q = currentDataList[currentIdx];
+  const fb = document.getElementById("feedbackBox");
+  const userArray = Array.from(userCuts).sort((a, b) => a - b);
+  const targetCuts = q.cuts.slice().sort((a, b) => a - b);
+  const isCorrect = userArray.length === targetCuts.length && userArray.every((val, index) => val === targetCuts[index]);
+
+  if (!isCorrect) {
+    fb.className = "feedback error";
+    fb.innerHTML = `❌ <b>형태소 경계가 정확하지 않습니다!</b> 다시 잘라보세요. (틀리면 2단계로 넘어갈 수 없습니다)`;
+    fb.style.display = "block";
+    return;
+  }
+
+  // 1단계 자르기 성공 -> +100점 획득 및 2단계(실질/형식, 자립/의존 선택) 열기
+  score += 100;
+  document.getElementById("scoreDisplay").innerText = score;
+  classifyStep = 2;
+
+  fb.className = "feedback success";
+  fb.innerHTML = `✅ <b>1단계 자르기 성공! (+100점)</b> 이제 아래 각 형태소의 성격을 선택해주세요.`;
+  fb.style.display = "block";
+
+  document.getElementById("stepGuide").innerText = "2단계: 각 형태소 조각마다 [실질 / 형식] 중 하나, [자립 / 의존] 중 하나를 모두 선택하세요!";
+  document.getElementById("sliceContainer").style.display = "none";
+
+  const propsContainer = document.getElementById("morphemePropsContainer");
+  let cardsHtml = "";
+  q.display.forEach((mText, idx) => {
+    userPropSelections[idx] = { meaning: null, indep: null };
+    cardsHtml += `
+      <div class="prop-card" id="propCard_${idx}">
+        <div class="prop-card-header">
+          <span class="prop-morpheme">${mText}</span>
+          <span style="font-size:12px; color:#64748b; font-weight:700;">형태소 ${idx + 1}</span>
+        </div>
+        <div class="prop-group-row">
+          <div class="prop-pair">
+            <button type="button" class="prop-btn" id="btn_${idx}_meaning_실질" onclick="selectMorphemeProp(${idx}, 'meaning', '실질', this)">실질 형태소</button>
+            <button type="button" class="prop-btn" id="btn_${idx}_meaning_형식" onclick="selectMorphemeProp(${idx}, 'meaning', '형식', this)">형식 형태소</button>
+          </div>
+          <div class="prop-pair">
+            <button type="button" class="prop-btn" id="btn_${idx}_indep_자립" onclick="selectMorphemeProp(${idx}, 'indep', '자립', this)">자립 형태소</button>
+            <button type="button" class="prop-btn" id="btn_${idx}_indep_의존" onclick="selectMorphemeProp(${idx}, 'indep', '의존', this)">의존 형태소</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  propsContainer.innerHTML = cardsHtml;
+  propsContainer.classList.add("active");
+
+  const actionBtn = document.getElementById("actionBtn");
+  actionBtn.innerText = "2단계: 분류 제출하기";
+  actionBtn.className = "btn";
+}
+
+function selectMorphemeProp(idx, category, value, btnEl) {
+  if (isEvaluated) return;
+  userPropSelections[idx][category] = value;
+
+  // 같은 그룹 내 버튼 선택 표시 갱신
+  const siblings = btnEl.parentElement.querySelectorAll(".prop-btn");
+  siblings.forEach(b => b.classList.remove("selected"));
+  btnEl.classList.add("selected");
+}
+
+// 형태소 분류하기 2단계(실질/형식, 자립/의존) 채점: 맞으면 초록색(✓), 틀리면 빨간색(✕)
+function checkClassifyStep2() {
+  const q = currentDataList[currentIdx];
+  const fb = document.getElementById("feedbackBox");
+
+  // 모든 조각의 2가지 속성이 선택되었는지 확인
+  for (let i = 0; i < q.display.length; i++) {
+    if (!userPropSelections[i].meaning || !userPropSelections[i].indep) {
+      fb.className = "feedback error";
+      fb.innerHTML = `⚠️ <b>모든 형태소 조각의 [실질/형식]과 [자립/의존]을 각각 하나씩 선택해주세요!</b>`;
+      fb.style.display = "block";
+      return;
+    }
+  }
+
+  isEvaluated = true;
+  let earnedBonus = 0;
+  let allPerfect = true;
+
+  for (let i = 0; i < q.display.length; i++) {
+    const correctMeaning = q.meaning[i];
+    const correctIndep = q.indep[i];
+    const userMeaning = userPropSelections[i].meaning;
+    const userIndep = userPropSelections[i].indep;
+
+    // 1) 실질 / 형식 버튼 색상 처리
+    const mSubstBtn = document.getElementById(`btn_${i}_meaning_실질`);
+    const mFormBtn = document.getElementById(`btn_${i}_meaning_형식`);
+    [mSubstBtn, mFormBtn].forEach(b => {
+      b.disabled = true;
+      b.classList.remove("selected");
+    });
+
+    if (userMeaning === correctMeaning) {
+      earnedBonus += 25;
+      const targetBtn = userMeaning === "실질" ? mSubstBtn : mFormBtn;
+      targetBtn.classList.add("correct-ans");
+      targetBtn.innerText += " ✓";
+      const otherBtn = userMeaning === "실질" ? mFormBtn : mSubstBtn;
+      otherBtn.classList.add("dimmed");
+    } else {
+      allPerfect = false;
+      const wrongBtn = userMeaning === "실질" ? mSubstBtn : mFormBtn;
+      wrongBtn.classList.add("wrong-ans");
+      wrongBtn.innerText += " ✕";
+      const rightBtn = correctMeaning === "실질" ? mSubstBtn : mFormBtn;
+      rightBtn.classList.add("correct-ans");
+      rightBtn.innerText += " ✓";
+    }
+
+    // 2) 자립 / 의존 버튼 색상 처리
+    const iIndepBtn = document.getElementById(`btn_${i}_indep_자립`);
+    const iDepBtn = document.getElementById(`btn_${i}_indep_의존`);
+    [iIndepBtn, iDepBtn].forEach(b => {
+      b.disabled = true;
+      b.classList.remove("selected");
+    });
+
+    if (userIndep === correctIndep) {
+      earnedBonus += 25;
+      const targetBtn = userIndep === "자립" ? iIndepBtn : iDepBtn;
+      targetBtn.classList.add("correct-ans");
+      targetBtn.innerText += " ✓";
+      const otherBtn = userIndep === "자립" ? iDepBtn : iIndepBtn;
+      otherBtn.classList.add("dimmed");
+    } else {
+      allPerfect = false;
+      const wrongBtn = userIndep === "자립" ? iIndepBtn : iDepBtn;
+      wrongBtn.classList.add("wrong-ans");
+      wrongBtn.innerText += " ✕";
+      const rightBtn = correctIndep === "자립" ? iIndepBtn : iDepBtn;
+      rightBtn.classList.add("correct-ans");
+      rightBtn.innerText += " ✓";
+    }
+  }
+
+  score += earnedBonus;
+  document.getElementById("scoreDisplay").innerText = score;
+
+  const answerCardHtml = renderAnswerCard(q);
+  if (allPerfect) {
+    fb.className = "feedback success";
+    fb.innerHTML = `🎉 <b>완벽합니다! (+${earnedBonus}점 추가 획득)</b><br>모든 형태소의 실질/형식 및 자립/의존 성격을 정확하게 분류했습니다.<div style='margin-top:8px; font-weight:700; color:#15803d;'>[형태소 구성 해설]</div>` + answerCardHtml;
+  } else {
+    fb.className = "feedback error";
+    fb.innerHTML = `💡 <b>채점 완료! (+${earnedBonus}점 획득)</b><br>초록색(✓)이 정답, 빨간색(✕)이 오답입니다. 틀린 항목을 확인해보세요.<div style='margin-top:8px; font-weight:700; color:#b91c1c;'>[형태소 구성 해설]</div>` + answerCardHtml;
+  }
+  fb.style.display = "block";
+
+  const actionBtn = document.getElementById("actionBtn");
+  if (currentIdx < currentDataList.length - 1) {
+    actionBtn.innerText = "다음 문제 →";
+    actionBtn.className = "btn next";
+  } else {
+    actionBtn.innerText = "최종 결과 보기 🏆";
+    actionBtn.className = "btn next";
   }
 }
 
@@ -995,8 +1289,10 @@ function nextQuestion() {
 function showFinalReport() {
   document.getElementById("actionBtn").style.display = "none";
   document.getElementById("sliceContainer").style.display = "none";
+  document.getElementById("morphemePropsContainer").classList.remove("active");
   document.getElementById("classifyContainer").classList.remove("active");
   document.getElementById("subjectiveContainer").classList.remove("active");
+  document.getElementById("stepGuide").style.display = "none";
   
   const currentTry = sessionRecords.length + 1;
   sessionRecords.push({ try: currentTry, mode: currentMode, score: score });
